@@ -1,0 +1,27 @@
+{
+  "name": "washington",
+  "version": "0.0.0",
+  "description": "Behavior driven dev tool. Because little George sets a good example",
+  "main": "washington.js",
+  "scripts": {
+    "test": "coffee washington.spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaviervia/washington"
+  },
+  "keywords": [
+    "example",
+    "bdd",
+    "test",
+    "tdd"
+  ],
+  "author": "Xavier Via <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/xaviervia/washington/issues"
+  },
+  "devDependencies": {
+    "cli-color": "~0.3.2"
+  }
+}
