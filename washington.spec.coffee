@@ -164,6 +164,7 @@ cleanup()
 
 ################################################################################
 
+<<<<<<< HEAD
 log "Use should simply remove is the argument is not an object"
 
 flag = true
@@ -241,3 +242,11 @@ log "Run event tests"
 log "---------------"
 log ""
 require "./events.spec"
+
+################################################################################
+
+log ""
+log "Run async tests"
+log "---------------"
+log ""
+require "./async.spec"
