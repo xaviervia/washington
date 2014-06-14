@@ -127,5 +127,5 @@ require "./events.spec"
 
 ################################################################################
 
-#log "Run async tests"
-#require "./async.spec"
+log "Run async tests"
+require "./async.spec"
