@@ -10,6 +10,11 @@ pending    = (reason)->
 cleanup    = ->
   washington.reset()
 
+log "Washington"
+log "=========="
+log ""
+
+
 ################################################################################
 
 log "Calling the function should get back an instance"
@@ -122,10 +127,24 @@ cleanup()
 
 ################################################################################
 
-log "Run event tests"
-require "./events.spec"
+log ""
+log "Run formatter tests"
+log "-------------------"
+log ""
+require "./src/formatter.spec"
 
 ################################################################################
 
-#log "Run async tests"
-#require "./async.spec"
+log ""
+log "Run mediator tests"
+log "------------------"
+log ""
+require "./src/mediator.spec"
+
+################################################################################
+
+log ""
+log "Run event tests"
+log "---------------"
+log ""
+require "./events.spec"

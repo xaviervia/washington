@@ -113,10 +113,4 @@ setTimeout ->
 
   cleanup()
 
-  ##############################################################################
-
-  log "on 'timeout' should be called when an example timeouts"
-
-  pending "Not done"
-
 , 500

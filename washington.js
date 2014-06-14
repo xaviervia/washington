@@ -217,6 +217,7 @@ Washington.prototype.pending = function () {
   Washington.list = Washington.list.map(function (example) {
     return example === current ? pending : example
   })
+  Washington.trigger('pending', [pending, Washington])
   return pending
 }
 
