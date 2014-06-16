@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "cli-color": "~0.3.2",
-    "coffee": "0.0.1"
+    "coffee-script": "~1.7.1"
   }
 }
