@@ -11,8 +11,10 @@
 //   `release` methods.
 var Mediator = {
 
-  // on( event, callback )
-  // ---------------------
+  // on( event, callback ) | on( eventHash )
+  // ---------------------------------------
+  //
+  // ### on( event, callback )
   //
   // Stores the `callback` function as a listener for the specified `event`.
   // If the callback was already present, does nothing.
@@ -27,19 +29,66 @@ var Mediator = {
   // #### Returns
   //
   // - `Mediator` this
+  //
+  // ### on( eventHash )
+  //
+  // Binds all property methods of the `eventHash` as listeners in their
+  // respective events. For example, if `on` is called with the hash:
+  //
+  // ```javascript
+  // {
+  //   hear: function (something) { console.log(something); },
+  //   see: function (something) { console.log(something); },
+  // }
+  // ```
+  //
+  // the effect will be the same as if `on` had been called with `('hear',
+  // function (...) {...})` and `('see', function (...) {...})`.
+  //
+  // Chainable.
+  //
+  // #### Arguments
+  //
+  // - `Object` eventHash
+  //
+  // #### Returns
+  //
+  // - `Mediator` this
   on: function (event, callback) {
 
-    //! Create the event listeners hash if there wasn't one
-    this.listeners = this.listeners || {}
+    //! If no callback, event hash assumed
+    if (!callback) {
 
-    //! Create the listeners array for the event if there wasn't one
-    this.listeners[event] = this.listeners[event] || []
+      //! Store this
+      var mediator = this
 
-    //! If the given callback was not present
-    if (this.listeners[event].indexOf(callback) == -1)
+      //! For each key in the hash
+      Object.keys(event).forEach(function (key) {
 
-      //! Store the callback
-      this.listeners[event].push(callback)
+      //! If the property named with the key is a function
+      if (event[key] instanceof Function)
+
+        //! ...add the function as a listener to the event named after the key
+        mediator.on(key, event[key]) })
+
+    }
+
+    //! If there is a callback this is setting a single event listener
+    else {
+
+      //! Create the event listeners hash if there wasn't one
+      this.listeners = this.listeners || {}
+
+      //! Create the listeners array for the event if there wasn't one
+      this.listeners[event] = this.listeners[event] || []
+
+      //! If the given callback was not present
+      if (this.listeners[event].indexOf(callback) == -1)
+
+        //! Store the callback
+        this.listeners[event].push(callback)
+
+    }
 
     //! Return this for chainability
     return this
@@ -78,8 +127,10 @@ var Mediator = {
 
   },
 
-  // off( event, callback )
-  // ----------------------
+  // off( event, callback ) | off( eventHash )
+  // -----------------------------------------
+  //
+  // ### off(event, callback)
   //
   // Removes the `callback` function from the listener list to the `event`.
   // Does nothing if the callback was not in the list.
@@ -94,74 +145,11 @@ var Mediator = {
   // #### Returns
   //
   // - `Mediator` this
-  off: function (event, callback) {
-
-    //! You can't be to careful. Check everything is in place.
-    if (this.listeners && this.listeners instanceof Object &&
-        this.listeners[event] instanceof Array)
-
-        //! Filter out the callback
-        this.listeners[event] =
-          this.listeners[event]
-            .filter(function (listener) {
-              return listener !== callback })
-
-    //! Returns this for chainability
-    return this
-
-  },
-
-  // bind( eventHash )
-  // -----------------
   //
-  // Binds all property methods of the `eventHash` as listeners in their
-  // respective events. For example, if `bind` is called with the hash:
-  //
-  // ```javascript
-  // {
-  //   hear: function (something) { console.log(something); },
-  //   see: function (something) { console.log(something); },
-  // }
-  // ```
-  //
-  // the effect will be the same as if `on` had been called with `('hear',
-  // function (...) {...})` and `('see', function (...) {...})`.
-  //
-  // The reverse method is `release`.
-  //
-  // Chainable.
-  //
-  // #### Arguments
-  //
-  // - `Object` eventHash
-  //
-  // #### Returns
-  //
-  // - `Mediator` this
-  bind: function (eventHash) {
-
-    //! Store this
-    var mediator = this
-
-    //! For each key in the hash
-    Object.keys(eventHash).forEach(function (key) {
-
-      //! If the property named with the key is a function
-      if (eventHash[key] instanceof Function)
-
-        //! ...add the function as a listener to the event named after the key
-        mediator.on(key, eventHash[key]) })
-
-    //! Returns this for chainability
-    return this
-
-  },
-
-  // relese( eventHash )
-  // -------------------
+  // ### off( eventHash )
   //
   // Releases all property methods of the `eventHash` from their
-  // respective events. For example, if `release` is called with the hash:
+  // respective events. For example, if `off` is called with the hash:
   //
   // ```javascript
   // {
@@ -173,8 +161,6 @@ var Mediator = {
   // the effect will be the same as if `off` had been called with `('hear',
   // function (...) {...})` and `('see', function (...) {...})`.
   //
-  // The reverse method is `bind`.
-  //
   // Chainable.
   //
   // #### Arguments
@@ -184,25 +170,44 @@ var Mediator = {
   // #### Returns
   //
   // - `Mediator` this
-  release: function (eventHash) {
+  off: function (event, callback) {
 
-    //! Store this
-    var mediator = this
+    //! If there is no callback assumed to be an eventHash
+    if (!callback) {
 
-    //! For each key in the hash
-    Object.keys(eventHash).forEach(function (key) {
+      //! Store this
+      var mediator = this
 
-      //! If the property named with the key is a function
-      if (eventHash[key] instanceof Function)
+      //! For each key in the hash
+      Object.keys(event).forEach(function (key) {
 
-        //! ...remove the function from the listeners' list of the event
-        //! named after the key
-        mediator.off(key, eventHash[key]) })
+        //! If the property named with the key is a function
+        if (event[key] instanceof Function)
+
+          //! ...remove the function from the listeners' list of the event
+          //! named after the key
+          mediator.off(key, event[key]) })
+
+    }
+
+    //! If there is a callback this is removing a single event listener
+    else
+
+      //! You can't be to careful. Check everything is in place.
+      if (this.listeners && this.listeners instanceof Object &&
+          this.listeners[event] instanceof Array)
+
+          //! Filter out the callback
+          this.listeners[event] =
+            this.listeners[event]
+              .filter(function (listener) {
+                return listener !== callback })
 
     //! Returns this for chainability
     return this
 
   }
+
 }
 
 module.exports = Mediator

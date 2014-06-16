@@ -54,7 +54,7 @@ eventHash =
     assert.equal datum, "reactionDatum"
     reactionFlag = true
 
-result = mediator.bind eventHash
+result = mediator.on eventHash
 assert.equal result, mediator
 
 mediator.trigger 'action', ["actionDatum"]
@@ -70,7 +70,7 @@ log "Releases a full event hash when instructed"
 actionFlag = false
 reactionFlag = false
 
-result = mediator.release eventHash
+result = mediator.off eventHash
 assert.equal result, mediator
 
 mediator.trigger 'action', ["actionDatum"]
