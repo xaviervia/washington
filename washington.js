@@ -3,6 +3,8 @@
 //
 // > Little George sets a good example
 //
+// [ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
+//
 // Example library for TDD/BDD in Node.js.
 // Very small. Much concise.
 //
@@ -28,21 +30,17 @@
 //   assert.equal(2 + 2, 4)
 // })
 //
-// // Shouldn't it be event driven? Of course it should
-// example.on("complete", function (report, code) {
-//   // High level log with standard formatter
-//   report.log()
-//
-//   // Use the exit code to propagate failures
-//   process.exit(code)
-// })
-//
 // example.go()
 // ```
 //
 // #### Arguments
 //
+// - `String` description
+// - `Function` example
+//
 "use strict"
+
+var mediator   = require("./src/mediator")
 
 var Washington = function (message, func) {
 
@@ -83,8 +81,11 @@ var Washington = function (message, func) {
 //
 // ```javascript
 // washington.on("complete", function (report, code) {
-//   // High level log with standard formatter
-//   report.log()
+//
+//   // Log the results by hand
+//   console.log("Successes: " + report.successes().length)
+//   console.log("Pending: " + report.pendings().length)
+//   console.log("Failures: " + report.failures().length)
 //
 //   // Use the exit code to propagate failures
 //   process.exit(code)
@@ -104,29 +105,10 @@ var Washington = function (message, func) {
 //
 // API
 // ---
-//
-// ### on( event, callback )
-//
-// Stores an event TODO
-Washington.on = function (event, callback) {
-  Washington.listeners = Washington.listeners || {}
-  Washington.listeners[event] = Washington.listeners[event] || []
-  if (Washington.listeners[event].indexOf(callback) == -1)
-    Washington.listeners[event].push(callback)
 
-  return Washington
-}
+Washington.on = mediator.on
 
-Washington.trigger = function (event, args) {
-  if (
-    Washington.listeners &&
-    Washington.listeners[event] instanceof Array)
-
-    Washington.listeners[event].forEach(function (callback) {
-      callback.apply(null, args)
-    })
-  return Washington
-}
+Washington.trigger = mediator.trigger
 
 Washington.go = function () {
   Washington.list.forEach(function (example) {
@@ -152,6 +134,8 @@ Washington.pendings = function () {
     return example instanceof Washington.Pending
   })
 }
+
+Washington.pending = Washington.pendings
 
 Washington.reset = function () {
   Washington.list      = null
