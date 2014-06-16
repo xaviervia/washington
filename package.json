@@ -22,6 +22,7 @@
     "url": "https://github.com/xaviervia/washington/issues"
   },
   "devDependencies": {
-    "cli-color": "~0.3.2"
+    "cli-color": "~0.3.2",
+    "coffee": "0.0.1"
   }
 }
