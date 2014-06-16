@@ -41,6 +41,7 @@
 "use strict"
 
 var mediator   = require("./src/mediator")
+var Formatter  = require("./src/formatter")
 
 var Washington = function (message, func) {
 
@@ -83,12 +84,13 @@ var Washington = function (message, func) {
 // washington.on("complete", function (report, code) {
 //
 //   // Log the results by hand
-//   console.log("Successes: " + report.successes().length)
-//   console.log("Pending: " + report.pendings().length)
-//   console.log("Failures: " + report.failures().length)
+//   console.log("Successful: " + report.successful().length)
+//   console.log("Pending: " + report.pending().length)
+//   console.log("Failing: " + report.failing().length)
 //
-//   // Use the exit code to propagate failures
+//   // Use the exit code to propagate failing status
 //   process.exit(code)
+//
 // })
 // ```
 //
@@ -108,7 +110,26 @@ var Washington = function (message, func) {
 
 Washington.on = mediator.on
 
+Washington.off = mediator.off
+
 Washington.trigger = mediator.trigger
+
+Washington.release = mediator.release
+
+Washington.use = function (formatter) {
+  if (Washington.formatter)
+    Washington.off(Washington.formatter)
+
+  try {
+    Object.keys(formatter)
+    Washington.on(formatter)
+    Washington.formatter = formatter
+  }
+
+  catch (notObject) {
+    Washington.formatter = null
+  }
+}
 
 Washington.go = function () {
   Washington.list.forEach(function (example) {
@@ -117,29 +138,28 @@ Washington.go = function () {
   })
 }
 
-Washington.successes = function () {
+Washington.successful = function () {
   return Washington.list.filter(function (example) {
     return example instanceof Washington.Success
   })
 }
 
-Washington.failures = function () {
+Washington.failing = function () {
   return Washington.list.filter(function (example) {
     return example instanceof Washington.Failure
   })
 }
 
-Washington.pendings = function () {
+Washington.pending = function () {
   return Washington.list.filter(function (example) {
     return example instanceof Washington.Pending
   })
 }
 
-Washington.pending = Washington.pendings
-
 Washington.reset = function () {
   Washington.list      = null
   Washington.listeners = null
+  Washington.use(Formatter)
 
   Washington.on("example", function () {
     if (Washington.list.filter(function (example) {
@@ -149,7 +169,7 @@ Washington.reset = function () {
         "complete",
         [
           Washington,
-          Washington.failures().length
+          Washington.failing().length
         ]
       )
   })

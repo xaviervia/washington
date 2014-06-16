@@ -14,6 +14,8 @@ cleanup    = ->
 
 log "Should fire the example event on example runned"
 
+washington.use "silent"
+
 flag = false
 
 example = washington "Will fire", ->
@@ -34,6 +36,8 @@ cleanup()
 
 log "on 'complete' should be called when complete"
 
+washington.use "silent"
+
 example = washington "Full test", ->
   assert.equal 2 + 2, 4
 
@@ -42,9 +46,9 @@ flag = false
 washington.on 'complete', (report, code)->
   assert.equal code, 0
   assert.equal report, washington
-  assert.equal report.successes().length, 1
-  assert.equal report.failures().length, 0
-  assert.equal report.pendings().length, 0
+  assert.equal report.successful().length, 1
+  assert.equal report.failing().length, 0
+  assert.equal report.pending().length, 0
   flag = true
 
 washington.go()
@@ -57,6 +61,8 @@ setTimeout ->
   ##############################################################################
 
   log "on 'success' should be called when an example has succeeded"
+
+  washington.use "silent"
 
   successFlag = false
 
@@ -78,6 +84,8 @@ setTimeout ->
 
   log "on 'failure' should be called when an example has failed"
 
+  washington.use "silent"
+
   failureFlag = false
 
   example = washington "Will fail", ->
@@ -97,6 +105,8 @@ setTimeout ->
   ##############################################################################
 
   log "on 'pending' should be called when an example is pending"
+
+  washington.use "silent"
 
   pendingFlag = false
 

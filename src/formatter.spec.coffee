@@ -5,6 +5,13 @@ log        = (message)->
   console.log color.bold message
 hijack     = {}
 
+jack       = (object, method, mock)->
+  hijack[method] = object[method]
+  object[method] = mock
+
+unjack     = (object, method)->
+  object[method] = hijack[method]
+
 pending    = (reason)->
   throw new Error(reason)
 
@@ -13,10 +20,9 @@ pending    = (reason)->
 log "Should log to info in green and nice whenever a success occurs"
 
 flag         = false
-hijack.info  = console.info
 message      = "This will succeed"
 
-console.info = (content)->
+jack console, "info", (content)->
   assert.equal content,
                color.green " ✌ " + message
   flag = true
@@ -26,17 +32,16 @@ formatter.success
 
 assert.equal flag, true
 
-console.info = hijack.info
+unjack hijack, "info"
 
 ################################################################################
 
 log "Should log to warn in yellow and normal whenever a pending occurs"
 
 flag         = false
-hijack.warn  = console.warn
 message      = "This is pending"
 
-console.warn = (content)->
+jack console, "warn", (content)->
   assert.equal content,
                color.yellow " ✍ " + message
   flag = true
@@ -46,18 +51,17 @@ formatter.pending
 
 assert.equal flag, true
 
-console.warn = hijack.warn
+unjack hijack, "warn"
 
 ################################################################################
 
 log "Should log to error in red and harsh whenever a failure occurs"
 
 flag         = false
-hijack.error = console.error
 message      = "This fails"
 error        = new Error "This should be there"
 
-console.error = (content)->
+jack console, "error", (content)->
   assert.equal content,
                color.red " ☜ " + message + "\n ☜ " +
                  error.stack
@@ -69,38 +73,154 @@ formatter.failure
 
 assert.equal flag, true
 
-console.error = hijack.error
+unjack hijack, "error"
+
+################################################################################
+
+log "Complete should list colored the successes, pending and failures"
+
+flag         = false
+
+jack process, "exit", ->
+jack console, "log", (content)->
+  assert.equal content,
+               color.red("3 failing") + " ∙ " +
+               color.yellow("2 pending") + " ∙ " +
+               color.green("5 successful")
+  flag = true
+
+formatter.complete
+  successful: ->
+    [1, 2, 3, 4, 5]
+  pending: ->
+    [1, 2]
+  failing: ->
+    [1, 2, 3]
+  , 0
+
+assert.equal flag, true
+
+unjack process, "exit"
+unjack console, "log"
+
+################################################################################
+
+log "Complete should list colored the successful and pending"
+
+flag         = false
+
+jack process, "exit", ->
+jack console, "log", (content)->
+  assert.equal content,
+               color.yellow("2 pending") + " ∙ " +
+               color.green("5 successful")
+  flag = true
+
+formatter.complete
+  successful: ->
+    [1, 2, 3, 4, 5]
+  pending: ->
+    [1, 2]
+  failing: ->
+    []
+  , 0
+
+assert.equal flag, true
+
+unjack process, "exit"
+unjack console, "log"
+
+################################################################################
+
+log "Complete should list colored the successful"
+
+flag         = false
+
+jack process, "exit", ->
+jack console, "log", (content)->
+  assert.equal content,
+               color.green("5 successful")
+  flag = true
+
+formatter.complete
+  successful: ->
+    [1, 2, 3, 4, 5]
+  pending: ->
+    []
+  failing: ->
+    []
+  , 0
+
+assert.equal flag, true
+
+unjack process, "exit"
+unjack console, "log"
+
+################################################################################
+
+log "Complete should list colored the successful"
+
+flag         = false
+
+jack process, "exit", ->
+jack console, "log", (content)->
+  assert.equal content,
+               color.red("5 failing")
+  flag = true
+
+formatter.complete
+  successful: ->
+    []
+  pending: ->
+    []
+  failing: ->
+    [1, 2, 3, 4, 5]
+  , 0
+
+assert.equal flag, true
+
+unjack process, "exit"
+unjack console, "log"
 
 ################################################################################
 
 log "Should exit with status 0 when the code is 0"
 
 flag         = false
-hijack.exit  = process.exit
+dummyReport  =
+  successful: ->
+    []
+  pending: ->
+    []
+  failing: ->
+    []
 
-process.exit = (code)->
+jack console, "log", ->
+jack process, "exit", (code)->
   assert.equal code, 0
   flag = true
 
-formatter.complete null, 0
+formatter.complete dummyReport, 0
 
 assert.equal flag, true
 
-process.exit = hijack.exit
+unjack process, "exit"
+unjack console, "log"
 
 ################################################################################
 
 log "Should exit with status two if there are two failures"
 
 flag         = false
-hijack.exit  = process.exit
 
-process.exit = (code)->
+jack console, "log", ->
+jack process, "exit", (code)->
   assert.equal code, 2
   flag = true
 
-formatter.complete null, 2
+formatter.complete dummyReport, 2
 
 assert.equal flag, true
 
-process.exit = hijack.exit
+unjack process, "exit"
+unjack console, "log"
