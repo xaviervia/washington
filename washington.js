@@ -22,6 +22,8 @@
 // Usage
 // -----
 //
+// ### Basic usage
+//
 // ```javascript
 // var example = require("washington")
 // var assert  = require("assert")
@@ -32,6 +34,72 @@
 //
 // example.go()
 // ```
+//
+// **Washington** runs the examples when the `go` method is called. By default,
+// each successful, pending or failing example is printed to the console and
+// the application ends with an exit code of `0` (success) if no example failed,
+// or with the amount of failing examples (more than `0` means failure).
+//
+// ### Failing example
+//
+// ```javascript
+// var example = require("washington")
+// var assert  = require("assert")
+//
+// example("2 + 2 should be 5", function () {
+//   assert.equal(2 + 2, 5)
+// })
+//
+// example.go()
+// ```
+//
+// ### Pending example
+//
+// > Oh yes, I missed pending. I'm looking at you,
+// > [**Jasmine**](jasmine.github.io)
+//
+// ```javascript
+// var example = require("washington")
+//
+// example("2 + 2 should be 4")
+//
+// example.go()
+// ```
+//
+// ### Asynchronous example
+//
+// The main difference between synchronous and asynchronous examples is that
+// asynchronous ones require to be told:
+//
+// - When is the example complete
+// - What has been the error, if any
+//
+// This is achieved with the `done` function that the example function receives
+// as argument.
+//
+// ```javascript
+// var example = require("washington")
+// var assert  = require("assert")
+//
+// example("2 + 2 will be 4", function (done) {
+//   var result = 2 + 2
+//   setTimeout(function () {
+//     try {
+//       assert.equal(result, 4)
+//       done()
+//     }
+//     catch(error) {
+//       done(error)
+//     }
+//   }, 100)
+// })
+//
+// example.go()
+// ```
+//
+// > **Important**: please note that if the example function receives a
+// > an argument, the example will be assumed to be asynchronous and will
+// > timeout if the `done` function is never executed.
 //
 // #### Arguments
 //
