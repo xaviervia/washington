@@ -164,7 +164,6 @@ cleanup()
 
 ################################################################################
 
-<<<<<<< HEAD
 log "Use should simply remove is the argument is not an object"
 
 flag = true
@@ -221,6 +220,25 @@ cleanup()
 
 ################################################################################
 
+log "It is not complete if there are examples not done"
+
+washington.list = [new washington]
+assert.equal washington.isComplete(), false
+
+cleanup()
+
+################################################################################
+
+log "It is not complete if there are promises"
+
+washington.list = [new washington.Promise()]
+
+assert.equal washington.isComplete(), false
+
+cleanup()
+
+################################################################################
+
 log ""
 log "Run formatter tests"
 log "-------------------"
@@ -242,11 +260,3 @@ log "Run event tests"
 log "---------------"
 log ""
 require "./events.spec"
-
-################################################################################
-
-log ""
-log "Run async tests"
-log "---------------"
-log ""
-require "./async.spec"

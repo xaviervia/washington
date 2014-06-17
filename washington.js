@@ -138,6 +138,14 @@ Washington.go = function () {
   })
 }
 
+Washington.isComplete = function () {
+  return Washington.list
+    .filter(function (example) {
+      return (example instanceof Washington) ||
+        (example instanceof Washington.Promise)
+    }).length == 0
+}
+
 Washington.successful = function () {
   return Washington.list.filter(function (example) {
     return example instanceof Washington.Success
@@ -162,9 +170,7 @@ Washington.reset = function () {
   Washington.use(Formatter)
 
   Washington.on("example", function () {
-    if (Washington.list.filter(function (example) {
-          return example instanceof Washington
-        }).length == 0)
+    if (Washington.isComplete())
       Washington.trigger(
         "complete",
         [
@@ -179,29 +185,56 @@ Washington.prototype.run = function () {
   var replacement
 
   if (this.function) {
-    try {
-      this.function()
-      replacement = this.succeeded()
+
+    //! If the example function requires an argument
+    //! it is interpreted as asynchronous
+    if (this.function.length == 1) {
+      replacement = this.promise()
+      this.function(function (error) {
+        replacement.done(error)
+      })
     }
-    catch (error) {
-      replacement = this.failed(error)
+
+    //! If the example function requires no arguments
+    //! it is interpreted as synchronous
+    else {
+      try {
+        this.function()
+        replacement = this.succeeded()
+      }
+      catch (error) {
+        replacement = this.failed(error)
+      }
     }
   }
 
-  else
+  else {
     replacement = this.pending()
+  }
 
-  Washington.trigger('example', [replacement, Washington])
   return replacement
+}
+
+Washington.prototype.promise = function () {
+  var promise = new Washington.Promise(this)
+  var current = this
+  Washington.list = Washington.list.map(function (example) {
+    return example === current ? promise : example
+  })
+  Washington.trigger('promise', [promise, Washington])
+  return promise
 }
 
 Washington.prototype.succeeded = function () {
   var success = new Washington.Success(this)
   var current = this
   Washington.list = Washington.list.map(function (example) {
-    return example === current ? success : example
+    return example instanceof Washington.Promise ?
+      (example.original === current ? success : example ) :
+      (example === current ? success : example )
   })
   Washington.trigger('success', [success, Washington])
+  Washington.trigger('example', [success, Washington])
   return success
 }
 
@@ -209,9 +242,12 @@ Washington.prototype.failed = function (error) {
   var failure = new Washington.Failure(this, error)
   var current = this
   Washington.list = Washington.list.map(function (example) {
-    return example === current ? failure : example
+    return example instanceof Washington.Promise ?
+      (example.original === current ? failure : example ) :
+      (example === current ? failure : example )
   })
   Washington.trigger('failure', [failure, Washington])
+  Washington.trigger('example', [failure, Washington])
   return failure
 }
 
@@ -222,12 +258,14 @@ Washington.prototype.pending = function () {
     return example === current ? pending : example
   })
   Washington.trigger('pending', [pending, Washington])
+  Washington.trigger('example', [pending, Washington])
   return pending
 }
 
 Washington.Success = require("./src/success")
 Washington.Failure = require("./src/failure")
 Washington.Pending = require("./src/pending")
+Washington.Promise = require("./src/promise")
 
 Washington.reset()
 

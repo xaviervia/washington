@@ -63,7 +63,7 @@ error        = new Error "This should be there"
 
 jack console, "error", (content)->
   assert.equal content,
-               color.red " ☜ " + message + "\n ☜ " +
+               color.red " ☞ " + message + "\n ☞ " +
                  error.stack
   flag = true
 

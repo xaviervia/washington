@@ -26,7 +26,7 @@ module.exports = {
   // Logs to `console.error` in red and adds a left pointing hand
   failure: function (example) {
     console.error(
-      color.red(" ☜ " + example.message + "\n ☜ " + example.error.stack))
+      color.red(" ☞ " + example.message + "\n ☞ " + example.error.stack))
   },
 
   // on complete
@@ -41,7 +41,7 @@ module.exports = {
       items.push(color.yellow(report.pending().length + " pending"))
     if (report.successful().length > 0)
       items.push(color.green(report.successful().length + " successful"))
-    
+
     console.log(items.join(" ∙ "))
     process.exit(code)
   }
