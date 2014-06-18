@@ -167,6 +167,7 @@ Washington.pending = function () {
 Washington.reset = function () {
   Washington.list      = null
   Washington.listeners = null
+  Washington.timeout   = null
   Washington.use(Formatter)
 
   Washington.on("example", function () {
@@ -216,7 +217,8 @@ Washington.prototype.run = function () {
 }
 
 Washington.prototype.promise = function () {
-  var promise = new Washington.Promise(this)
+  var promise = new Washington.Promise(this, Washington.timeout)
+
   var current = this
   Washington.list = Washington.list.map(function (example) {
     return example === current ? promise : example
@@ -266,6 +268,7 @@ Washington.Success = require("./src/success")
 Washington.Failure = require("./src/failure")
 Washington.Pending = require("./src/pending")
 Washington.Promise = require("./src/promise")
+Washington.TimeoutError = require("./src/timeout-error")
 
 Washington.reset()
 

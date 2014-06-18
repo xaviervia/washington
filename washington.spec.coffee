@@ -231,7 +231,9 @@ cleanup()
 
 log "It is not complete if there are promises"
 
-washington.list = [new washington.Promise()]
+washington.list = [new washington.Promise({})]
+
+washington.list[0].ready = true # Prevent the promise from firing a timeout
 
 assert.equal washington.isComplete(), false
 
