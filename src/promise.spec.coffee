@@ -55,6 +55,7 @@ example =
   failed: (error)->
     assert.equal error instanceof TimeoutError, true
     assert.equal error.message, message
+    assert.equal error.stack.length > 0, true
     flag = true
 
 promise = new Promise example

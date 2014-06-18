@@ -6,6 +6,9 @@
 
 var TimeoutError = function (message) {
   this.message = message
+  this.name    = "TimeoutError"
+
+  Error.captureStackTrace(this, TimeoutError)
 }
 
 TimeoutError.prototype = Object.create(Error.prototype)
