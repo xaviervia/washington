@@ -55,7 +55,7 @@
 //
 // ### Pending example
 //
-// > Oh yes, I missed pending. I'm looking at you,
+// > Oh yes, I missed having "pending". I'm looking at you,
 // > [**Jasmine**](jasmine.github.io)
 //
 // ```javascript
@@ -97,14 +97,9 @@
 // example.go()
 // ```
 //
-// > **Important**: please note that if the example function receives a
+// > **Important**: please note that if the example function receives
 // > an argument, the example will be assumed to be asynchronous and will
 // > timeout if the `done` function is never executed.
-//
-// #### Arguments
-//
-// - `String` description
-// - `Function` example
 //
 "use strict"
 
