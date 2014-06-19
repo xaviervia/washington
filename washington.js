@@ -521,7 +521,7 @@ Washington.prototype.run = function () {
 
   //! Return the adapted example
   return replacement
-  
+
 }
 
 Washington.prototype.promise = function () {
