@@ -40,6 +40,13 @@
 // the application ends with an exit code of `0` (success) if no example failed,
 // or with the amount of failing examples (more than `0` means failure).
 //
+// > Note: I'm naming the module `example` even when the internal name is
+// > `Washington` and I'll maintain this inconsistency accross the
+// > documentation. This is because I strongly recommend using `example` to
+// > make the purpose explicit. Please bear in mind that all of `Washington`
+// > methods as stated in the documentation below are accessible through
+// > `example` in these samples.
+//
 // ### Failing example
 //
 // ```javascript
@@ -100,7 +107,6 @@
 // > **Important**: please note that if the example function receives
 // > an argument, the example will be assumed to be asynchronous and will
 // > timeout if the `done` function is never executed.
-//
 "use strict"
 
 var mediator   = require("./src/mediator")
@@ -114,9 +120,10 @@ var Washington = function (message, func) {
 }
 
 //
-// #### Events
+// Events
+// ------
 //
-// ##### `complete`
+// ### `complete`
 //
 // Fires whenever the full report is ready.
 //
@@ -141,7 +148,7 @@ var Washington = function (message, func) {
 // })
 // ```
 //
-// ##### `example`
+// ### `example`
 //
 // Fires whenever an example ran. Fires just after the corresponding `success`,
 // `failure` or `pending` events by the same example. Internally, Washington
@@ -161,7 +168,7 @@ var Washington = function (message, func) {
 // })
 // ```
 //
-// ##### `success`
+// ### `success`
 //
 // Fires whenever an example ran successfully. Fires just before the
 // corresponding `example` event.
@@ -171,7 +178,7 @@ var Washington = function (message, func) {
 // - `Washington.Success` successObject
 // - `Object` report
 //
-// ##### `failure`
+// ### `failure`
 //
 // Fires whenever an example failed. Fires just before the corresponding
 // `example` event.
@@ -181,7 +188,7 @@ var Washington = function (message, func) {
 // - `Washington.Failure` failureObject
 // - `Object` report
 //
-// ##### `pending`
+// ### `pending`
 //
 // Fires whenever an example is pending. Fires just before the corresponding
 // `example` event.
@@ -191,7 +198,7 @@ var Washington = function (message, func) {
 // - `Washington.Pending` pendingObject
 // - `Object` report
 //
-// ##### `promise`
+// ### `promise`
 //
 // Fires whenever an example is async and became a promise.
 //
@@ -200,12 +207,8 @@ var Washington = function (message, func) {
 // - `Washington.Promise` promiseObject
 // - `Object` report
 //
-// API
-// ---
-//
-// ### Washington function
-//
-// #### Properties
+// Properties
+// ----------
 //
 // - list: `Array` of examples
 // - listeners: `Array` of events
@@ -214,18 +217,25 @@ var Washington = function (message, func) {
 // - formatter: `Object` containing methods that listen to their corresponding
 //   events
 //
-// #### Methods
+// Methods
+// -------
 //
-// - `Washington.on`: See [`Mediator.on`](src/mediator.md)
+// ### on( event, callback ) | on( eventHash )
+//
+// > See [`Mediator.on`](src/mediator.md)
 Washington.on = mediator.on
 
-// - `Washington.off`: See [`Mediator.off`](src/mediator.md)
+// ### off( event, callback ) | off( eventHash )
+//
+// See [`Mediator.off`](src/mediator.md)
 Washington.off = mediator.off
 
-// - `Washington.trigger`: See [`Mediator.trigger`](src/mediator.md)
+// ### trigger( event, data )
+//
+// See [`Mediator.trigger`](src/mediator.md)
 Washington.trigger = mediator.trigger
 
-// ##### use( formatter )
+// ### use( formatter )
 //
 // The `use` method allows you to change formatters easily.
 // The `formatter` object is simply an object where each method maps to an event
@@ -269,9 +279,9 @@ Washington.trigger = mediator.trigger
 // example.go()
 // ```
 //
-// ###### Silencing the reporter
+// **Silencing the output**
 //
-// Silencing the reporter is pretty straightforward. If you send anything
+// Silencing the output is pretty straightforward. If you send anything
 // to the `use` method that has no corresponding `example`, `success`, etc
 // methods itself, the result will be that the default formatter will be
 // removed but nothing added to replace it.
@@ -313,7 +323,7 @@ Washington.use = function (formatter) {
   }
 }
 
-// ##### go()
+// ### go()
 //
 // Runs the examples in the list, one by one.
 Washington.go = function () {
@@ -328,11 +338,11 @@ Washington.go = function () {
 
 }
 
-// ##### isComplete()
+// ### isComplete()
 //
 // Returns whether all the examples are ready or not.
 //
-// ###### Returns
+// #### Returns
 //
 // - `Boolean` isComplete
 Washington.isComplete = function () {
@@ -351,11 +361,11 @@ Washington.isComplete = function () {
 
 }
 
-// ##### successful()
+// ### successful()
 //
 // Returns the amount of successful examples currently on the report.
 //
-// ###### Returns
+// #### Returns
 //
 // - `Integer` amountOfSuccessfulExamples
 Washington.successful = function () {
@@ -366,11 +376,11 @@ Washington.successful = function () {
 
 }
 
-// ##### failing()
+// ### failing()
 //
 // Returns the amount of failing examples currently on the report.
 //
-// ###### Returns
+// #### Returns
 //
 // - `Integer` amountOfFailingExamples
 Washington.failing = function () {
@@ -381,11 +391,11 @@ Washington.failing = function () {
 
 }
 
-// ##### pending()
+// ### pending()
 //
 // Returns the amount of pending examples currently on the report.
 //
-// ###### Returns
+// #### Returns
 //
 // - `Integer` amountOfPendingExamples
 Washington.pending = function () {
@@ -396,14 +406,14 @@ Washington.pending = function () {
 
 }
 
-// ##### reset()
+// ### reset()
 //
 // Sets washington to the defaults
 //
-// - Empties the list of examples
-// - Removes all event listeners
-// - Sets the timeout to null (that will cause the default to be used)
-// - Sets the default formatter to be used
+// - Empties the `list` of examples
+// - Removes all event `listeners`
+// - Sets the `timeout` to null (that will cause the default to be used)
+// - Sets the default `formatter` to be used
 // - Hooks function that fires the `complete` event when the last `example` ran
 Washington.reset = function () {
   Washington.list      = null
@@ -423,13 +433,37 @@ Washington.reset = function () {
   })
 }
 
+// Classes
+// -------
+//
+// - [`Washington.Example`](src/example.md)
 Washington.Example = require("./src/example")(Washington)
+
+// - [`Washington.Success`](src/success.md)
 Washington.Success = require("./src/success")
+
+// - [`Washington.Failure`](src/failure.md)
 Washington.Failure = require("./src/failure")
+
+// - [`Washington.Pending`](src/pending.md)
 Washington.Pending = require("./src/pending")
+
+// - [`Washington.Promise`](src/promise.md)
 Washington.Promise = require("./src/promise")
+
+// - [`Washington.TimeoutError`](src/timeout-error.md)
 Washington.TimeoutError = require("./src/timeout-error")
 
+//! Setup washington to the defaults.
 Washington.reset()
 
 module.exports = Washington
+
+// License
+// -------
+//
+// Copyright 2014 Xavier Via
+//
+// BSD 2 Clause license.
+//
+// See [LICENSE](LICENSE) attached.

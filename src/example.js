@@ -61,7 +61,7 @@ module.exports = function (Washington) {
         //! and make sure that it doesn't lose context
         this.function(function (error) {
           replacement.done(error) })
-        
+
       }
 
       //! If the example function requires no arguments
@@ -97,6 +97,9 @@ module.exports = function (Washington) {
 
   }
 
+  // ### promise()
+  //
+  // Starts a [`Washington.Promise`](promise.md) pointing to the TODO
   Example.prototype.promise = function () {
     var promise = new Washington.Promise(this, Washington.timeout)
 

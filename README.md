@@ -40,6 +40,13 @@ each successful, pending or failing example is printed to the console and
 the application ends with an exit code of `0` (success) if no example failed,
 or with the amount of failing examples (more than `0` means failure).
 
+> Note: I'm naming the module `example` even when the internal name is
+> `Washington` and I'll maintain this inconsistency accross the
+> documentation. This is because I strongly recommend using `example` to
+> make the purpose explicit. Please bear in mind that all of `Washington`
+> methods as stated in the documentation below are accessible through
+> `example` in these samples.
+
 ### Failing example
 
 ```javascript
@@ -101,9 +108,11 @@ example.go()
 > an argument, the example will be assumed to be asynchronous and will
 > timeout if the `done` function is never executed.
 
-#### Events
 
-##### `complete`
+Events
+------
+
+### `complete`
 
 Fires whenever the full report is ready.
 
@@ -117,18 +126,18 @@ Fires whenever the full report is ready.
 ```javascript
 washington.on("complete", function (report, code) {
 
-  Log the results by hand
+  // Log the results by hand
   console.log("Successful: " + report.successful().length)
   console.log("Pending: " + report.pending().length)
   console.log("Failing: " + report.failing().length)
 
-  Use the exit code to propagate failing status
+  // Use the exit code to propagate failing status
   process.exit(code)
 
 })
 ```
 
-##### `example`
+### `example`
 
 Fires whenever an example ran. Fires just after the corresponding `success`,
 `failure` or `pending` events by the same example. Internally, Washington
@@ -148,7 +157,7 @@ washington.on("example", function (example, report) {
 })
 ```
 
-##### `success`
+### `success`
 
 Fires whenever an example ran successfully. Fires just before the
 corresponding `example` event.
@@ -158,7 +167,7 @@ corresponding `example` event.
 - `Washington.Success` successObject
 - `Object` report
 
-##### `failure`
+### `failure`
 
 Fires whenever an example failed. Fires just before the corresponding
 `example` event.
@@ -168,7 +177,7 @@ Fires whenever an example failed. Fires just before the corresponding
 - `Washington.Failure` failureObject
 - `Object` report
 
-##### `pending`
+### `pending`
 
 Fires whenever an example is pending. Fires just before the corresponding
 `example` event.
@@ -178,7 +187,7 @@ Fires whenever an example is pending. Fires just before the corresponding
 - `Washington.Pending` pendingObject
 - `Object` report
 
-##### `promise`
+### `promise`
 
 Fires whenever an example is async and became a promise.
 
@@ -187,12 +196,8 @@ Fires whenever an example is async and became a promise.
 - `Washington.Promise` promiseObject
 - `Object` report
 
-API
----
-
-### Washington function
-
-#### Properties
+Properties
+----------
 
 - list: `Array` of examples
 - listeners: `Array` of events
@@ -201,15 +206,22 @@ API
 - formatter: `Object` containing methods that listen to their corresponding
   events
 
-#### Methods
+Methods
+-------
 
-- `Washington.on`: See [`Mediator.on`](src/mediator.md)
+### on( event, callback ) | on( eventHash )
 
-- `Washington.off`: See [`Mediator.off`](src/mediator.md)
+> See [`Mediator.on`](src/mediator.md)
 
-- `Washington.trigger`: See [`Mediator.trigger`](src/mediator.md)
+### off( event, callback ) | off( eventHash )
 
-##### use( formatter )
+See [`Mediator.off`](src/mediator.md)
+
+### trigger( event, data )
+
+See [`Mediator.trigger`](src/mediator.md)
+
+### use( formatter )
 
 The `use` method allows you to change formatters easily.
 The `formatter` object is simply an object where each method maps to an event
@@ -253,9 +265,9 @@ example("Bad", function () {
 example.go()
 ```
 
-###### Silencing the reporter
+**Silencing the output**
 
-Silencing the reporter is pretty straightforward. If you send anything
+Silencing the output is pretty straightforward. If you send anything
 to the `use` method that has no corresponding `example`, `success`, etc
 methods itself, the result will be that the default formatter will be
 removed but nothing added to replace it.
@@ -270,75 +282,62 @@ example("Will print nothing, do nothing")
 example.go()
 ```
 
-##### go()
+### go()
 
 Runs the examples in the list, one by one.
 
-##### isComplete()
+### isComplete()
 
 Returns whether all the examples are ready or not.
 
-###### Returns
+#### Returns
 
 - `Boolean` isComplete
 
-##### successful()
+### successful()
 
 Returns the amount of successful examples currently on the report.
 
-###### Returns
+#### Returns
 
 - `Integer` amountOfSuccessfulExamples
 
-##### failing()
+### failing()
 
 Returns the amount of failing examples currently on the report.
 
-###### Returns
+#### Returns
 
 - `Integer` amountOfFailingExamples
 
-##### pending()
+### pending()
 
 Returns the amount of pending examples currently on the report.
 
-###### Returns
+#### Returns
 
 - `Integer` amountOfPendingExamples
 
-##### reset()
+### reset()
 
 Sets washington to the defaults
 
-- Empties the list of examples
-- Removes all event listeners
-- Sets the timeout to null (that will cause the default to be used)
-- Sets the default formatter to be used
+- Empties the `list` of examples
+- Removes all event `listeners`
+- Sets the `timeout` to null (that will cause the default to be used)
+- Sets the default `formatter` to be used
 - Hooks function that fires the `complete` event when the last `example` ran
-### Washington Example
 
-#### Properties
+Classes
+-------
 
-- message: `String` the description of the example
-- function: `Function` the actual example
+- [`Washington.Example`](src/example.md)
 
-#### Methods
+License
+-------
 
-##### run()
+Copyright 2014 Xavier Via
 
-Runs the example.
+BSD 2 Clause license.
 
-If the example requires an argument, it is assumed that the result will
-be passed to the argument function, so the example becomes a promise and
-`run` returns the `Washington.Promise`
-
-If the example does not require an argument, it fails or succeeds according
-to whether the function throws an error or not. `run` then returns either a
-`Washington.Success` or `Washington.Failure`
-
-If the example has no function at all, it will become a `Washington.Pending`
-
-###### Returns
-
-- `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
-  `Washington.Promise` adaptedExample
+See [LICENSE](LICENSE) attached.
