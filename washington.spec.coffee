@@ -30,7 +30,7 @@ log "Calling the function should get back an instance"
 
 example = washington()
 
-assert.equal example instanceof washington, true
+assert.equal example instanceof washington.Example, true
 
 cleanup()
 
