@@ -12,6 +12,30 @@ cleanup    = ->
 
 ################################################################################
 
+log "Sync failure for async"
+
+flag = false
+
+example = washington "Fail sync please", (done)->
+  throw new Error "Fail sync!"
+  setTimeout ->
+    done()
+  , 10
+
+washington.use
+  failure: (failure)->
+    assert.equal failure.message, "Fail sync please"
+    assert.equal failure.error.message, "Fail sync!"
+    flag = true
+
+example.run()
+
+assert.equal flag, true
+
+cleanup()
+
+################################################################################
+
 log "Simple async test"
 
 flag = false
@@ -124,7 +148,7 @@ setTimeout ->
         log "---------------"
         log ""
         require "./src/promise.spec"
-        
+
       , 400
 
     , 3500

@@ -54,13 +54,24 @@ module.exports = function (Washington) {
       //! it is interpreted as asynchronous
       if (this.function.length == 1) {
 
-        //! Get the promise
-        replacement = this.promise()
 
-        //! Send the done function of the Promise to the example function
-        //! and make sure that it doesn't lose context
-        this.function(function (error) {
-          replacement.done(error) })
+        //! Try catch the function call for the promise since it may fail
+        //! synchronously after all
+        try {
+
+          //! Get the promise
+          replacement = this.promise()
+
+          //! Send the done function of the Promise to the example function
+          //! and make sure that it doesn't lose context
+          this.function(function (error) {
+            replacement.done(error) })
+
+        }
+
+        //! If it fails, adapt it to a Failure forwarding the Error
+        catch (error) {
+          replacement = this.failed(error) }
 
       }
 
@@ -76,12 +87,9 @@ module.exports = function (Washington) {
           replacement = this.succeeded()
         }
 
+        //! If it fails, adapt it to a Failure forwarding the Error
         catch (error) {
-
-          //! If it fails, adapt it to a Failure forwarding the Error
-          replacement = this.failed(error)
-
-        }
+          replacement = this.failed(error)  }
 
       }
 
