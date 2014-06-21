@@ -21,8 +21,10 @@
   "bugs": {
     "url": "https://github.com/xaviervia/washington/issues"
   },
+  "dependencies": {
+    "cli-color": "~0.3.2"
+  },
   "devDependencies": {
-    "cli-color": "~0.3.2",
     "coffee-script": "~1.7.1"
   }
 }
