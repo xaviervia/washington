@@ -63,7 +63,8 @@ var Promise = function (original, timeout) {
 // done( error )
 // -------------
 //
-// Run the `done` method when the promise is fulfilled.
+// Run the `done` method when the promise is fulfilled. Only runs if
+// the promise was not `ready`.
 //
 // If there is no argument, the example is assumed to have succeeded and the
 // promise will call the `succeeded` method of the original example.
@@ -78,20 +79,26 @@ var Promise = function (original, timeout) {
 //
 Promise.prototype.done = function (error) {
 
-  //! Set the promise as ready so that the timeout is discarded
-  this.ready = true
+  //! Do nothing if the promise is already done
+  if (!this.ready) {
 
-  //! If there is an error
-  if (error)
+    //! Set the promise as ready so that the timeout is discarded
+    this.ready = true
 
-    //! Call failed
-    this.original.failed(error)
+    //! If there is an error
+    if (error)
 
-  //! If there was no error, assume success
-  else
+      //! Call failed
+      this.original.failed(error)
 
-    //! ...and call succeeded
-    this.original.succeeded()
+    //! If there was no error, assume success
+    else
+
+      //! ...and call succeeded
+      this.original.succeeded()
+
+  }
+
 }
 
 

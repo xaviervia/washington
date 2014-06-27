@@ -126,9 +126,9 @@ setTimeout ->
   ##############################################################################
 
   log ""
-  log "Run async tests"
-  log "---------------"
+  log "Run sequential tests"
+  log "--------------------"
   log ""
-  require "./async.spec"
+  require "./sequential.spec"
 
 , 500

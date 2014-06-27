@@ -69,9 +69,17 @@ module.exports = function (Washington) {
 
         }
 
-        //! If it fails, adapt it to a Failure forwarding the Error
+        //! If it fails
         catch (error) {
-          replacement = this.failed(error) }
+
+          //! Set the promise as ready so it disregards the done method and
+          //! the timeout
+          replacement.ready = true
+
+          // Adapt it to a Failure forwarding the Error
+          replacement = this.failed(error)
+
+        }
 
       }
 
@@ -105,12 +113,34 @@ module.exports = function (Washington) {
 
   }
 
+  // ### next()
+  //
+  // Returns the next example on the list or undefined if this is the last
+  // example.
+  //
+  // #### Returns
+  //
+  // - `Washington.Example` next
+  Example.prototype.next = function () {
+
+    return Washington
+        .list
+        .filter(
+          (function (example, index, collection) {
+            if (index > 0)
+              return collection[index - 1].original === this
+            else
+              return false
+          }).bind(this)
+        )[0]
+
+  }
+
   // ### promise()
   //
   // Starts a [`Washington.Promise`](promise.md) pointing to the TODO
   Example.prototype.promise = function () {
     var promise = new Washington.Promise(this, Washington.timeout)
-
     var current = this
     Washington.list = Washington.list.map(function (example) {
       return example === current ? promise : example
@@ -129,6 +159,11 @@ module.exports = function (Washington) {
     })
     Washington.trigger('success', [success, Washington])
     Washington.trigger('example', [success, Washington])
+
+    this.next() ?
+      this.next().run() :
+      Washington.complete()
+
     return success
   }
 
@@ -142,6 +177,11 @@ module.exports = function (Washington) {
     })
     Washington.trigger('failure', [failure, Washington])
     Washington.trigger('example', [failure, Washington])
+
+    this.next() ?
+      this.next().run() :
+      Washington.complete()
+
     return failure
   }
 
@@ -153,6 +193,11 @@ module.exports = function (Washington) {
     })
     Washington.trigger('pending', [pending, Washington])
     Washington.trigger('example', [pending, Washington])
+
+    this.next() ?
+      this.next().run() :
+      Washington.complete()
+
     return pending
   }
 

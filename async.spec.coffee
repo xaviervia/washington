@@ -12,7 +12,7 @@ cleanup    = ->
 
 ################################################################################
 
-log "Sync failure for async"
+log "Sync failure for async and abort promise"
 
 flag = false
 
@@ -22,10 +22,16 @@ example = washington "Fail sync please", (done)->
     done()
   , 10
 
+thePromise = null
+
 washington.use
+  promise: (promise)->
+    thePromise = promise
+
   failure: (failure)->
     assert.equal failure.message, "Fail sync please"
     assert.equal failure.error.message, "Fail sync!"
+    assert.equal thePromise.ready, true
     flag = true
 
 example.run()

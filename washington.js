@@ -325,17 +325,25 @@ Washington.use = function (formatter) {
 
 // ### go()
 //
-// Runs the examples in the list, one by one.
+// Runs the first example, which runs the second on complete, etc
 Washington.go = function () {
 
-  //! For each example in the list
-  Washington.list.forEach(function (example) {
+  //! Run the first example
+  Washington.list[0].run()
 
-    //! Run only if the example has a run function
-    //! This is because only objects of type Washington should be run
-    if (example.run === Washington.Example.prototype.run)
-      example.run() })
+}
 
+// ### complete()
+//
+// Triggers the 'complete' event.
+Washington.complete = function () {
+  Washington.trigger(
+    "complete",
+    [
+      Washington,
+      Washington.failing().length
+    ]
+  )
 }
 
 // ### isComplete()
@@ -421,6 +429,7 @@ Washington.reset = function () {
   Washington.timeout   = null
   Washington.use(Formatter)
 
+/*
   Washington.on("example", function () {
     if (Washington.isComplete())
       Washington.trigger(
@@ -431,6 +440,7 @@ Washington.reset = function () {
         ]
       )
   })
+  */
 }
 
 // Classes
