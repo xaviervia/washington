@@ -3,7 +3,7 @@
 //
 // > Little George sets a good example
 //
-// [ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932) [![Code Climate](https://codeclimate.com/github/xaviervia/washington.png)](https://codeclimate.com/github/xaviervia/washington)
+// [ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
 //
 // Example library for TDD/BDD in Node.js.
 // Very small. Much concise.
