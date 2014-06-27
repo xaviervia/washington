@@ -159,8 +159,10 @@ module.exports = function (Washington) {
       return example === this ? promise : example
     }).bind(this))
 
-    //! Trigger the Promise
+    //! Trigger the 'promise' event
     Washington.trigger('promise', [promise, Washington])
+
+    //! Return the promise
     return promise
   }
 
@@ -174,19 +176,27 @@ module.exports = function (Washington) {
   //
   // - `Washington.Success` success
   Example.prototype.succeeded = function () {
+
+    //! Create the Success object
     var success = new Washington.Success(this)
-    var current = this
-    Washington.list = Washington.list.map(function (example) {
+
+    //! Replace the Example or Promise for the Success on the list
+    Washington.list = Washington.list.map((function (example) {
       return example instanceof Washington.Promise ?
-        (example.original === current ? success : example ) :
-        (example === current ? success : example )
-    })
+        (example.original === this ? success : example ) :
+        (example === this ? success : example )
+    }).bind(this))
+
+    //! Trigger the 'success' and 'example' events
     Washington.trigger('success', [success, Washington])
     Washington.trigger('example', [success, Washington])
 
+    //! Run the next example or complete the report
     this.next()
 
+    //! Return the Success object
     return success
+
   }
 
   // ### failed()
@@ -199,18 +209,25 @@ module.exports = function (Washington) {
   //
   // - `Washington.Failure` failure
   Example.prototype.failed = function (error) {
+
+    //! Create the Failure object
     var failure = new Washington.Failure(this, error)
-    var current = this
-    Washington.list = Washington.list.map(function (example) {
+
+    //! Replace the Example or Promise for the Failure on the list
+    Washington.list = Washington.list.map((function (example) {
       return example instanceof Washington.Promise ?
-        (example.original === current ? failure : example ) :
-        (example === current ? failure : example )
-    })
+        (example.original === this ? failure : example ) :
+        (example === this ? failure : example )
+    }).bind(this))
+
+    //! Trigger the 'failure' and 'example' events
     Washington.trigger('failure', [failure, Washington])
     Washington.trigger('example', [failure, Washington])
 
+    //! Run the next example or complete the report
     this.next()
 
+    //! Return the Failure object
     return failure
   }
 
@@ -224,17 +241,25 @@ module.exports = function (Washington) {
   //
   // - `Washington.Pending` pending
   Example.prototype.pending = function () {
+
+    //! Create the Pending object
     var pending = new Washington.Pending(this)
-    var current = this
-    Washington.list = Washington.list.map(function (example) {
-      return example === current ? pending : example
-    })
+
+    //! Replace the Example for the Pending on the list
+    Washington.list = Washington.list.map((function (example) {
+      return example === this ? pending : example
+    }).bind(this))
+
+    //! Trigger the 'pending' and 'example' events
     Washington.trigger('pending', [pending, Washington])
     Washington.trigger('example', [pending, Washington])
 
+    //! Run the next example or complete the report
     this.next()
 
+    //! Return the Pending object
     return pending
+    
   }
 
   return Example
