@@ -422,25 +422,11 @@ Washington.pending = function () {
 // - Removes all event `listeners`
 // - Sets the `timeout` to null (that will cause the default to be used)
 // - Sets the default `formatter` to be used
-// - Hooks function that fires the `complete` event when the last `example` ran
 Washington.reset = function () {
   Washington.list      = null
   Washington.listeners = null
   Washington.timeout   = null
   Washington.use(Formatter)
-
-/*
-  Washington.on("example", function () {
-    if (Washington.isComplete())
-      Washington.trigger(
-        "complete",
-        [
-          Washington,
-          Washington.failing().length
-        ]
-      )
-  })
-  */
 }
 
 // Classes
