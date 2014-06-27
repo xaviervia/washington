@@ -3,7 +3,7 @@ Washington
 
 > Little George sets a good example
 
-[ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
+[ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932) [![Code Climate](https://codeclimate.com/github/xaviervia/washington.png)](https://codeclimate.com/github/xaviervia/washington)
 
 Example library for TDD/BDD in Node.js.
 Very small. Much concise.
@@ -108,6 +108,45 @@ example.go()
 > an argument, the example will be assumed to be asynchronous and will
 > timeout if the `done` function is never executed.
 
+### Sequential example
+
+Asynchronous examples are run one at a time. Washington is designed to do
+this because many real life testing scenarios involve tests that interact
+with the same objects or servers concurrently and knowing the state of the
+server or object is significative to the example's completion. As of
+version 0.3.0 there is no alternative to this behavior.
+
+```javascript
+var example = require("washington")
+var assert  = require("assert")
+
+var flag    = false
+
+example("will set the flag to true", function (done) {
+  setTimeout(function () {
+    assert.equal(flag, false)
+    flag = true
+    done()
+  }, 100)
+})
+
+example("the flag should be set to true", function (done) {
+  setTimeout(function () {
+    try {
+      assert.equal(flag, true)
+      done()
+    }
+
+    catch(error) {
+      done(error)
+    }
+  }, 100)
+})
+
+example.go()
+```
+
+
 
 Events
 ------
@@ -140,9 +179,7 @@ washington.on("complete", function (report, code) {
 ### `example`
 
 Fires whenever an example ran. Fires just after the corresponding `success`,
-`failure` or `pending` events by the same example. Internally, Washington
-hooks itself to the `example` event to find out if the batch is ready and
-fire the `complete` event.
+`failure` or `pending` events by the same example.
 
 **Arguments for callback**
 
@@ -189,7 +226,7 @@ Fires whenever an example is pending. Fires just before the corresponding
 
 ### `promise`
 
-Fires whenever an example is async and became a promise.
+Fires whenever an example was found to be asynchronous and became a Promise.
 
 **Arguments for callback**
 
@@ -284,7 +321,12 @@ example.go()
 
 ### go()
 
-Runs the examples in the list, one by one.
+Runs the first example, which runs the second on complete and so on.
+Once the last example runs it runs the `complete` method of Washington.
+
+### complete()
+
+Triggers the 'complete' event.
 
 ### isComplete()
 
@@ -326,12 +368,21 @@ Sets washington to the defaults
 - Removes all event `listeners`
 - Sets the `timeout` to null (that will cause the default to be used)
 - Sets the default `formatter` to be used
-- Hooks function that fires the `complete` event when the last `example` ran
 
 Classes
 -------
 
 - [`Washington.Example`](src/example.md)
+
+- [`Washington.Success`](src/success.md)
+
+- [`Washington.Failure`](src/failure.md)
+
+- [`Washington.Pending`](src/pending.md)
+
+- [`Washington.Promise`](src/promise.md)
+
+- [`Washington.TimeoutError`](src/timeout-error.md)
 
 License
 -------
