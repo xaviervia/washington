@@ -493,6 +493,19 @@ Washington.reset()
 
 module.exports = Washington
 
+// Testing
+// -------
+//
+// Washington tests are written using only `assert`, because of course.
+//
+// To run the tests you need to have CoffeeScript installed. Clone the repo and
+// run:
+//
+// ```
+// > sudo npm install -g coffee-script
+// > npm test
+// ```
+//
 // License
 // -------
 //
