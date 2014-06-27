@@ -15,7 +15,7 @@
 // - `Washington` original
 // - `Error` error
 //
-"use strict"
+"use strict";
 
 var Failure = function (original, error) {
   this.message  = original.message

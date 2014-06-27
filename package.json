@@ -26,5 +26,9 @@
   },
   "devDependencies": {
     "coffee-script": "~1.7.1"
+  },
+  "jshintConfig": {
+    "asi": true,
+    "node": true
   }
 }

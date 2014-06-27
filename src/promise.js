@@ -16,7 +16,7 @@
 // - `Washington` original
 // - _optional_ `Integer`: timeout
 //
-"use strict"
+"use strict";
 
 var TimeoutError = require("./timeout-error")
 

@@ -13,7 +13,7 @@
 //
 // - `Washington` original
 //
-"use strict"
+"use strict";
 
 var Success = function (original) {
   this.message  = original.message

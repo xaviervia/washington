@@ -7,7 +7,7 @@
 // - message: `String` the description of the example
 // - function: `Function` the actual example
 //
-"use strict"
+"use strict";
 
 module.exports = function (Washington) {
 
@@ -115,7 +115,7 @@ module.exports = function (Washington) {
 
   // ### next()
   //
-  // Returns the next example on the list or undefined if this is the last
+  // Returns the next example on the list or `undefined` if this is the last
   // example.
   //
   // #### Returns
@@ -123,7 +123,7 @@ module.exports = function (Washington) {
   // - `Washington.Example` next
   Example.prototype.next = function () {
 
-    return Washington
+    var next = Washington
         .list
         .filter(
           (function (example, index, collection) {
@@ -134,21 +134,45 @@ module.exports = function (Washington) {
           }).bind(this)
         )[0]
 
+    if (next)  next.run()
+
+    else       Washington.complete()
+
   }
 
   // ### promise()
   //
-  // Starts a [`Washington.Promise`](promise.md) pointing to the TODO
+  // Starts a [`Washington.Promise`](promise.md) pointing to the current
+  // example. Fires the `promise` event in `Washington` passing the `Promise`
+  // as argument. Returns the `Promise`.
+  //
+  // #### Returns
+  //
+  // - `Washington.Promise` promise
   Example.prototype.promise = function () {
+
+    //! Create the Promise (starts the timeout!)
     var promise = new Washington.Promise(this, Washington.timeout)
-    var current = this
-    Washington.list = Washington.list.map(function (example) {
-      return example === current ? promise : example
-    })
+
+    //! Replace the example for the Promise in the Washington.list
+    Washington.list = Washington.list.map((function (example) {
+      return example === this ? promise : example
+    }).bind(this))
+
+    //! Trigger the Promise
     Washington.trigger('promise', [promise, Washington])
     return promise
   }
 
+  // ### succeeded()
+  //
+  // Gets a [`Washington.Success`](success.md) object for this example.
+  // Fires the `success` and `example` events on `Washington` passing the
+  // `Success` as argument.
+  //
+  // #### Returns
+  //
+  // - `Washington.Success` success
   Example.prototype.succeeded = function () {
     var success = new Washington.Success(this)
     var current = this
@@ -160,13 +184,20 @@ module.exports = function (Washington) {
     Washington.trigger('success', [success, Washington])
     Washington.trigger('example', [success, Washington])
 
-    this.next() ?
-      this.next().run() :
-      Washington.complete()
+    this.next()
 
     return success
   }
 
+  // ### failed()
+  //
+  // Gets a [`Washington.Failure`](failure.md) object for this example.
+  // Fires the `failure` and `example` events on `Washington` passing the
+  // `Failure` as argument.
+  //
+  // #### Returns
+  //
+  // - `Washington.Failure` failure
   Example.prototype.failed = function (error) {
     var failure = new Washington.Failure(this, error)
     var current = this
@@ -178,13 +209,20 @@ module.exports = function (Washington) {
     Washington.trigger('failure', [failure, Washington])
     Washington.trigger('example', [failure, Washington])
 
-    this.next() ?
-      this.next().run() :
-      Washington.complete()
+    this.next()
 
     return failure
   }
 
+  // ### pending()
+  //
+  // Gets a [`Washington.Pending`](pending.md) object for this example.
+  // Fires the `pending` and `example` events on `Washington` passing the
+  // `Pending` as argument.
+  //
+  // #### Returns
+  //
+  // - `Washington.Pending` pending
   Example.prototype.pending = function () {
     var pending = new Washington.Pending(this)
     var current = this
@@ -194,9 +232,7 @@ module.exports = function (Washington) {
     Washington.trigger('pending', [pending, Washington])
     Washington.trigger('example', [pending, Washington])
 
-    this.next() ?
-      this.next().run() :
-      Washington.complete()
+    this.next()
 
     return pending
   }

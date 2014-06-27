@@ -107,14 +107,53 @@
 // > **Important**: please note that if the example function receives
 // > an argument, the example will be assumed to be asynchronous and will
 // > timeout if the `done` function is never executed.
-"use strict"
+//
+// ### Sequential example
+//
+// Asynchronous examples are run one at a time. Washington is designed to do
+// this because many real life testing scenarios involve tests that interact
+// with the same objects or servers concurrently and knowing the state of the
+// server or object is significative to the example's completion. As of
+// version 0.3.0 there is no alternative to this behavior.
+//
+// ```javascript
+// var example = require("washington")
+// var assert  = require("assert")
+//
+// var flag    = false
+//
+// example("will set the flag to true", function (done) {
+//   setTimeout(function () {
+//     assert.equal(flag, false)
+//     flag = true
+//     done()
+//   }, 100)
+// })
+//
+// example("the flag should be set to true", function (done) {
+//   setTimeout(function () {
+//     try {
+//       assert.equal(flag, true)
+//       done()
+//     }
+//
+//     catch(error) {
+//       done(error)
+//     }
+//   }, 100)
+// })
+//
+// example.go()
+// ```
+//
+"use strict";
 
 var mediator   = require("./src/mediator")
 var Formatter  = require("./src/formatter")
 
 var Washington = function (message, func) {
 
-  //! We should return a new instance
+  //! Return a new instance of Example
   return new Washington.Example(message, func)
 
 }
@@ -151,9 +190,7 @@ var Washington = function (message, func) {
 // ### `example`
 //
 // Fires whenever an example ran. Fires just after the corresponding `success`,
-// `failure` or `pending` events by the same example. Internally, Washington
-// hooks itself to the `example` event to find out if the batch is ready and
-// fire the `complete` event.
+// `failure` or `pending` events by the same example.
 //
 // **Arguments for callback**
 //
@@ -200,7 +237,7 @@ var Washington = function (message, func) {
 //
 // ### `promise`
 //
-// Fires whenever an example is async and became a promise.
+// Fires whenever an example was found to be asynchronous and became a Promise.
 //
 // **Arguments for callback**
 //
@@ -325,7 +362,8 @@ Washington.use = function (formatter) {
 
 // ### go()
 //
-// Runs the first example, which runs the second on complete, etc
+// Runs the first example, which runs the second on complete and so on.
+// Once the last example runs it runs the `complete` method of Washington.
 Washington.go = function () {
 
   //! Run the first example
@@ -365,7 +403,7 @@ Washington.isComplete = function () {
 
     //! If there was any instance of Washington or Washington.Promise
     //! then the report is not complete
-    .length == 0
+    .length === 0
 
 }
 

@@ -12,7 +12,7 @@
 //
 // - `Washington` original
 //
-"use strict"
+"use strict";
 
 var Pending = function (original) {
   this.message  = original.message

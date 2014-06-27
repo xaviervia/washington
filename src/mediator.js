@@ -9,6 +9,8 @@
 //   Mediator
 // - I want a bulk add and remove listener feature, which I call the `bind` and
 //   `release` methods.
+"use strict";
+
 var Mediator = {
 
   // on( event, callback ) | on( eventHash )

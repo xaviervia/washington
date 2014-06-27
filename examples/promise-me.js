@@ -1,7 +1,7 @@
 var example = require("../washington")
 
 example("Will work eventually", function (done) {
-  "Hey hey"
+  "Hey hey";
 })
 
 example.on("promise", function (promise, report) {

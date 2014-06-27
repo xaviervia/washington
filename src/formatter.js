@@ -1,5 +1,7 @@
 // Default formatter
 // =================
+"use strict";
+
 var color      = require("cli-color")
 
 module.exports = {
