@@ -248,15 +248,15 @@ Methods
 
 ### on( event, callback ) | on( eventHash )
 
-> See [`Mediator.on`](src/mediator.md)
+> See [`Mediador.on`](https://github.com/xaviervia/mediador)
 
 ### off( event, callback ) | off( eventHash )
 
-See [`Mediator.off`](src/mediator.md)
+See [`Mediador.off`](https://github.com/xaviervia/mediador)
 
 ### trigger( event, data )
 
-See [`Mediator.trigger`](src/mediator.md)
+See [`Mediador.trigger`](https://github.com/xaviervia/mediador)
 
 ### use( formatter )
 

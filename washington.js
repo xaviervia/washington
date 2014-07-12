@@ -148,7 +148,7 @@
 //
 "use strict";
 
-var mediator   = require("./src/mediator")
+var Mediador   = require("mediador")
 var Formatter  = require("./src/formatter")
 
 var Washington = function (message, func) {
@@ -259,18 +259,18 @@ var Washington = function (message, func) {
 //
 // ### on( event, callback ) | on( eventHash )
 //
-// > See [`Mediator.on`](src/mediator.md)
-Washington.on = mediator.on
+// > See [`Mediador.on`](https://github.com/xaviervia/mediador)
+Washington.on = Mediador.prototype.on
 
 // ### off( event, callback ) | off( eventHash )
 //
-// See [`Mediator.off`](src/mediator.md)
-Washington.off = mediator.off
+// See [`Mediador.off`](https://github.com/xaviervia/mediador)
+Washington.off = Mediador.prototype.off
 
 // ### trigger( event, data )
 //
-// See [`Mediator.trigger`](src/mediator.md)
-Washington.trigger = mediator.trigger
+// See [`Mediador.trigger`](https://github.com/xaviervia/mediador)
+Washington.trigger = Mediador.prototype.trigger
 
 // ### use( formatter )
 //
