@@ -503,6 +503,7 @@ module.exports = Washington
 //
 // ```
 // > sudo npm install -g coffee-script
+// > sudo npm link
 // > npm test
 // ```
 //
