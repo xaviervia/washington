@@ -146,6 +146,57 @@
 // example.go()
 // ```
 //
+// ### Use it as a command
+//
+// > You need to install washington as global for using the command line
+// > tool. Do that by running `sudo npm install -g washington`
+//
+// **Washington** provides a command line tool for executing the specs in
+// a [**code document**]. The procedure is like this: you start with a file
+// that features some washington specs, for example `greet.js`
+//
+// ```javascript
+// var example = require("washington")
+// var assert  = require("assert")
+//
+// function greet(name) {
+//   return "Hello " + name + "!"
+// }
+//
+// example("Lets greet Paulie", function () {
+//   assert.equal(greet("Paulie"), "Hello Paulie!")
+// })
+//
+// module.exports = greet
+// ```
+//
+// Then you call the command line tool with the file as argument
+//
+// ```
+// washington greet.js
+// ```
+//
+// The interesting thing about this (besides convenience) is that the
+// code file is a fully functional module, requirable and production ready.
+// Washington is added as a dependency but that is not really a concern
+// in most applications. The file itself does not contain an invocation to
+// actually run the examples, so the examples are just stored by Node unless
+// you run them manually from another script.
+//
+// In essence, what the command line tool does is requiring **Washington**
+// and the file and running Washington. You can also require the script
+// `greet.js` in another script that itself has some Washington specs
+// and run them all together from the command line. As a way of organizing
+// the examples, it is really concise and convenient.
+//
+// An interesting gotcha is that the command line tool actually creates a
+// script named `.washington` in the current working directory that makes
+// the actual requiring, and it then executes that script. This is because
+// of the isolation policy of Node.js that limits access to data declared
+// but not explictly exported with `module.exports` if the required script
+// is located in a  different part of the directory tree. The `.washington`
+// script is removed once the execution is completed.
+
 "use strict";
 
 var Mediador   = require("mediador")

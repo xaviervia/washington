@@ -1,0 +1,4 @@
+var washington = require("washington")
+var other      = require("./{{file}}")
+
+washington.go()

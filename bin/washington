@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+var fs           = require("fs")
+var spawn        = require("child_process").spawn
+var text         = fs.readFileSync(__dirname + "/.washington").toString()
+var interpolated = text.replace(
+  "{{file}}",
+  process.argv[process.argv.length - 1]
+)
+
+fs.writeFileSync(
+  process.cwd() + "/.washington",
+  interpolated
+)
+
+var node      = spawn("node", [process.cwd() + "/.washington"])
+
+node.stdout.pipe(process.stdout)
+node.stderr.pipe(process.stderr)
+
+node.on('close', function (code) {
+  fs.unlinkSync(process.cwd() + "/.washington")
+  process.exit(code)
+})

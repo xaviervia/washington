@@ -23,10 +23,13 @@
   },
   "dependencies": {
     "cli-color": "~0.3.2",
-    "mediador": "0.0.2"
+    "mediador": "0.0.3"
   },
   "devDependencies": {
     "coffee-script": "~1.7.1"
+  },
+  "bin": {
+    "washington": "./bin/washington"
   },
   "jshintConfig": {
     "asi": true,
