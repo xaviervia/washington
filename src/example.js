@@ -159,8 +159,8 @@ module.exports = function (Washington) {
       return example === this ? promise : example
     }).bind(this))
 
-    //! Trigger the 'promise' event
-    Washington.trigger('promise', [promise, Washington])
+    //! Emit the 'promise' event
+    Washington.emit('promise', [promise, Washington])
 
     //! Return the promise
     return promise
@@ -187,9 +187,9 @@ module.exports = function (Washington) {
         (example === this ? success : example )
     }).bind(this))
 
-    //! Trigger the 'success' and 'example' events
-    Washington.trigger('success', [success, Washington])
-    Washington.trigger('example', [success, Washington])
+    //! Emit the 'success' and 'example' events
+    Washington.emit('success', [success, Washington])
+    Washington.emit('example', [success, Washington])
 
     //! Run the next example or complete the report
     this.next()
@@ -220,9 +220,9 @@ module.exports = function (Washington) {
         (example === this ? failure : example )
     }).bind(this))
 
-    //! Trigger the 'failure' and 'example' events
-    Washington.trigger('failure', [failure, Washington])
-    Washington.trigger('example', [failure, Washington])
+    //! Emit the 'failure' and 'example' events
+    Washington.emit('failure', [failure, Washington])
+    Washington.emit('example', [failure, Washington])
 
     //! Run the next example or complete the report
     this.next()
@@ -250,9 +250,9 @@ module.exports = function (Washington) {
       return example === this ? pending : example
     }).bind(this))
 
-    //! Trigger the 'pending' and 'example' events
-    Washington.trigger('pending', [pending, Washington])
-    Washington.trigger('example', [pending, Washington])
+    //! Emit the 'pending' and 'example' events
+    Washington.emit('pending', [pending, Washington])
+    Washington.emit('example', [pending, Washington])
 
     //! Run the next example or complete the report
     this.next()

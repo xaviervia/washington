@@ -318,10 +318,10 @@ Washington.on = Mediador.prototype.on
 // See [`Mediador.off`](https://github.com/xaviervia/mediador)
 Washington.off = Mediador.prototype.off
 
-// ### trigger( event, data )
+// ### emit( event, data )
 //
-// See [`Mediador.trigger`](https://github.com/xaviervia/mediador)
-Washington.trigger = Mediador.prototype.trigger
+// See [`Mediador.emit`](https://github.com/xaviervia/mediador)
+Washington.emit = Mediador.prototype.emit
 
 // ### use( formatter )
 //
@@ -426,7 +426,7 @@ Washington.go = function () {
 //
 // Triggers the 'complete' event.
 Washington.complete = function () {
-  Washington.trigger(
+  Washington.emit(
     "complete",
     [
       Washington,
