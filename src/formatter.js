@@ -2,7 +2,10 @@
 // =================
 "use strict";
 
-var color      = require("cli-color")
+var RED        = "\u001b[31m"
+var GREEN      = "\u001b[32m"
+var YELLOW     = "\u001b[33m"
+var CLEAR      = "\u001b[39m"
 
 module.exports = {
 
@@ -11,7 +14,7 @@ module.exports = {
   //
   // Logs to `console.info` in green and adds a victory hand
   success: function (example) {
-    console.info(color.green(" ✌ " + example.message))
+    console.info(GREEN + " ✌ " + example.message + CLEAR)
   },
 
   // on pending
@@ -19,7 +22,7 @@ module.exports = {
   //
   // Logs to `console.warn` in yellow and adds writing hand
   pending: function (example) {
-    console.warn(color.yellow(" ✍ " + example.message))
+    console.warn(YELLOW + " ✍ " + example.message + CLEAR)
   },
 
   // on failure
@@ -28,7 +31,7 @@ module.exports = {
   // Logs to `console.error` in red and adds a left pointing hand
   failure: function (example) {
     console.error(
-      color.red(" ☞ " + example.message + "\n ☞ " + example.error.stack))
+      RED + " ☞ " + example.message + "\n ☞ " + example.error.stack + CLEAR)
   },
 
   // on complete
@@ -38,11 +41,11 @@ module.exports = {
   complete: function (report, code) {
     var items = []
     if (report.failing().length > 0)
-      items.push(color.red(report.failing().length + " failing"))
+      items.push(RED + report.failing().length + " failing" + CLEAR)
     if (report.pending().length > 0)
-      items.push(color.yellow(report.pending().length + " pending"))
+      items.push(YELLOW + report.pending().length + " pending" + CLEAR)
     if (report.successful().length > 0)
-      items.push(color.green(report.successful().length + " successful"))
+      items.push(GREEN + report.successful().length + " successful" + CLEAR)
 
     console.log(items.join(" ∙ "))
     process.exit(code)

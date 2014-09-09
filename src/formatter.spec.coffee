@@ -1,8 +1,15 @@
 formatter  = require "./formatter"
 assert     = require "assert"
-color      = require "cli-color"
+
+RED        = "\u001b[31m"
+GREEN      = "\u001b[32m"
+YELLOW     = "\u001b[33m"
+CLEAR      = "\u001b[39m"
+BOLD       = "\u001b[1m"
+
 log        = (message)->
-  console.log color.bold message
+  console.log BOLD + message + CLEAR
+
 hijack     = {}
 
 jack       = (object, method, mock)->
@@ -24,7 +31,7 @@ message      = "This will succeed"
 
 jack console, "info", (content)->
   assert.equal content,
-               color.green " ✌ " + message
+               GREEN + " ✌ " + message + CLEAR
   flag = true
 
 formatter.success
@@ -43,7 +50,7 @@ message      = "This is pending"
 
 jack console, "warn", (content)->
   assert.equal content,
-               color.yellow " ✍ " + message
+               YELLOW + " ✍ " + message + CLEAR
   flag = true
 
 formatter.pending
@@ -63,8 +70,7 @@ error        = new Error "This should be there"
 
 jack console, "error", (content)->
   assert.equal content,
-               color.red " ☞ " + message + "\n ☞ " +
-                 error.stack
+               RED + " ☞ " + message + "\n ☞ " + error.stack + CLEAR
   flag = true
 
 formatter.failure
@@ -84,9 +90,9 @@ flag         = false
 jack process, "exit", ->
 jack console, "log", (content)->
   assert.equal content,
-               color.red("3 failing") + " ∙ " +
-               color.yellow("2 pending") + " ∙ " +
-               color.green("5 successful")
+               RED + "3 failing" + CLEAR + " ∙ " +
+               YELLOW + "2 pending" + CLEAR + " ∙ " +
+               GREEN + "5 successful" + CLEAR
   flag = true
 
 formatter.complete
@@ -112,8 +118,8 @@ flag         = false
 jack process, "exit", ->
 jack console, "log", (content)->
   assert.equal content,
-               color.yellow("2 pending") + " ∙ " +
-               color.green("5 successful")
+               YELLOW + "2 pending" + CLEAR + " ∙ " +
+               GREEN + "5 successful" + CLEAR
   flag = true
 
 formatter.complete
@@ -139,7 +145,7 @@ flag         = false
 jack process, "exit", ->
 jack console, "log", (content)->
   assert.equal content,
-               color.green("5 successful")
+               GREEN + "5 successful" + CLEAR
   flag = true
 
 formatter.complete
@@ -165,7 +171,7 @@ flag         = false
 jack process, "exit", ->
 jack console, "log", (content)->
   assert.equal content,
-               color.red("5 failing")
+               RED + "5 failing" + CLEAR
   flag = true
 
 formatter.complete

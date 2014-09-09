@@ -1,8 +1,9 @@
 washington = require "./washington"
 assert     = require "assert"
-color      = require "cli-color"
+CLEAR      = "\u001b[39m"
+BOLD       = "\u001b[1m"
 log        = (message)->
-  console.log color.bold message
+  console.log BOLD + message + CLEAR
 
 pending    = (reason)->
   throw new Error(reason)
