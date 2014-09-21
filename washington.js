@@ -503,6 +503,27 @@ Washington.pending = function () {
 
 }
 
+// ### duration()
+//
+// Returns the total duration of all tests run, in milliseconds.
+//
+// #### Returns
+//
+// - `Integer` duration
+Washington.duration = function () {
+  
+  //! Collect
+  var duration = 0
+
+  //! Add for each example that has duration
+  Washington.list.forEach(function (example) {
+    duration += example.duration ? example.duration() : 0 })
+
+  //! Return the total
+  return duration
+
+}
+
 // ### reset()
 //
 // Sets washington to the defaults

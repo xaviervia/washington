@@ -21,4 +21,22 @@ var Success = function (original) {
   this.original = original
 }
 
+// Success.prototype.duration()
+// ----------------------------
+//
+// Returns an `Integer` with the duration of the original event, in 
+// milliseconds
+//
+// #### Returns
+//
+// - `Integer` duration
+//
+Success.prototype.duration = function() {
+
+  //! Defensive code never hurt anybody
+  if (this.original)
+    return this.original.duration
+
+}
+
 module.exports = Success

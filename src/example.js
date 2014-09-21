@@ -6,6 +6,7 @@
 //
 // - message: `String` the description of the example
 // - function: `Function` the actual example
+// - duration: `Integer` the amount of time it took to run, in milliseconds
 //
 "use strict";
 
@@ -46,6 +47,9 @@ module.exports = function (Washington) {
   //   `Washington.Promise` adaptedExample
   Example.prototype.run = function () {
     var replacement
+
+    //! Start the clock
+    this.start = new Date().getTime()
 
     //! The example may not be a function if it is just pending, so lets check
     if (this.function) {
@@ -184,6 +188,9 @@ module.exports = function (Washington) {
   // - `Washington.Success` success
   Example.prototype.succeeded = function () {
 
+    //! Get the duration
+    this.duration = new Date().getTime() - this.start
+
     //! Create the Success object
     var success = new Washington.Success(this)
 
@@ -216,6 +223,9 @@ module.exports = function (Washington) {
   //
   // - `Washington.Failure` failure
   Example.prototype.failed = function (error) {
+
+    //! Get the duration
+    this.duration = new Date().getTime() - this.start
 
     //! Create the Failure object
     var failure = new Washington.Failure(this, error)

@@ -6,6 +6,7 @@ Properties
 
 - message: `String` the description of the example
 - function: `Function` the actual example
+- duration: `Integer` the amount of time it took to run, in milliseconds
 
 Methods
 -------

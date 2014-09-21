@@ -152,8 +152,8 @@ setTimeout ->
         ########################################################################
 
         log ""
-        log "Run Promise tests"
-        log "---------------"
+        log "Run promise tests"
+        log "-----------------"
         log ""
         require "./src/promise.spec"
 
