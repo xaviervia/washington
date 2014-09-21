@@ -117,27 +117,34 @@ module.exports = function (Washington) {
   //
   // Returns the next example on the list or `undefined` if this is the last
   // example.
+  // 
+  // Runs the next example if available. Otherwise declares the batch to be
+  // complete.
   //
   // #### Returns
   //
   // - `Washington.Example` next
   Example.prototype.next = function () {
 
-    var next = Washington
-        .list
-        .filter(
-          (function (example, index, collection) {
-            if (index > 0)
-              return collection[index - 1].original === this
-            else
-              return false
-          }).bind(this)
-        )[0]
+    var next   = undefined
+    var i      = 0
+    var max    = Washington.list.length - 1
 
-    if (next)  next.run()
+    //! Whatever happens first: the next is discovered or we run out of list
+    //! examples
+    while (!next && i < max) {
 
-    else       Washington.complete()
+      next = Washington.list[i].original === this ? 
+        Washington.list[i + 1] : undefined
 
+      i ++
+    }
+
+    if (next) next.run()
+
+    else Washington.complete()
+
+    return next
   }
 
   // ### promise()

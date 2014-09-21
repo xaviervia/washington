@@ -1,6 +1,6 @@
 washington = require "./washington"
 assert     = require "assert"
-CLEAR      = "\u001b[39m"
+CLEAR      = "\u001b[0m"
 BOLD       = "\u001b[1m"
 log        = (message)->
   console.log BOLD + message + CLEAR
