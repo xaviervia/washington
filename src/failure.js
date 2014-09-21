@@ -24,4 +24,22 @@ var Failure = function (original, error) {
   this.original = original
 }
 
+// Failure.prototype.duration()
+// ----------------------------
+//
+// Returns an `Integer` with the duration of the original event, in 
+// milliseconds
+//
+// #### Returns
+//
+// - `Integer` duration
+//
+Failure.prototype.duration = function() {
+
+  //! Defensive code never hurt anybody
+  if (this.original)
+    return this.original.duration
+
+}
+
 module.exports = Failure

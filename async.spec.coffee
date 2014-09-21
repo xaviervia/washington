@@ -151,11 +151,11 @@ setTimeout ->
 
         ########################################################################
 
-        log ""
-        log "Run Promise tests"
-        log "---------------"
-        log ""
-        require "./src/promise.spec"
+        # log ""
+        # log "Run profiling tests"
+        # log "-------------------"
+        # log ""
+        # require "./profiling.spec"
 
       , 400
 
