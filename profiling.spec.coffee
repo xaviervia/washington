@@ -119,13 +119,50 @@ setTimeout ->
 
   cleanup()
 
-
   #############################################################################
 
-  log ""
-  log "Run Promise tests"
-  log "---------------"
-  log ""
-  require "./src/promise.spec"
+  log "Reports total time"
 
+  examples = 
+    first: washington("will take a reasonable amount of time", (done) ->
+        setTimeout ->
+          assert 1 == 1
+          done()
+        , 200
+      )
+    second: washington("will take a reasonable amount of time", (done) ->
+        setTimeout ->
+          assert 1 == 1
+          done()
+        , 200
+      )
+  afterTime = false
+
+  washington.use 
+    complete: ->
+      afterTime = new Date().getTime()
+
+  previousTime = new Date().getTime()
+
+  washington.go()
+
+  setTimeout ->
+    
+    assert afterTime
+    assert washington.duration() <= afterTime - previousTime
+    assert washington.duration() > examples.first.duration
+    assert washington.duration() > examples.second.duration
+    assert.equal washington.duration(), examples.second.duration + examples.first.duration
+
+    cleanup()
+
+    #############################################################################
+
+    log ""
+    log "Run Async tests"
+    log "---------------"
+    log ""
+    require "./async.spec"
+
+  , 500
 , 300

@@ -5,7 +5,8 @@
 var RED        = "\u001b[31m"
 var GREEN      = "\u001b[32m"
 var YELLOW     = "\u001b[33m"
-var CLEAR      = "\u001b[39m"
+var CLEAR      = "\u001b[0m"
+var GREY       = "\u001b[30m"
 
 module.exports = {
 
@@ -14,7 +15,7 @@ module.exports = {
   //
   // Logs to `console.info` in green and adds a victory hand
   success: function (example) {
-    console.info(GREEN + " ✌ " + example.message + CLEAR)
+    console.info(GREEN + " ✌ " + example.message + CLEAR + GREY + " (" + example.duration() + "ms)" + CLEAR)
   },
 
   // on pending
@@ -31,7 +32,7 @@ module.exports = {
   // Logs to `console.error` in red and adds a left pointing hand
   failure: function (example) {
     console.error(
-      RED + " ☞ " + example.message + "\n ☞ " + example.error.stack + CLEAR)
+      RED + " ☞ " + example.message + CLEAR + GREY + " (" + example.duration() + "ms)" + CLEAR + RED + "\n ☞ " + example.error.stack + CLEAR)
   },
 
   // on complete
@@ -47,7 +48,11 @@ module.exports = {
     if (report.successful().length > 0)
       items.push(GREEN + report.successful().length + " successful" + CLEAR)
 
-    console.log(items.join(" ∙ "))
+    var log = items.join(" ∙ ")
+    if (report.duration() > 0)
+      log += GREY + " (" + report.duration() + "ms)" + CLEAR
+
+    console.log(log)
     process.exit(code)
   }
 

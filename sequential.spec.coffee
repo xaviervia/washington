@@ -45,9 +45,9 @@ setTimeout ->
   #############################################################################
 
   log ""
-  log "Run async tests"
+  log "Run profiling tests"
   log "---------------"
   log ""
-  require "./async.spec"
+  require "./profiling.spec"
 
 , 500

@@ -409,6 +409,14 @@ Returns the amount of pending examples currently on the report.
 
 - `Integer` amountOfPendingExamples
 
+### duration()
+
+Returns the total duration of all tests run, in milliseconds.
+
+#### Returns
+
+- `Integer` duration
+
 ### reset()
 
 Sets washington to the defaults
