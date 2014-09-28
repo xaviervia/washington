@@ -176,6 +176,12 @@ Then you call the command line tool with the file as argument
 washington greet.js
 ```
 
+You can also use the `--only`, `--start`, `--end` and `--match` filtering options:
+
+```
+washington greet.js --start=2 --end=5 --match=WIP
+```
+
 The interesting thing about this (besides convenience) is that the
 code file is a fully functional module, requirable and production ready.
 Washington is added as a dependency but that is not really a concern
