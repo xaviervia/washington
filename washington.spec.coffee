@@ -20,238 +20,230 @@ jack       = (object, method, mock)->
 unjack     = (object, method)->
   object[method] = hijack[method]
 
-log "Washington"
-log "=========="
-log ""
 
+module.exports = (done) ->
 
-################################################################################
+  log "Washington"
+  log "=========="
+  log ""
 
-log "Calling the function should get back an instance"
+  #############################################################################
 
-example = washington()
+  log "Calling the function should get back an instance"
 
-assert.equal example instanceof washington.Example, true
+  example = washington()
 
-cleanup()
+  assert.equal example instanceof washington.Example, true
 
-################################################################################
+  cleanup()
 
-log "The message should be stored in the instance"
+  #############################################################################
 
-example = washington "Message"
+  log "The message should be stored in the instance"
 
-assert.equal example.message, "Message"
+  example = washington "Message"
 
-cleanup()
+  assert.equal example.message, "Message"
 
-################################################################################
+  cleanup()
 
-log "The example function should also be stored"
+  #############################################################################
 
-exampleFunction = ->
-example = washington "The message", exampleFunction
+  log "The example function should also be stored"
 
-assert.equal example.function, exampleFunction
+  exampleFunction = ->
+  example = washington "The message", exampleFunction
 
-cleanup()
+  assert.equal example.function, exampleFunction
 
-################################################################################
+  cleanup()
 
-log "The example should be registered in the list"
+  #############################################################################
 
-example = washington "Registered"
+  log "The example should be registered in the list"
 
-assert.equal washington.list.indexOf(example) != -1, true
+  example = washington "Registered"
 
-cleanup()
+  assert.equal washington.list.indexOf(example) != -1, true
 
-################################################################################
+  cleanup()
 
-log "The example should change itself to a Success when successful"
+  #############################################################################
 
-washington.use "silent"
+  log "The example should change itself to a Success when successful"
 
-exampleFunction = ->
-  assert.equal 2 + 2, 4
-example = washington "To the infinite and beyond!", exampleFunction
+  washington.use "silent"
 
-success = example.run()
+  exampleFunction = ->
+    assert.equal 2 + 2, 4
+  example = washington "To the infinite and beyond!", exampleFunction
 
-assert.equal washington.list[0] instanceof washington.Success, true
-assert.equal washington.list[0].message, "To the infinite and beyond!"
-assert.equal washington.list[0].function, exampleFunction
-assert.equal washington.list[0].original, example
+  success = example.run()
 
-assert.equal success, washington.list[0]
+  assert.equal washington.list[0] instanceof washington.Success, true
+  assert.equal washington.list[0].message, "To the infinite and beyond!"
+  assert.equal washington.list[0].function, exampleFunction
+  assert.equal washington.list[0].original, example
 
-assert.equal washington.successful()[0], washington.list[0]
+  assert.equal success, washington.list[0]
 
-cleanup()
+  assert.equal washington.successful()[0], washington.list[0]
 
-################################################################################
+  cleanup()
 
-log "The example should change itself to a Failure when failing"
+  #############################################################################
 
-washington.use "silent"
+  log "The example should change itself to a Failure when failing"
 
-exampleFunction = ->
-  assert.equal 2 + 3, 4
-example = washington "To the failure and beyond!", exampleFunction
+  washington.use "silent"
 
-errorSample = null
+  exampleFunction = ->
+    assert.equal 2 + 3, 4
+  example = washington "To the failure and beyond!", exampleFunction
 
-try
-  assert.equal 2 + 3, 4
-catch error
-  errorSample = error
+  errorSample = null
 
-failure = example.run()
+  try
+    assert.equal 2 + 3, 4
+  catch error
+    errorSample = error
 
-assert.equal washington.list[0] instanceof washington.Failure, true
-assert.equal washington.list[0].message, "To the failure and beyond!"
-assert.equal washington.list[0].error instanceof assert.AssertionError, true
-assert.equal washington.list[0].error.message, errorSample.message
-assert.equal washington.list[0].function, exampleFunction
-assert.equal washington.list[0].original, example
+  failure = example.run()
 
-assert.equal failure, washington.list[0]
+  assert.equal washington.list[0] instanceof washington.Failure, true
+  assert.equal washington.list[0].message, "To the failure and beyond!"
+  assert.equal washington.list[0].error instanceof assert.AssertionError, true
+  assert.equal washington.list[0].error.message, errorSample.message
+  assert.equal washington.list[0].function, exampleFunction
+  assert.equal washington.list[0].original, example
 
-assert.equal washington.failing()[0], washington.list[0]
+  assert.equal failure, washington.list[0]
 
-cleanup()
+  assert.equal washington.failing()[0], washington.list[0]
 
-################################################################################
+  cleanup()
 
-log "The example should change itself to a Pending when there is no function"
+  #############################################################################
 
-washington.use "silent"
+  log "The example should change itself to a Pending when there is no function"
 
-example = washington "This is not defined yet"
+  washington.use "silent"
 
-pending = example.run()
+  example = washington "This is not defined yet"
 
-assert.equal washington.list[0] instanceof washington.Pending, true
-assert.equal washington.list[0].message, "This is not defined yet"
-assert.equal washington.list[0].original, example
+  pending = example.run()
 
-assert.equal pending, washington.list[0]
+  assert.equal washington.list[0] instanceof washington.Pending, true
+  assert.equal washington.list[0].message, "This is not defined yet"
+  assert.equal washington.list[0].original, example
 
-assert.equal washington.pending()[0], washington.list[0]
+  assert.equal pending, washington.list[0]
 
-cleanup()
+  assert.equal washington.pending()[0], washington.list[0]
 
-################################################################################
+  cleanup()
 
-log "By default the formatter should be set as formatter"
+  #############################################################################
 
-flag = false
+  log "By default the formatter should be set as formatter"
 
-formatter = require "./src/formatter"
-
-jack washington, "on", (object)->
-  if object != "example"
-    assert.equal object, formatter
-    flag = true
-
-washington.reset()
-
-assert.equal washington.formatter, formatter
-assert.equal flag, true
-
-unjack washington, "on"
-
-cleanup()
-
-################################################################################
-
-log "Use should simply remove is the argument is not an object"
-
-flag = true
-offFlag = false
-
-jack washington, "on", (object)->
   flag = false
 
-jack washington, "off", (object)->
-  assert.equal object, formatter
-  offFlag = true
+  formatter = require "./src/formatter"
 
-washington.use "something"
+  jack washington, "on", (object)->
+    if object != "example"
+      assert.equal object, formatter
+      flag = true
 
-assert.equal washington.formatter, null
-assert.equal flag, true
-assert.equal offFlag, true
+  washington.reset()
 
-unjack washington, "on"
-unjack washington, "off"
+  assert.equal washington.formatter, formatter
+  assert.equal flag, true
 
-cleanup()
+  unjack washington, "on"
 
-################################################################################
+  cleanup()
 
-log "You should be able to replace the formatter by a different one"
+  #############################################################################
 
-myformatFlag   = false
-formatterFlag  = false
+  log "Use should simply remove is the argument is not an object"
 
-myformat =
-  success: ->
-    console.log "something"
+  flag = true
+  offFlag = false
 
-jack washington, "on", (object)->
-  if object != "example"
-    assert.equal object, myformat
-    myformatFlag = true
+  jack washington, "on", (object)->
+    flag = false
 
-jack washington, "off", (object)->
-  assert.equal object, formatter
-  formatterFlag = true
+  jack washington, "off", (object)->
+    assert.equal object, formatter
+    offFlag = true
 
-washington.use myformat
+  washington.use "something"
 
-assert.equal washington.formatter, myformat
-assert.equal myformatFlag, true
-assert.equal formatterFlag, true
+  assert.equal washington.formatter, null
+  assert.equal flag, true
+  assert.equal offFlag, true
 
-unjack washington, "on"
-unjack washington, "off"
+  unjack washington, "on"
+  unjack washington, "off"
 
-cleanup()
+  cleanup()
 
-################################################################################
+  #############################################################################
 
-log "It is not complete if there are examples not done"
+  log "You should be able to replace the formatter by a different one"
 
-washington.list = [new washington]
-assert.equal washington.isComplete(), false
+  myformatFlag   = false
+  formatterFlag  = false
 
-cleanup()
+  myformat =
+    success: ->
+      console.log "something"
 
-################################################################################
+  jack washington, "on", (object)->
+    if object != "example"
+      assert.equal object, myformat
+      myformatFlag = true
 
-log "It is not complete if there are promises"
+  jack washington, "off", (object)->
+    assert.equal object, formatter
+    formatterFlag = true
 
-washington.list = [new washington.Promise({})]
+  washington.use myformat
 
-washington.list[0].ready = true # Prevent the promise from firing a timeout
+  assert.equal washington.formatter, myformat
+  assert.equal myformatFlag, true
+  assert.equal formatterFlag, true
 
-assert.equal washington.isComplete(), false
+  unjack washington, "on"
+  unjack washington, "off"
 
-cleanup()
+  cleanup()
 
-################################################################################
+  #############################################################################
 
-log ""
-log "Run formatter tests"
-log "-------------------"
-log ""
-require "./src/formatter.spec"
+  log "It is not complete if there are examples not done"
 
-################################################################################
+  washington.list = [new washington]
+  assert.equal washington.isComplete(), false
 
-log ""
-log "Run event tests"
-log "---------------"
-log ""
-require "./events.spec"
+  cleanup()
+
+  #############################################################################
+
+  log "It is not complete if there are promises"
+
+  washington.list = [new washington.Promise({})]
+
+  washington.list[0].ready = true # Prevent the promise from firing a timeout
+
+  assert.equal washington.isComplete(), false
+
+  cleanup()
+
+  #############################################################################
+
+  done()
+
+module.exports(->) if process.argv[1] == __filename

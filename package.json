@@ -4,7 +4,7 @@
   "description": "Behavior driven dev tool. Because little George sets a good example",
   "main": "washington.js",
   "scripts": {
-    "test": "coffee washington.spec.coffee"
+    "test": "coffee spec.coffee"
   },
   "repository": {
     "type": "git",

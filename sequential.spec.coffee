@@ -11,43 +11,43 @@ pending    = (reason)->
 cleanup    = ->
   washington.reset()
 
-################################################################################
-
-log "Async tests are completed before the next is executed"
-
-thenable = false
-thenned  = false
-complete = false
-
-washington "My thenable test", (done)->
-  setTimeout ->
-    thenable = true
-    assert.equal 2, 2
-    done()
-  , 200
-
-washington "And then this will be", ->
-  assert.equal thenable, true
-  thenned = true
-
-washington.use
-  complete: ->
-    assert.equal thenned, true
-    complete = true
-
-washington.go()
-
-setTimeout ->
-
-  assert.equal complete, true
-  cleanup()
+module.exports = (done) ->
 
   #############################################################################
 
-  log ""
-  log "Run profiling tests"
-  log "---------------"
-  log ""
-  require "./profiling.spec"
+  log "Async tests are completed before the next is executed"
 
-, 500
+  thenable = false
+  thenned  = false
+  complete = false
+
+  washington "My thenable test", (done)->
+    setTimeout ->
+      thenable = true
+      assert.equal 2, 2
+      done()
+    , 200
+
+  washington "And then this will be", ->
+    assert.equal thenable, true
+    thenned = true
+
+  washington.use
+    complete: ->
+      assert.equal thenned, true
+      complete = true
+
+  washington.go()
+
+  setTimeout ->
+
+    assert.equal complete, true
+    cleanup()
+
+    ###########################################################################
+
+    done()
+
+  , 500
+
+module.exports(->) if process.argv[1] == __filename
