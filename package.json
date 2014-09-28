@@ -22,7 +22,7 @@
     "url": "https://github.com/xaviervia/washington/issues"
   },
   "dependencies": {
-    "mediador": "0.1.0"
+    "mediador": "0.1.2"
   },
   "devDependencies": {
     "coffee-script": "~1.7.1"
