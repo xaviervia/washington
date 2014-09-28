@@ -51,9 +51,17 @@ require("./spec/washington") ->
 
 
             log ""
-            log "Run promise tests"
-            log "-----------------"
+            log "Run picking tests"
+            log "---------------"
             log ""
-            require("./src/promise.spec") ->
-              console.log "-----"
-              console.log "READY"
+            require("./spec/picking") ->
+
+
+
+              log ""
+              log "Run promise tests"
+              log "-----------------"
+              log ""
+              require("./src/promise.spec") ->
+                console.log "-----"
+                console.log "READY"

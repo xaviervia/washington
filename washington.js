@@ -295,11 +295,24 @@ var Washington = function (message, func) {
 // - `Washington.Promise` promiseObject
 // - `Object` report
 //
+// ### `empty`
+//
+// Is emitted whenever washington was instructed to run but no examples where
+// actually selected. The filtering options are sent to the listener for 
+// reporting and debugging.
+//
+// **Arguments for callback**
+//
+// - `Object` options
+// - `Object` report
+// 
 // Properties
 // ----------
 //
 // - list: `Array` of examples
-// - listeners: `Array` of events
+// - picked: `Array` of examples to actually be run
+// - listeners: `Object` containing the events as key and the listeners as
+//   value `Array`s
 // - timeout: `Integer` amount of time in milliseconds before timeout. If
 //   not set, default to `3000` milliseconds as specified in the `Promise`
 // - formatter: `Object` containing methods that listen to their corresponding
@@ -415,10 +428,65 @@ Washington.use = function (formatter) {
 //
 // Runs the first example, which runs the second on complete and so on.
 // Once the last example runs it runs the `complete` method of Washington.
-Washington.go = function () {
+//
+// ### go( options )
+//
+// Runs the examples. If `options` are provided, filters the examples to run
+// based on the provided criteria.  Emits `complete` once the last example in
+// the picked range is emitted.
+//
+// ```javascript
+// Washington.go({
+//   start: 7,       // Will start from the 7th example on
+//   end: 10,        // Will stop at the 10th example
+//   match: /WIP/,   // Will only select examples matching /WIP/
+//   filter: function (example) {
+//     // Will only select asynchronous examples
+//     return example.function.length == 1
+//   }
+// })
+// ```
+//
+// #### Arguments
+//
+// - _optional_ `Object` options
+//   - _optional_ `Integer` start
+//   - _optional_ `Integer` end
+//   - _optional_ `Regexp`|`String` match
+//   - _optional_ `Function` filter
+Washington.go = function (options) {
+
+  //! If filtering options are available, restrict "picked"
+  if (options) {
+
+    //! Expand only into "start" and "end" to simplify filtering
+    if (options.only) {
+      options.start = options.only
+      options.end = options.only
+    }
+
+    //! Subset to the `picked list if needed
+    Washington.picked = Washington.list.filter(function (example, index) {
+      if (options && options.start && index < options.start - 1) return false
+      if (options.end && index > options.end - 1) return false
+      if (options.match && !example.message.match(options.match)) return false
+      return true
+    })
+
+    //! If a filter is provided, apply it
+    if (options.filter)
+      Washington.picked = Washington.picked.filter(options.filter)
+
+  }
+
+  //! Emit "empty" and "complete" if no examples selected
+  if (Washington.picked.length === 0)
+    Washington
+      .emit("empty", [options])
+      .complete()
 
   //! Run the first example
-  Washington.list[0].run()
+  else Washington.picked[0].run()
 
 }
 
@@ -446,7 +514,7 @@ Washington.isComplete = function () {
 
   //! Filter the list of examples searching for instances of Washington
   //! or Washington.Promise
-  return Washington.list
+  return Washington.picked
     .filter(function (example) {
       return (example instanceof Washington.Example) ||
         (example instanceof Washington.Promise)
@@ -468,7 +536,7 @@ Washington.isComplete = function () {
 Washington.successful = function () {
 
   //! Simply filter in all instances of Washington.Success from the list
-  return Washington.list.filter(function (example) {
+  return Washington.picked.filter(function (example) {
     return example instanceof Washington.Success })
 
 }
@@ -483,7 +551,7 @@ Washington.successful = function () {
 Washington.failing = function () {
 
   //! Simply filter in all instances of Washington.Failure from the list
-  return Washington.list.filter(function (example) {
+  return Washington.picked.filter(function (example) {
     return example instanceof Washington.Failure })
 
 }
@@ -498,7 +566,7 @@ Washington.failing = function () {
 Washington.pending = function () {
 
   //! Simply filter in all instances of Washington.Pending from the list
-  return Washington.list.filter(function (example) {
+  return Washington.picked.filter(function (example) {
     return example instanceof Washington.Pending })
 
 }
@@ -516,7 +584,7 @@ Washington.duration = function () {
   var duration = 0
 
   //! Add for each example that has duration
-  Washington.list.forEach(function (example) {
+  Washington.picked.forEach(function (example) {
     duration += example.duration ? example.duration() : 0 })
 
   //! Return the total
@@ -529,11 +597,13 @@ Washington.duration = function () {
 // Sets washington to the defaults
 //
 // - Empties the `list` of examples
+// - Empties the `picked` examples
 // - Removes all event `listeners`
 // - Sets the `timeout` to null (that will cause the default to be used)
 // - Sets the default `formatter` to be used
 Washington.reset = function () {
   Washington.list      = null
+  Washington.picked    = null
   Washington.listeners = null
   Washington.timeout   = null
   Washington.use(Formatter)

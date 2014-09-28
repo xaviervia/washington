@@ -57,7 +57,7 @@ module.exports = (done) ->
 
   washington.use
     complete: (report)->
-      assert.equal report.list[0].original, example
+      assert.equal report.picked[0].original, example
       flag = true
 
   example.run()
@@ -80,7 +80,7 @@ module.exports = (done) ->
 
     washington.use
       complete: (report)->
-        assert.equal report.list[0].original, example
+        assert.equal report.picked[0].original, example
         flag = true
 
     example.run()
@@ -104,8 +104,8 @@ module.exports = (done) ->
 
       washington.use
         complete: (report)->
-          assert.equal report.list[0].original, example
-          assert.equal report.list[0].error.message, message
+          assert.equal report.picked[0].original, example
+          assert.equal report.picked[0].error.message, message
           flag = true
 
       example.run()
@@ -134,7 +134,7 @@ module.exports = (done) ->
             flag = true
 
           complete: (report)->
-            assert.equal report.list[0].original, example
+            assert.equal report.picked[0].original, example
 
         example.run()
 

@@ -80,14 +80,14 @@ module.exports = (done) ->
 
   success = example.run()
 
-  assert.equal washington.list[0] instanceof washington.Success, true
-  assert.equal washington.list[0].message, "To the infinite and beyond!"
-  assert.equal washington.list[0].function, exampleFunction
-  assert.equal washington.list[0].original, example
+  assert.equal washington.picked[0] instanceof washington.Success, true
+  assert.equal washington.picked[0].message, "To the infinite and beyond!"
+  assert.equal washington.picked[0].function, exampleFunction
+  assert.equal washington.picked[0].original, example
 
-  assert.equal success, washington.list[0]
+  assert.equal success, washington.picked[0]
 
-  assert.equal washington.successful()[0], washington.list[0]
+  assert.equal washington.successful()[0], washington.picked[0]
 
   cleanup()
 
@@ -110,16 +110,16 @@ module.exports = (done) ->
 
   failure = example.run()
 
-  assert.equal washington.list[0] instanceof washington.Failure, true
-  assert.equal washington.list[0].message, "To the failure and beyond!"
-  assert.equal washington.list[0].error instanceof assert.AssertionError, true
-  assert.equal washington.list[0].error.message, errorSample.message
-  assert.equal washington.list[0].function, exampleFunction
-  assert.equal washington.list[0].original, example
+  assert.equal washington.picked[0] instanceof washington.Failure, true
+  assert.equal washington.picked[0].message, "To the failure and beyond!"
+  assert washington.picked[0].error instanceof assert.AssertionError
+  assert.equal washington.picked[0].error.message, errorSample.message
+  assert.equal washington.picked[0].function, exampleFunction
+  assert.equal washington.picked[0].original, example
 
-  assert.equal failure, washington.list[0]
+  assert.equal failure, washington.picked[0]
 
-  assert.equal washington.failing()[0], washington.list[0]
+  assert.equal washington.failing()[0], washington.picked[0]
 
   cleanup()
 
@@ -133,13 +133,13 @@ module.exports = (done) ->
 
   pending = example.run()
 
-  assert.equal washington.list[0] instanceof washington.Pending, true
-  assert.equal washington.list[0].message, "This is not defined yet"
-  assert.equal washington.list[0].original, example
+  assert.equal washington.picked[0] instanceof washington.Pending, true
+  assert.equal washington.picked[0].message, "This is not defined yet"
+  assert.equal washington.picked[0].original, example
 
-  assert.equal pending, washington.list[0]
+  assert.equal pending, washington.picked[0]
 
-  assert.equal washington.pending()[0], washington.list[0]
+  assert.equal washington.pending()[0], washington.picked[0]
 
   cleanup()
 
@@ -225,7 +225,7 @@ module.exports = (done) ->
 
   log "It is not complete if there are examples not done"
 
-  washington.list = [new washington]
+  washington.picked = [new washington]
   assert.equal washington.isComplete(), false
 
   cleanup()
@@ -234,9 +234,9 @@ module.exports = (done) ->
 
   log "It is not complete if there are promises"
 
-  washington.list = [new washington.Promise({})]
+  washington.picked = [new washington.Promise({})]
 
-  washington.list[0].ready = true # Prevent the promise from firing a timeout
+  washington.picked[0].ready = true # Prevent the promise from firing a timeout
 
   assert.equal washington.isComplete(), false
 

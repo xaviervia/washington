@@ -368,10 +368,31 @@ example("Will print nothing, do nothing")
 example.go()
 ```
 
-### go()
+### go( options )
 
-Runs the first example, which runs the second on complete and so on.
-Once the last example runs it runs the `complete` method of Washington.
+Runs the examples. If `options` are provided, filters the examples to run
+based on the provided criteria.  Emits `complete` once the last example in
+the picked range is emitted.
+
+```javascript
+Washington.go({
+  start: 7,       // Will start from the 7th example on
+  end: 10,        // Will stop at the 10th example
+  match: /WIP/,   // Will only select examples matching /WIP/
+  filter: function (example) {
+    // Will only select asynchronous examples
+    return example.function.length == 1
+  }
+})
+```
+
+#### Arguments
+
+- _optional_ `Object` options
+  - _optional_ `Integer` start
+  - _optional_ `Integer` end
+  - _optional_ `Regexp`|`String` match
+  - _optional_ `Function` filter
 
 ### complete()
 

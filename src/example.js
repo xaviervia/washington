@@ -12,6 +12,26 @@
 
 module.exports = function (Washington) {
 
+  // Methods
+  // -------
+  //
+  // ### new Example( message, function ) 
+  // 
+  // Creates a new `Example` which adds itself to the global `Washington` 
+  // instance, both to the general `list` and to the `picked` list. 
+  //
+  // > _Warning_: Creating a example consequently overwrites the contents of 
+  // > the `picked` list. This makes sense since the example cannot proactively
+  // > filter itself once the criteria has been applied.
+  //
+  // #### Arguments
+  //
+  // - `String` message
+  // - `Function` function
+  //
+  // #### Returns
+  //
+  // - `Example` example
   var Example = function (message, func) {
 
     //! Assign the properties
@@ -22,11 +42,11 @@ module.exports = function (Washington) {
     Washington.list = Washington.list || []
     Washington.list.push(this)
 
+    //! Sync list and picked list
+    Washington.picked = Washington.list
+
   }
 
-  // Methods
-  // -------
-  //
   // ### run()
   //
   // Runs the example.
@@ -119,8 +139,8 @@ module.exports = function (Washington) {
 
   // ### next()
   //
-  // Returns the next example on the list or `undefined` if this is the last
-  // example.
+  // Returns the next example on the picked list or `undefined` if this is the
+  // last example there.
   // 
   // Runs the next example if available. Otherwise declares the batch to be
   // complete.
@@ -132,14 +152,14 @@ module.exports = function (Washington) {
 
     var next   = undefined
     var i      = 0
-    var max    = Washington.list.length - 1
+    var max    = Washington.picked.length - 1
 
-    //! Whatever happens first: the next is discovered or we run out of list
+    //! Whatever happens first: the next is discovered or we run out of picked
     //! examples
     while (!next && i < max) {
 
-      next = Washington.list[i].original === this ? 
-        Washington.list[i + 1] : undefined
+      next = Washington.picked[i].original === this ? 
+        Washington.picked[i + 1] : undefined
 
       i ++
     }
@@ -165,8 +185,8 @@ module.exports = function (Washington) {
     //! Create the Promise (starts the timeout!)
     var promise = new Washington.Promise(this, Washington.timeout)
 
-    //! Replace the example for the Promise in the Washington.list
-    Washington.list = Washington.list.map((function (example) {
+    //! Replace the example for the Promise in the Washington.picked
+    Washington.picked = Washington.picked.map((function (example) {
       return example === this ? promise : example
     }).bind(this))
 
@@ -195,7 +215,7 @@ module.exports = function (Washington) {
     var success = new Washington.Success(this)
 
     //! Replace the Example or Promise for the Success on the list
-    Washington.list = Washington.list.map((function (example) {
+    Washington.picked = Washington.picked.map((function (example) {
       return example instanceof Washington.Promise ?
         (example.original === this ? success : example ) :
         (example === this ? success : example )
@@ -231,7 +251,7 @@ module.exports = function (Washington) {
     var failure = new Washington.Failure(this, error)
 
     //! Replace the Example or Promise for the Failure on the list
-    Washington.list = Washington.list.map((function (example) {
+    Washington.picked = Washington.picked.map((function (example) {
       return example instanceof Washington.Promise ?
         (example.original === this ? failure : example ) :
         (example === this ? failure : example )
@@ -263,7 +283,7 @@ module.exports = function (Washington) {
     var pending = new Washington.Pending(this)
 
     //! Replace the Example for the Pending on the list
-    Washington.list = Washington.list.map((function (example) {
+    Washington.picked = Washington.picked.map((function (example) {
       return example === this ? pending : example
     }).bind(this))
 
