@@ -1,4 +1,4 @@
-washington = require "./washington"
+washington = require "../washington"
 assert     = require "assert"
 CLEAR      = "\u001b[0m"
 BOLD       = "\u001b[1m"

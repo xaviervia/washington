@@ -1,4 +1,4 @@
-washington = require "./washington"
+washington = require "../washington"
 assert     = require "assert"
 CLEAR      = "\u001b[39m"
 BOLD       = "\u001b[1m"
@@ -149,7 +149,7 @@ module.exports = (done) ->
 
   flag = false
 
-  formatter = require "./src/formatter"
+  formatter = require "../src/formatter"
 
   jack washington, "on", (object)->
     if object != "example"

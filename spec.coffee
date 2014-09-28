@@ -6,7 +6,7 @@ log        = (message)->
 
 
 
-require("./washington.spec") -> 
+require("./spec/washington") -> 
   
 
 
@@ -22,7 +22,7 @@ require("./washington.spec") ->
     log "Run event tests"
     log "---------------"
     log ""
-    require("./events.spec") ->
+    require("./spec/events") ->
 
 
 
@@ -30,7 +30,7 @@ require("./washington.spec") ->
       log "Run sequential tests"
       log "--------------------"
       log ""
-      require("./sequential.spec") ->
+      require("./spec/sequential") ->
 
 
 
@@ -38,7 +38,7 @@ require("./washington.spec") ->
         log "Run profiling tests"
         log "---------------"
         log ""
-        require("./profiling.spec") ->
+        require("./spec/profiling") ->
 
 
 
@@ -46,7 +46,7 @@ require("./washington.spec") ->
           log "Run Async tests"
           log "---------------"
           log ""
-          require("./async.spec") ->
+          require("./spec/async") ->
 
 
 
