@@ -186,6 +186,29 @@ module.exports = (done) ->
   assert.equal flag, true
 
   unjack process, "exit"
+  unjack console, "log"  
+
+  #############################################################################
+
+  log "Complete should log *nothing* if no examples"
+
+  flag         = true
+
+  jack process, "exit", ->
+  jack console, "log", ->
+    flag = false
+
+  formatter.complete
+    successful:  -> []
+    pending:     -> []
+    failing:     -> []
+    duration:    -> 
+      12
+    , 0
+
+  assert.equal flag, true
+
+  unjack process, "exit"
   unjack console, "log"
 
   #############################################################################
@@ -257,6 +280,47 @@ module.exports = (done) ->
 
   unjack process, "exit"
   unjack console, "log"
+
+  #############################################################################
+
+  log "In grey with empty sign if no examples where selected"
+
+  flag         = false
+
+  jack console, "warn", (content) ->
+    assert.equal content,
+                 GREY + " ∅ No examples selected" + CLEAR
+    flag = true
+
+  formatter.empty 
+    only: 2
+    start: 2
+    end: 4
+    match: /this/
+    filter: ->
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"  
+
+  #############################################################################
+
+  log "In grey with empty sign if no examples where found"
+
+  flag         = false
+
+  jack console, "warn", (content) ->
+    assert.equal content,
+                 GREY + " ∅ No examples found" + CLEAR
+    flag = true
+
+  formatter.empty({})
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"
 
   #############################################################################
 

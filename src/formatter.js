@@ -35,6 +35,17 @@ module.exports = {
       RED + " ☞ " + example.message + CLEAR + GREY + " (" + example.duration() + "ms)" + CLEAR + RED + "\n ☞ " + example.error.stack + CLEAR)
   },
 
+  // on empty
+  // --------
+  //
+  // Logs to `console.warn` whether no examples were selected or no examples
+  // were found
+  empty: function (options) {
+    console.warn(
+      GREY + " ∅ No examples " + 
+      (Object.keys(options).length == 0 ? "found" : "selected") + CLEAR)
+  },
+
   // on complete
   // ----------
   //
@@ -52,7 +63,8 @@ module.exports = {
     if (report.duration() > 0)
       log += GREY + " (" + report.duration() + "ms)" + CLEAR
 
-    console.log(log)
+    if (items.length > 0)
+      console.log(log)
     process.exit(code)
   }
 
