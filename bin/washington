@@ -4,22 +4,50 @@ var fs           = require("fs")
 var spawn        = require("child_process").spawn
 var text         = fs.readFileSync(__dirname + "/.washington").toString()
 var options      = {}
+var GREY         = "\u001b[30m"
+var CLEAR        = "\u001b[0m"
+var BOLD         = "\u001b[1m"
 var interpolated
 
+//! Pre process command line arguments
 process.argv.forEach(function (argument, index) {
   var match
   
   if (index < 2) return
   
+  //! Match arguments for filtering
   if (match = argument.match(/^--([a-z]+)=(.+)$/)) 
     options[match[1]] = isNaN(+match[2]) ? match[2] : +match[2]
 
+  //! File name to match
   else 
     interpolated = text
       .replace(
         "{{file}}",
         process.argv[2] )
 })
+
+//! Show "help" if no file is provided as argument
+if (!interpolated) {
+  console.log(
+    "\n" + BOLD + "Washington\n" + CLEAR + 
+    GREY + "  Because little George sets a good Example" + CLEAR + "\n" +
+    "\n"                                                      +
+    "Usage: \n"                                               +
+    "  washington <filename> [<options>]\n\n"                   +
+    "Options: \n"                                             +
+    "  --only=<position>        # Only run the example in \n" +
+    "                           # that position\n"            +
+    "  --start=<position>       # Only run examples after \n" +
+    "                           # that position           \n" +
+    "  --end=<position>         # Run examples before that\n" +
+    "                           # position                \n" +
+    "  --match=<regexp>         # Run only examples that  \n" +
+    "                           # match the given regular \n" +
+    "                           # expression"
+  )
+  process.exit()
+}
 
 interpolated = interpolated.replace("{{options}}", JSON.stringify(options))
 
