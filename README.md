@@ -288,6 +288,17 @@ Fires whenever an example was found to be asynchronous and became a Promise.
 - `Washington.Promise` promiseObject
 - `Object` report
 
+### `empty`
+
+Is emitted whenever washington was instructed to run but no examples where
+actually selected. The filtering options are sent to the listener for
+reporting and debugging.
+
+**Arguments for callback**
+
+- `Object` options
+- `Object` report
+
 Properties
 ----------
 
