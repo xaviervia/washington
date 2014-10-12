@@ -298,14 +298,14 @@ var Washington = function (message, func) {
 // ### `empty`
 //
 // Is emitted whenever washington was instructed to run but no examples where
-// actually selected. The filtering options are sent to the listener for 
+// actually selected. The filtering options are sent to the listener for
 // reporting and debugging.
 //
 // **Arguments for callback**
 //
 // - `Object` options
 // - `Object` report
-// 
+//
 // Properties
 // ----------
 //
@@ -456,6 +456,12 @@ Washington.use = function (formatter) {
 //   - _optional_ `Function` filter
 Washington.go = function (options) {
 
+  //! If the list is empty, just report that
+  if (!Washington.list || Washington.list.length === 0)
+    return Washington
+      .emit("empty", [options || {}])
+      .complete()
+
   //! If filtering options are available, restrict "picked"
   if (options) {
 
@@ -536,8 +542,10 @@ Washington.isComplete = function () {
 Washington.successful = function () {
 
   //! Simply filter in all instances of Washington.Success from the list
-  return Washington.picked.filter(function (example) {
-    return example instanceof Washington.Success })
+  return Washington.picked ? (
+      Washington.picked.filter(function (example) {
+        return example instanceof Washington.Success })
+    ) : []
 
 }
 
@@ -551,8 +559,10 @@ Washington.successful = function () {
 Washington.failing = function () {
 
   //! Simply filter in all instances of Washington.Failure from the list
-  return Washington.picked.filter(function (example) {
-    return example instanceof Washington.Failure })
+  return Washington.picked ? (
+      Washington.picked.filter(function (example) {
+        return example instanceof Washington.Failure })
+    ) : []
 
 }
 
@@ -566,8 +576,10 @@ Washington.failing = function () {
 Washington.pending = function () {
 
   //! Simply filter in all instances of Washington.Pending from the list
-  return Washington.picked.filter(function (example) {
-    return example instanceof Washington.Pending })
+  return Washington.picked ? (
+      Washington.picked.filter(function (example) {
+        return example instanceof Washington.Pending })
+    ) : []
 
 }
 
@@ -579,13 +591,14 @@ Washington.pending = function () {
 //
 // - `Integer` duration
 Washington.duration = function () {
-  
+
   //! Collect
   var duration = 0
 
   //! Add for each example that has duration
-  Washington.picked.forEach(function (example) {
-    duration += example.duration ? example.duration() : 0 })
+  if (Washington.picked)
+    Washington.picked.forEach(function (example) {
+      duration += example.duration ? example.duration() : 0 })
 
   //! Return the total
   return duration

@@ -6,8 +6,8 @@ log        = (message)->
 
 
 
-require("./spec/washington") -> 
-  
+require("./spec/washington") ->
+
 
 
   log ""
@@ -63,5 +63,14 @@ require("./spec/washington") ->
               log "-----------------"
               log ""
               require("./src/promise.spec") ->
-                console.log "-----"
-                console.log "READY"
+
+
+
+                log ""
+                log "Run friendly errors tests"
+                log "-------------------------"
+                log ""
+                require("./spec/friendly-error") ->
+
+                  console.log "-----"
+                  console.log "READY"
