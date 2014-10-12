@@ -1,6 +1,6 @@
 {
   "name": "washington",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Behavior driven dev tool. Because little George sets a good example",
   "main": "washington.js",
   "scripts": {
