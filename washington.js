@@ -491,6 +491,11 @@ Washington.go = function (options) {
       .emit("empty", [options])
       .complete()
 
+  //! If this is just a dry run
+  else if(options && options.dry)
+    Washington.picked.forEach(function (example) {
+      Washington.emit("dry", [example]) })
+
   //! Run the first example
   else Washington.picked[0].run()
 

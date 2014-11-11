@@ -72,5 +72,13 @@ require("./spec/washington") ->
                 log ""
                 require("./spec/friendly-error") ->
 
-                  console.log "-----"
-                  console.log "READY"
+
+
+                  log ""
+                  log "Run dry run tests"
+                  log "-------------------------"
+                  log ""
+                  require("./spec/dry") ->
+
+                    console.log "-----"
+                    console.log "READY"
