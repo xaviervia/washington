@@ -15,7 +15,9 @@ module.exports = {
   //
   // Logs to `console.info` in green and adds a victory hand
   success: function (example) {
-    console.info(GREEN + " ✌ " + example.message + CLEAR + GREY + " (" + example.duration() + "ms)" + CLEAR)
+    console.info(
+      "%s ✌ %s%s%s (%dms)%s",
+      GREEN, example.message, CLEAR, GREY, example.duration(), CLEAR )
   },
 
   // on pending
@@ -23,7 +25,9 @@ module.exports = {
   //
   // Logs to `console.warn` in yellow and adds writing hand
   pending: function (example) {
-    console.warn(YELLOW + " ✍ " + example.message + CLEAR)
+    console.warn(
+      "%s ✍ %s%s",
+      YELLOW, example.message, CLEAR )
   },
 
   // on failure
@@ -32,7 +36,9 @@ module.exports = {
   // Logs to `console.error` in red and adds a left pointing hand
   failure: function (example) {
     console.error(
-      RED + " ☞ " + example.message + CLEAR + GREY + " (" + example.duration() + "ms)" + CLEAR + RED + "\n ☞ " + example.error.stack + CLEAR)
+      "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
+      RED, example.message, CLEAR, GREY, example.duration(),
+      CLEAR, RED, example.error.stack, CLEAR )
   },
 
   // on empty
@@ -42,8 +48,8 @@ module.exports = {
   // were found
   empty: function (options) {
     console.warn(
-      GREY + " ∅ No examples " + 
-      (Object.keys(options).length == 0 ? "found" : "selected") + CLEAR)
+      "%s ∅ No examples %s%s",
+      GREY, (Object.keys(options).length == 0 ? "found" : "selected"), CLEAR )
   },
 
   // on complete

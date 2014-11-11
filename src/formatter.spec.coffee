@@ -31,9 +31,15 @@ module.exports = (done) ->
   flag         = false
   message      = "This will succeed"
 
-  jack console, "info", (content)->
-    assert.equal content,
-                 GREEN + " ✌ " + message + CLEAR + GREY + " (34ms)" + CLEAR
+  jack console, "info", ()->
+    assert.equal arguments[0], "%s ✌ %s%s%s (%dms)%s"
+    assert.equal arguments[1], GREEN
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+    assert.equal arguments[4], GREY
+    assert.equal arguments[5], "34"
+    assert.equal arguments[6], CLEAR
+
     flag = true
 
   formatter.success
@@ -51,9 +57,12 @@ module.exports = (done) ->
   flag         = false
   message      = "This is pending"
 
-  jack console, "warn", (content)->
-    assert.equal content,
-                 YELLOW + " ✍ " + message + CLEAR
+  jack console, "warn", ()->
+    assert.equal arguments[0], "%s ✍ %s%s"
+    assert.equal arguments[1], YELLOW
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+
     flag = true
 
   formatter.pending
@@ -71,9 +80,17 @@ module.exports = (done) ->
   message      = "This fails"
   error        = new Error "This should be there"
 
-  jack console, "error", (content)->
-    assert.equal content,
-                 RED + " ☞ " + message + CLEAR + GREY + " (56ms)" + CLEAR + RED + "\n ☞ " + error.stack + CLEAR
+  jack console, "error", ()->
+    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[1], RED
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+    assert.equal arguments[4], GREY
+    assert.equal arguments[5], "56"
+    assert.equal arguments[6], CLEAR
+    assert.equal arguments[7], RED
+    assert.equal arguments[8], error.stack
+    assert.equal arguments[9], CLEAR
     flag = true
 
   formatter.failure
@@ -103,7 +120,7 @@ module.exports = (done) ->
     successful:  -> [1, 2, 3, 4, 5]
     pending:     -> [1, 2]
     failing:     -> [1, 2, 3]
-    duration:    -> 
+    duration:    ->
       45
     , 0
 
@@ -129,7 +146,7 @@ module.exports = (done) ->
     successful:  -> [1, 2, 3, 4, 5]
     pending:     -> [1, 2]
     failing:     -> []
-    duration:    -> 
+    duration:    ->
       67
     , 0
 
@@ -154,7 +171,7 @@ module.exports = (done) ->
     successful:  -> [1, 2, 3, 4, 5]
     pending:     -> []
     failing:     -> []
-    duration:    -> 
+    duration:    ->
       98
     , 0
 
@@ -179,14 +196,14 @@ module.exports = (done) ->
     successful:  -> []
     pending:     -> []
     failing:     -> [1, 2, 3, 4, 5]
-    duration:    -> 
+    duration:    ->
       12
     , 0
 
   assert.equal flag, true
 
   unjack process, "exit"
-  unjack console, "log"  
+  unjack console, "log"
 
   #############################################################################
 
@@ -202,7 +219,7 @@ module.exports = (done) ->
     successful:  -> []
     pending:     -> []
     failing:     -> []
-    duration:    -> 
+    duration:    ->
       12
     , 0
 
@@ -227,7 +244,7 @@ module.exports = (done) ->
     successful:  -> []
     pending:     -> [1, 2, 3, 4, 5]
     failing:     -> []
-    duration:    -> 
+    duration:    ->
       0
     , 0
 
@@ -248,7 +265,7 @@ module.exports = (done) ->
       []
     failing: ->
       []
-    duration: -> 
+    duration: ->
       0
 
   jack console, "log", ->
@@ -287,12 +304,14 @@ module.exports = (done) ->
 
   flag         = false
 
-  jack console, "warn", (content) ->
-    assert.equal content,
-                 GREY + " ∅ No examples selected" + CLEAR
+  jack console, "warn", () ->
+    assert.equal arguments[0], "%s ∅ No examples %s%s"
+    assert.equal arguments[1], GREY
+    assert.equal arguments[2], "selected"
+    assert.equal arguments[3], CLEAR
     flag = true
 
-  formatter.empty 
+  formatter.empty
     only: 2
     start: 2
     end: 4
@@ -302,7 +321,7 @@ module.exports = (done) ->
   assert.equal flag, true
 
   unjack process, "exit"
-  unjack console, "warn"  
+  unjack console, "warn"
 
   #############################################################################
 
@@ -311,8 +330,10 @@ module.exports = (done) ->
   flag         = false
 
   jack console, "warn", (content) ->
-    assert.equal content,
-                 GREY + " ∅ No examples found" + CLEAR
+    assert.equal arguments[0], "%s ∅ No examples %s%s"
+    assert.equal arguments[1], GREY
+    assert.equal arguments[2], "found"
+    assert.equal arguments[3], CLEAR
     flag = true
 
   formatter.empty({})
