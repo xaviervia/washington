@@ -146,6 +146,26 @@
 // example.go()
 // ```
 //
+// ### Dry run (no actual execution)
+//
+// Dry run lists the examples without actually running them.
+//
+// Useful for listing available examples.
+//
+// ```javascript
+// var example = require("washington")
+//
+// example('Example', function () { 10 })
+// example('Pending example')
+// example('Failing example', function () { assert(1 === 2) })
+// example('Async example', function () {})
+//
+// example.go({
+//   dry: true
+// })
+//
+// ```
+//
 // ### Use it as a command
 //
 // > You need to install washington as global for using the command line
