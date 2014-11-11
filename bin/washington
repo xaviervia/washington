@@ -12,15 +12,19 @@ var interpolated
 //! Pre process command line arguments
 process.argv.forEach(function (argument, index) {
   var match
-  
+
   if (index < 2) return
-  
+
   //! Match arguments for filtering
-  if (match = argument.match(/^--([a-z]+)=(.+)$/)) 
+  if (match = argument.match(/^--([a-z]+)=(.+)$/))
     options[match[1]] = isNaN(+match[2]) ? match[2] : +match[2]
 
+  //! Match flags without argument
+  else if (match = argument.match(/^--([a-z]+)$/))
+    options[match[1]] = true
+
   //! File name to match
-  else 
+  else
     interpolated = text
       .replace(
         "{{file}}",
@@ -30,7 +34,7 @@ process.argv.forEach(function (argument, index) {
 //! Show "help" if no file is provided as argument
 if (!interpolated) {
   console.log(
-    "\n" + BOLD + "Washington\n" + CLEAR + 
+    "\n" + BOLD + "Washington\n" + CLEAR +
     GREY + "  Because little George sets a good Example" + CLEAR + "\n" +
     "\n"                                                      +
     "Usage: \n"                                               +
