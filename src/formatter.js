@@ -41,6 +41,17 @@ module.exports = {
       CLEAR, RED, example.error.stack, CLEAR )
   },
 
+  // on dry
+  // ------
+  //
+  // Logs to `console.warn` whether no examples were selected or no examples
+  // were found
+  dry: function (example) {
+    console.warn(
+      "%s ☂ %s%s",
+      GREY, example.message, CLEAR )
+  },
+
   // on empty
   // --------
   //

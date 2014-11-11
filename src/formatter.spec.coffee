@@ -329,7 +329,7 @@ module.exports = (done) ->
 
   flag         = false
 
-  jack console, "warn", (content) ->
+  jack console, "warn", () ->
     assert.equal arguments[0], "%s ∅ No examples %s%s"
     assert.equal arguments[1], GREY
     assert.equal arguments[2], "found"
@@ -337,6 +337,28 @@ module.exports = (done) ->
     flag = true
 
   formatter.empty({})
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"
+
+  #############################################################################
+
+  log "In grey with umbrella sign if dry mode"
+
+  flag         = false
+
+  message      = "This is dry"
+  jack console, "warn", () ->
+    assert.equal arguments[0], "%s ☂ %s%s"
+    assert.equal arguments[1], GREY
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+    flag = true
+
+  formatter.dry
+    message: "This is dry"
 
   assert.equal flag, true
 
