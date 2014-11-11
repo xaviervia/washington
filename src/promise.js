@@ -41,9 +41,8 @@ var Promise = function (original, timeout) {
       //! forgot to use the `done` function
       var message = "The example timed out before firing the `done` function"
       if (promise.original) {
-        var functionMatch = promise.original.function
-              .toString()
-              .match(/^function\s*?\(\s*(\w+?)\s*\)/)
+        var functionMatch = /^function\s*?\(\s*(\w+?)\s*\)/
+                            .exec(promise.original.function)
 
         //! If the function name is not present, assume that it is because
         //! the user forgot to put it there
