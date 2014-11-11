@@ -1,18 +1,22 @@
 var example = require("washington")
 var assert  = require("assert")
-var color   = require("cli-color")
+
+var RED        = "\u001b[31m"
+var GREEN      = "\u001b[32m"
+var YELLOW     = "\u001b[33m"
+var CLEAR      = "\u001b[0m"
 
 example.use({
   success: function (success, report) {
-    process.stdout.write(color.green("."))
+    process.stdout.write(GREEN + "." + CLEAR)
   },
 
   pending: function (pending, report) {
-    process.stdout.write(color.yellow("-"))
+    process.stdout.write(YELLOW + "-" + CLEAR)
   },
 
   failure: function (failure, report) {
-    process.stdout.write(color.red("X"))
+    process.stdout.write(RED + "X" + CLEAR)
   },
 
   complete: function (report, code) {
