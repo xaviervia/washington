@@ -196,6 +196,18 @@
 // washington greet.js
 // ```
 //
+// You can also use the `--only`, `--start`, `--end` and `--match` filtering options:
+//
+// ```
+// washington greet.js --start=2 --end=5 --match=WIP
+// ```
+//
+// If you want to just list the available tests, do a dry run
+//
+// ```
+// washington greet.js --dry
+// ```
+//
 // The interesting thing about this (besides convenience) is that the
 // code file is a fully functional module, requirable and production ready.
 // Washington is added as a dependency but that is not really a concern
