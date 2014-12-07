@@ -32,3 +32,4 @@ argument is assumed to be an error. The error is then forwarded to the
 #### Arguments
 
 - _optional_ `Function` error
+

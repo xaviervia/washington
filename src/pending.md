@@ -11,3 +11,4 @@ Class representing an example in a pending status.
 #### Constructor arguments
 
 - `Washington` original
+

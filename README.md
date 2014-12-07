@@ -146,6 +146,26 @@ example("the flag should be set to true", function (done) {
 example.go()
 ```
 
+### Dry run (no actual execution)
+
+Dry run lists the examples without actually running them.
+
+Useful for listing available examples.
+
+```javascript
+var example = require("washington")
+
+example('Example', function () { 10 })
+example('Pending example')
+example('Failing example', function () { assert(1 === 2) })
+example('Async example', function () {})
+
+example.go({
+  dry: true
+})
+
+```
+
 ### Use it as a command
 
 > You need to install washington as global for using the command line
@@ -182,6 +202,12 @@ You can also use the `--only`, `--start`, `--end` and `--match` filtering option
 washington greet.js --start=2 --end=5 --match=WIP
 ```
 
+If you want to just list the available tests, do a dry run
+
+```
+washington greet.js --dry
+```
+
 The interesting thing about this (besides convenience) is that the
 code file is a fully functional module, requirable and production ready.
 Washington is added as a dependency but that is not really a concern
@@ -199,7 +225,7 @@ An interesting gotcha is that the command line tool actually creates a
 script named `.washington` in the current working directory that makes
 the actual requiring, and it then executes that script. This is because
 of the isolation policy of Node.js that limits access to data declared
-but not explicitly exported with `module.exports` if the required script
+but not explictly exported with `module.exports` if the required script
 is located in a  different part of the directory tree. The `.washington`
 script is removed once the execution is completed.
 
@@ -303,7 +329,9 @@ Properties
 ----------
 
 - list: `Array` of examples
-- listeners: `Array` of events
+- picked: `Array` of examples to actually be run
+- listeners: `Object` containing the events as key and the listeners as
+  value `Array`s
 - timeout: `Integer` amount of time in milliseconds before timeout. If
   not set, default to `3000` milliseconds as specified in the `Promise`
 - formatter: `Object` containing methods that listen to their corresponding
@@ -320,9 +348,9 @@ Methods
 
 See [`Mediador.off`](https://github.com/xaviervia/mediador)
 
-### trigger( event, data )
+### emit( event, data )
 
-See [`Mediador.trigger`](https://github.com/xaviervia/mediador)
+See [`Mediador.emit`](https://github.com/xaviervia/mediador)
 
 ### use( formatter )
 
@@ -385,6 +413,11 @@ example("Will print nothing, do nothing")
 example.go()
 ```
 
+### go()
+
+Runs the first example, which runs the second on complete and so on.
+Once the last example runs it runs the `complete` method of Washington.
+
 ### go( options )
 
 Runs the examples. If `options` are provided, filters the examples to run
@@ -392,7 +425,9 @@ based on the provided criteria.  Emits `complete` once the last example in
 the picked range is emitted.
 
 ```javascript
-Washington.go({
+var example = require("washington");
+
+example.go({
   start: 7,       // Will start from the 7th example on
   end: 10,        // Will stop at the 10th example
   match: /WIP/,   // Will only select examples matching /WIP/
@@ -425,27 +460,27 @@ Returns whether all the examples are ready or not.
 
 ### successful()
 
-Returns the amount of successful examples currently on the report.
+Returns the successful examples currently on the report.
 
 #### Returns
 
-- `Integer` amountOfSuccessfulExamples
+- `Array` successfulExamples
 
 ### failing()
 
-Returns the amount of failing examples currently on the report.
+Returns the failing examples currently on the report.
 
 #### Returns
 
-- `Integer` amountOfFailingExamples
+- `Array` failingExamples
 
 ### pending()
 
-Returns the amount of pending examples currently on the report.
+Returns the pending examples currently on the report.
 
 #### Returns
 
-- `Integer` amountOfPendingExamples
+- `Array` pendingExamples
 
 ### duration()
 
@@ -460,6 +495,7 @@ Returns the total duration of all tests run, in milliseconds.
 Sets washington to the defaults
 
 - Empties the `list` of examples
+- Empties the `picked` examples
 - Removes all event `listeners`
 - Sets the `timeout` to null (that will cause the default to be used)
 - Sets the default `formatter` to be used
@@ -484,13 +520,11 @@ Testing
 
 Washington tests are written using only `assert`, because of course.
 
-To run the tests you need to have CoffeeScript installed. Clone the repo and
-run:
+To run the tests, clone this repo and run:
 
 ```
-> sudo npm install -g coffee-script
-> sudo npm link
-> npm test
+npm install
+npm test
 ```
 
 License

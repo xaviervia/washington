@@ -1,5 +1,6 @@
 // Default formatter
 // =================
+//
 "use strict";
 
 var RED        = "\u001b[31m"
@@ -14,6 +15,7 @@ module.exports = {
   // ----------
   //
   // Logs to `console.info` in green and adds a victory hand
+  //
   success: function (example) {
     console.info(
       "%s ✌ %s%s%s (%dms)%s",
@@ -24,6 +26,7 @@ module.exports = {
   // ----------
   //
   // Logs to `console.warn` in yellow and adds writing hand
+  //
   pending: function (example) {
     console.warn(
       "%s ✍ %s%s",
@@ -34,6 +37,7 @@ module.exports = {
   // ----------
   //
   // Logs to `console.error` in red and adds a left pointing hand
+  //
   failure: function (example) {
     console.error(
       "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
@@ -46,6 +50,7 @@ module.exports = {
   //
   // Logs to `console.warn` whether no examples were selected or no examples
   // were found
+  //
   dry: function (example) {
     console.warn(
       "%s ☂ %s%s",
@@ -57,6 +62,7 @@ module.exports = {
   //
   // Logs to `console.warn` whether no examples were selected or no examples
   // were found
+  //
   empty: function (options) {
     console.warn(
       "%s ∅ No examples %s%s",
@@ -67,6 +73,7 @@ module.exports = {
   // ----------
   //
   // Exits using the code
+  //
   complete: function (report, code) {
     var items = []
     if (report.failing().length > 0)

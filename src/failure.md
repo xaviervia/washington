@@ -14,3 +14,14 @@ Class representing a failure to complete the example.
 
 - `Washington` original
 - `Error` error
+
+Failure.prototype.duration()
+----------------------------
+
+Returns an `Integer` with the duration of the original event, in 
+milliseconds
+
+#### Returns
+
+- `Integer` duration
+

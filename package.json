@@ -4,7 +4,8 @@
   "description": "Behavior driven dev tool. Because little George sets a good example",
   "main": "washington.js",
   "scripts": {
-    "test": "coffee spec.coffee"
+    "test": "coffee spec.coffee",
+    "doc": "locco '--source={washington.js,src/**/*.js}' --adapter=markdown --adapter-readme=washington.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,9 @@
     "mediador": "0.1.2"
   },
   "devDependencies": {
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "locco": "1.0.2",
+    "locco-markdown": "0.0.2"
   },
   "bin": {
     "washington": "./bin/washington"

@@ -677,21 +677,27 @@ Washington.reset = function () {
 // -------
 //
 // - [`Washington.Example`](src/example.md)
+//
 Washington.Example = require("./src/example")(Washington)
 
 // - [`Washington.Success`](src/success.md)
+//
 Washington.Success = require("./src/success")
 
 // - [`Washington.Failure`](src/failure.md)
+//
 Washington.Failure = require("./src/failure")
 
 // - [`Washington.Pending`](src/pending.md)
+//
 Washington.Pending = require("./src/pending")
 
 // - [`Washington.Promise`](src/promise.md)
+//
 Washington.Promise = require("./src/promise")
 
 // - [`Washington.TimeoutError`](src/timeout-error.md)
+//
 Washington.TimeoutError = require("./src/timeout-error")
 
 //! Setup washington to the defaults.

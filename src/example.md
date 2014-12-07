@@ -11,6 +11,23 @@ Properties
 Methods
 -------
 
+### new Example( message, function ) 
+
+Creates a new `Example` which adds itself to the global `Washington` 
+instance, both to the general `list` and to the `picked` list. 
+
+> _Warning_: Creating a example consequently overwrites the contents of 
+> the `picked` list. This makes sense since the example cannot proactively
+> filter itself once the criteria has been applied.
+
+#### Arguments
+
+- `String` message
+- `Function` function
+
+#### Returns
+
+- `Example` example
 ### run()
 
 Runs the example.
@@ -29,16 +46,18 @@ If the example has no function at all, it will become a `Washington.Pending`
 
 - `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
   `Washington.Promise` adaptedExample
-
+Adapt it to a Failure forwarding the Error
 ### next()
 
-Returns the next example on the list or `undefined` if this is the last
-example.
+Returns the next example on the picked list or `undefined` if this is the
+last example there.
+
+Runs the next example if available. Otherwise declares the batch to be
+complete.
 
 #### Returns
 
 - `Washington.Example` next
-
 ### promise()
 
 Starts a [`Washington.Promise`](promise.md) pointing to the current
@@ -48,7 +67,6 @@ as argument. Returns the `Promise`.
 #### Returns
 
 - `Washington.Promise` promise
-
 ### succeeded()
 
 Gets a [`Washington.Success`](success.md) object for this example.
@@ -58,7 +76,6 @@ Fires the `success` and `example` events on `Washington` passing the
 #### Returns
 
 - `Washington.Success` success
-
 ### failed()
 
 Gets a [`Washington.Failure`](failure.md) object for this example.
@@ -68,7 +85,6 @@ Fires the `failure` and `example` events on `Washington` passing the
 #### Returns
 
 - `Washington.Failure` failure
-
 ### pending()
 
 Gets a [`Washington.Pending`](pending.md) object for this example.
