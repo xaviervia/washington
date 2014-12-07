@@ -228,6 +228,7 @@
 // but not explictly exported with `module.exports` if the required script
 // is located in a  different part of the directory tree. The `.washington`
 // script is removed once the execution is completed.
+//
 
 "use strict";
 
@@ -241,7 +242,6 @@ var Washington = function (message, func) {
 
 }
 
-//
 // Events
 // ------
 //
@@ -356,16 +356,19 @@ var Washington = function (message, func) {
 // ### on( event, callback ) | on( eventHash )
 //
 // > See [`Mediador.on`](https://github.com/xaviervia/mediador)
+//
 Washington.on = Mediador.prototype.on
 
 // ### off( event, callback ) | off( eventHash )
 //
 // See [`Mediador.off`](https://github.com/xaviervia/mediador)
+//
 Washington.off = Mediador.prototype.off
 
 // ### emit( event, data )
 //
 // See [`Mediador.emit`](https://github.com/xaviervia/mediador)
+//
 Washington.emit = Mediador.prototype.emit
 
 // ### use( formatter )
@@ -428,6 +431,7 @@ Washington.emit = Mediador.prototype.emit
 //
 // example.go()
 // ```
+//
 Washington.use = function (formatter) {
 
   //! If there is a formatter set
@@ -468,7 +472,9 @@ Washington.use = function (formatter) {
 // the picked range is emitted.
 //
 // ```javascript
-// Washington.go({
+// var example = require("washington");
+//
+// example.go({
 //   start: 7,       // Will start from the 7th example on
 //   end: 10,        // Will stop at the 10th example
 //   match: /WIP/,   // Will only select examples matching /WIP/
@@ -486,6 +492,7 @@ Washington.use = function (formatter) {
 //   - _optional_ `Integer` end
 //   - _optional_ `Regexp`|`String` match
 //   - _optional_ `Function` filter
+//
 Washington.go = function (options) {
 
   //! If the list is empty, just report that
@@ -536,6 +543,7 @@ Washington.go = function (options) {
 // ### complete()
 //
 // Triggers the 'complete' event.
+//
 Washington.complete = function () {
   Washington.emit(
     "complete",
@@ -553,6 +561,7 @@ Washington.complete = function () {
 // #### Returns
 //
 // - `Boolean` isComplete
+//
 Washington.isComplete = function () {
 
   //! Filter the list of examples searching for instances of Washington
@@ -571,11 +580,12 @@ Washington.isComplete = function () {
 
 // ### successful()
 //
-// Returns the amount of successful examples currently on the report.
+// Returns the successful examples currently on the report.
 //
 // #### Returns
 //
-// - `Integer` amountOfSuccessfulExamples
+// - `Array` successfulExamples
+//
 Washington.successful = function () {
 
   //! Simply filter in all instances of Washington.Success from the list
@@ -588,11 +598,12 @@ Washington.successful = function () {
 
 // ### failing()
 //
-// Returns the amount of failing examples currently on the report.
+// Returns the failing examples currently on the report.
 //
 // #### Returns
 //
-// - `Integer` amountOfFailingExamples
+// - `Array` failingExamples
+//
 Washington.failing = function () {
 
   //! Simply filter in all instances of Washington.Failure from the list
@@ -605,11 +616,12 @@ Washington.failing = function () {
 
 // ### pending()
 //
-// Returns the amount of pending examples currently on the report.
+// Returns the pending examples currently on the report.
 //
 // #### Returns
 //
-// - `Integer` amountOfPendingExamples
+// - `Array` pendingExamples
+//
 Washington.pending = function () {
 
   //! Simply filter in all instances of Washington.Pending from the list
@@ -627,6 +639,7 @@ Washington.pending = function () {
 // #### Returns
 //
 // - `Integer` duration
+//
 Washington.duration = function () {
 
   //! Collect
@@ -651,6 +664,7 @@ Washington.duration = function () {
 // - Removes all event `listeners`
 // - Sets the `timeout` to null (that will cause the default to be used)
 // - Sets the default `formatter` to be used
+//
 Washington.reset = function () {
   Washington.list      = null
   Washington.picked    = null
@@ -690,13 +704,11 @@ module.exports = Washington
 //
 // Washington tests are written using only `assert`, because of course.
 //
-// To run the tests you need to have CoffeeScript installed. Clone the repo and
-// run:
+// To run the tests, clone this repo and run:
 //
 // ```
-// > sudo npm install -g coffee-script
-// > sudo npm link
-// > npm test
+// npm install
+// npm test
 // ```
 //
 // License
