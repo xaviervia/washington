@@ -15,19 +15,19 @@
 
       <proposition>
         <pre><span class="muted">var</span> example <span class="muted">=</span> require<span class="muted">(</span><span class="string">"washington"</span><span class="muted">);</span>
-<span class="muted">var</span> assert  <span class="muted">=</span> require<span class="muted">(</span><span class="string">"assert"</span><span class="muted">);</span>
+<span class="muted">var</span> assert <span class="muted">=</span> require<span class="muted">(</span><span class="string">"arrest"</span><span class="muted">);</span>
 
 <span class="muted">var</span> add <span class="muted">= function (</span>number<span class="muted">,</span> addition<span class="muted">) {</span>
   <span class="muted">return</span> number <span class="muted">+</span> addition<span class="muted">;</span>
 <span class="muted">}</span>
 
 example<span class="muted">(</span><span class="string">"add: 2, 2 will be 4 @wip"</span><span class="muted">, function () {</span>
-  assert<span class="muted">.</span>equal<span class="muted">(</span>add<span class="muted">(</span>2<span class="muted">,</span> 2<span class="muted">),</span> 4<span class="muted">);
-});</span>
+  assert<span class="muted">.</span>equal<span class="muted">(</span>add<span class="muted">(</span>2<span class="muted">,</span> 2<span class="muted">), </span>4<span class="muted">);</span>
+<span class="muted">});</span>
 
 <span class="muted">---</span>
 <span class="muted">&gt;</span> washington script.js
-<span class="success">✌︎ plus: 2 + 2 will be 4 @wip</span> <span class="muted">(1ms)</span>
+<span class="success">✌︎ add: 2 + 2 will be 4 @wip</span> <span class="muted">(1ms)</span>
 <span class="success">1 successful</span> <span class="muted">(1ms)</span>
 </pre>
       </proposition>
@@ -43,13 +43,15 @@ example<span class="muted">(</span><span class="string">"add: 2, 2 will be 4 @wi
 
       <h2>What is Example Driven Development?</h2>
 
-      <p>It's the practice of writing programmatic consumption examples as tests.</p>
-      <p>It's going back to the roots of what testing means. Testing (BDD/TDD) is a long, complex topic where a lot of opinions coexist and frequently collide. The enlightenment in testing is in essence it is about balancing:</p>
+      <p>It's the practice of writing real life usage examples as tests instead of contrived artificial artifacts.</p>
+      <p>It's going back to the roots of what testing means. Testing (BDD/TDD) is a long, complex topic where a lot of opinions coexist and frequently collide. The enlightenment in testing is all about the balance of:</p>
 
       <ul>
-        <li><strong>Coverage</strong>: Good coverage means robust code, but there is such thing as too many tests. Example driven development means that you shouldn't write tests of which you cannot come up at all with real life examples of the ocurrence of that consumption scenario.</li>
+        <li><strong>Coverage</strong>: Good coverage means robust code, but there is such thing as too many tests. Example driven development means that you shouldn't write tests for scenarios that you cannot imagine happening in real life.</li>
         <li><strong>Ergonomics</strong>: The test suite must be easy to run, easy to filter, easy to create. Example driven development means that the tests should lie as close to the tested code as possible, ideally just below it. Example driven development also means that you can ditch complex suite structures to reflect large APIs, favoring instead filterability and really small components. This is better explained by the related principle <a href="dont develop">Don't develop: standardize</a></li>
-        <li><strong>Utility</strong>: It should be possible to run the test suite in a various of ways: with full fletched command line, human readable output; with various output formats (html, json, xml, ...); optimized for continuous integration, with log-like, one line per test output format; and programatically, so tools can be built on top of the test suite to leverage the test suite results in making progress metrics, API complexity analysis, statistical analysis and all kind of insights that you shouldn't need to parse the command line output or monkeypatch the test runner to be able to extract. Example driven development means treating the examples as first class citizens of the code base, since in the contemporary ecosystem tests are becoming more and more production code. Washington solves that by provinding a powerful interface for interacting with the test suite and the possibility of overriding formatters, and of course full access to the test suite objects with no esoteric structures.</li>
+        <li><strong>Interoperability</strong>: It should be possible to run the test suite in a various of ways: with full fletched command line, human readable output; with various output formats (html, json, xml, ...); optimized for continuous integration, with log-like, one line per test output format; and programatically, so tools can be built on top of the test suite to leverage the test suite results in making progress metrics, API complexity analysis, statistical analysis and all kind of insights that you shouldn't need to parse the command line output or monkeypatch the test runner to be able to extract. Example driven development means treating the examples as first class citizens of the code base, since in the contemporary ecosystem tests are becoming more and more production code. Washington solves that by provinding a powerful interface for interacting with the test suite and the possibility of overriding formatters, and of course full access to the test suite objects with no esoteric structures.</li>
+      </ul>
+      <p>The bottom line is that you should treat your test examples as production code. Treat the test suite as a citizen of your codebase (do not dwell into "first class", citizens should be equal). In the end it is about the <a href="http://www.catb.org/esr/writings/taoup/html/ch01s06.html">Unix philosophy</a>, the cornerstone of Open Source.</p>
 
       <h2>License</h2>
       <p>&copy; 2014 Xavier Via<br />
