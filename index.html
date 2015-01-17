@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <title>Washington ✍ Example Driven Development</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <main class="grid">
+      <h1>Washington ✍</h1>
+      <p>Example Driven Development</p>
+
+      <proposition>
+        <pre><span class="muted">var</span> example <span class="muted">=</span> require<span class="muted">(</span><span class="string">"washington"</span><span class="muted">);</span>
+<span class="muted">var</span> assert  <span class="muted">=</span> require<span class="muted">(</span><span class="string">"assert"</span><span class="muted">);</span>
+
+example<span class="muted">(</span><span class="string">"plus: 2 + 2 will be 4 @wip"</span><span class="muted">, function () {</span>
+  assert<span class="muted">.</span>equal<span class="muted">(</span>2 <span class="muted">+</span> 2<span class="muted">,</span> 4<span class="muted">);
+});</span>
+
+<span class="muted">---</span>
+<span class="muted">&gt;</span> washington script.js
+<span class="success">✌︎ plus: 2 + 2 will be 4 @wip</span> <span class="muted">(1ms)</span>
+<span class="success">1 successful</span> <span class="muted">(1ms)</span>
+</pre>
+      </proposition>
+
+      <clearfix />
+
+      <h2>Install</h2>
+      <p>&gt; npm install washington</p>
+
+      <h2>Usage</h2>
+
+      <p>a</p>
+
+      <h2>License</h2>
+      <p>&copy; 2014 Xavier Via<br />
+        <a href="https://github.com/xaviervia/washington/blob/master/LICENSE">BSD 2 Clause license.</a></p>
+
+    </main>
+  </body>
+</html>
