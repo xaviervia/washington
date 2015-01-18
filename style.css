@@ -75,6 +75,14 @@ h2 {
   padding: .2rem 0 .4rem 0;
 }
 
+h3 {
+  margin: 0 1.2rem;
+  font-size: 1.2rem;
+  line-height: 2.4rem;
+  font-weight: 500;
+  padding: 1.4rem 0 .4rem 0;
+}
+
 pre {
   margin: 0 0 .8rem 0;
   font-size: 1rem;
@@ -84,6 +92,14 @@ pre {
   color: #ddd;
   border-radius: .15rem;
   font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+}
+
+code {
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+  background: #333;
+  color: #f0f0f0;
+  padding: .1rem .2rem;
+  border-radius: .3rem;
 }
 
 proposition, result {
