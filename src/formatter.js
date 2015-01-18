@@ -11,6 +11,8 @@ var GREY       = "\u001b[30m"
 
 module.exports = {
 
+  exampleRunRegexp: /at Example\.run \(.+?washington\/src\/example\.js:\d+:\d+\)/,
+
   // on success
   // ----------
   //
@@ -39,10 +41,23 @@ module.exports = {
   // Logs to `console.error` in red and adds a left pointing hand
   //
   failure: function (example) {
+    var stack = []
+    var stop = false
+    var index = 0
+    var baseStack = example.error.stack.split("\n")
+
+    while ( !stop && index < baseStack.length) {
+      if (!baseStack[index].match(this.exampleRunRegexp))
+        stack.push(baseStack[index])
+      else stop = true
+
+      index ++
+    }
+
     console.error(
       "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
       RED, example.message, CLEAR, GREY, example.duration(),
-      CLEAR, RED, example.error.stack, CLEAR )
+      CLEAR, RED, stack.join("\n"), CLEAR )
   },
 
   // on dry

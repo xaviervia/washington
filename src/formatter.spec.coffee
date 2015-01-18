@@ -74,11 +74,25 @@ module.exports = (done) ->
 
   #############################################################################
 
-  log "Should log to error in red and harsh whenever a failure occurs and duration in grey"
+  log "Should log to error in red with the shortened stack whenever a failure occurs and duration in grey"
 
   flag         = false
   message      = "This fails"
-  error        = new Error "This should be there"
+  error        =
+    stack: "ReferenceError: ArrayEllipsis is not defined\n
+    at null.function (/Users/fernando.canel/Code/remote/sydney/src/endpoint.js:653:15)\n
+    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:116:24)\n
+    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
+    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)\n
+    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:124:30)\n
+    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
+    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)\n
+    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:124:30)\n
+    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
+    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)"
+
+  shortened    = "ReferenceError: ArrayEllipsis is not defined\n
+    at null.function (/Users/fernando.canel/Code/remote/sydney/src/endpoint.js:653:15)"
 
   jack console, "error", ()->
     assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
@@ -89,7 +103,7 @@ module.exports = (done) ->
     assert.equal arguments[5], "56"
     assert.equal arguments[6], CLEAR
     assert.equal arguments[7], RED
-    assert.equal arguments[8], error.stack
+    assert.equal arguments[8], shortened
     assert.equal arguments[9], CLEAR
     flag = true
 
