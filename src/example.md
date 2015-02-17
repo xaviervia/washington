@@ -11,12 +11,12 @@ Properties
 Methods
 -------
 
-### new Example( message, function ) 
+### new Example( message, function )
 
-Creates a new `Example` which adds itself to the global `Washington` 
-instance, both to the general `list` and to the `picked` list. 
+Creates a new `Example` which adds itself to the global `Washington`
+instance, both to the general `list` and to the `picked` list.
 
-> _Warning_: Creating a example consequently overwrites the contents of 
+> _Warning_: Creating a example consequently overwrites the contents of
 > the `picked` list. This makes sense since the example cannot proactively
 > filter itself once the criteria has been applied.
 

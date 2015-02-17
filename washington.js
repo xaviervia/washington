@@ -700,6 +700,10 @@ Washington.Promise = require("./src/promise")
 //
 Washington.TimeoutError = require("./src/timeout-error")
 
+// - [`Washington.AssertionError`](src/assertion-error.md)
+//
+Washington.AssertionError = require("./src/assertion-error")
+
 //! Setup washington to the defaults.
 Washington.reset()
 

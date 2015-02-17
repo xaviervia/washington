@@ -1,8 +1,6 @@
 Washington
 ==========
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xaviervia/washington?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 > Little George sets a good example
 
 [ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
@@ -516,6 +514,8 @@ Classes
 - [`Washington.Promise`](src/promise.md)
 
 - [`Washington.TimeoutError`](src/timeout-error.md)
+
+- [`Washington.AssertionError`](src/assertion-error.md)
 
 Testing
 -------

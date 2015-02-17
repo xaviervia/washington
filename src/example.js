@@ -15,12 +15,12 @@ module.exports = function (Washington) {
   // Methods
   // -------
   //
-  // ### new Example( message, function ) 
-  // 
-  // Creates a new `Example` which adds itself to the global `Washington` 
-  // instance, both to the general `list` and to the `picked` list. 
+  // ### new Example( message, function )
   //
-  // > _Warning_: Creating a example consequently overwrites the contents of 
+  // Creates a new `Example` which adds itself to the global `Washington`
+  // instance, both to the general `list` and to the `picked` list.
+  //
+  // > _Warning_: Creating a example consequently overwrites the contents of
   // > the `picked` list. This makes sense since the example cannot proactively
   // > filter itself once the criteria has been applied.
   //
@@ -111,9 +111,27 @@ module.exports = function (Washington) {
       //! it is interpreted as synchronous
       else {
 
-        //! Attempt to run the example function
+        //! Attempt to run the example function, store return value
         try {
-          this.function()
+          var result = this.function()
+
+          //! If the return value is `false`, adapt it to Failure with
+          //! a Washington.AssertionError that describes the problem
+          if (result === false)
+            replacement = this.failed(
+              new Washington.AssertionError(
+                "False as return value, indicating assertion failure") )
+
+          //! If the result value is an actual `Error`, adapt the Example to a
+          //! Failure passing the received error
+          if (result instanceof Error)
+            replacement = this.failed(result)
+
+          //! If the result value is a `String`, we treat it as a the message
+          //! of a generic Washington.AssertionError
+          if (typeof result === "string" || result instanceof String)
+            replacement = this.failed(
+              new Washington.AssertionError(result) )
 
           //! If the function succeeds, adapt it to Success
           replacement = this.succeeded()
@@ -141,7 +159,7 @@ module.exports = function (Washington) {
   //
   // Returns the next example on the picked list or `undefined` if this is the
   // last example there.
-  // 
+  //
   // Runs the next example if available. Otherwise declares the batch to be
   // complete.
   //
@@ -158,7 +176,7 @@ module.exports = function (Washington) {
     //! examples
     while (!next && i < max) {
 
-      next = Washington.picked[i].original === this ? 
+      next = Washington.picked[i].original === this ?
         Washington.picked[i + 1] : undefined
 
       i ++
@@ -296,7 +314,7 @@ module.exports = function (Washington) {
 
     //! Return the Pending object
     return pending
-    
+
   }
 
   return Example

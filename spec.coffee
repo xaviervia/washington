@@ -80,5 +80,13 @@ require("./spec/washington") ->
                   log ""
                   require("./spec/dry") ->
 
-                    console.log "-----"
-                    console.log "READY"
+
+
+                    log ""
+                    log "Run passive assertions tests"
+                    log "----------------------------"
+                    log ""
+                    require("./spec/passive-assertions") ->
+
+                      console.log "-------"
+                      console.log "SUCCESS"
