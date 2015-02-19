@@ -1,7 +1,7 @@
 {
   "name": "washington",
   "version": "0.7.2",
-  "description": "Behavior driven dev tool. Because little George sets a good example",
+  "description": "Example Driven Development. Because little George sets a good example",
   "main": "washington.js",
   "scripts": {
     "test": "coffee spec.coffee",

@@ -5,18 +5,23 @@
 //
 // [ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
 //
-// Example library for TDD/BDD in Node.js.
-// Very small. Much concise.
+// Example Driven Development for Node.js.
 //
-// - No assertions. Use [`assert`](http://nodejs.org/api/assert.html)
-// - Stupidly simple asynchronous support.
+// Low footprint. Unique features:
+//
+// - [Passive assertions](https://github.com/xaviervia/washington/wiki/Passive-Assertions).
+//   Throw errors or use return values.
+// - Stupidly simple asynchronous example support.
 // - Programmatically usable report (`washington.failing().length`)
+//
+// You can also see the introductory website on
+// [xaviervia.github.io/washington](http://xaviervia.github.io/washington)
 //
 // Installation
 // ------------
 //
 // ```
-// npm install washington
+// npm install -g washington
 // ```
 //
 // Usage
@@ -26,10 +31,9 @@
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 //
-// example("2 + 2 should be 4", function () {
-//   assert.equal(2 + 2, 4)
+// example("2 + 2 should be 4", function (check) {
+//   check( 2 + 2 == 4 )
 // })
 //
 // example.go()
@@ -45,16 +49,15 @@
 // > documentation. This is because I strongly recommend using `example` to
 // > make the purpose explicit. Please bear in mind that all of `Washington`
 // > methods as stated in the documentation below are accessible through
-// > `example` in these samples.
+// > `example` in these introductory snippets.
 //
 // ### Failing example
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 //
-// example("2 + 2 should be 5", function () {
-//   assert.equal(2 + 2, 5)
+// example("2 + 2 should be 5", function (check) {
+//   check( 2 + 2 == 5 )
 // })
 //
 // example.go()
@@ -81,66 +84,86 @@
 // - When is the example complete
 // - What has been the error, if any
 //
-// This is achieved with the `done` function that the example function receives
-// as argument.
+// This is achieved by waiting for the `check` function to be invoked. The
+// `check` function is received by the example function as an argument.
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 //
-// example("2 + 2 will be 4", function (done) {
+// example("2 + 2 will be 4", function (check) {
 //   var result = 2 + 2
 //   setTimeout(function () {
-//     try {
-//       assert.equal(result, 4)
-//       done()
-//     }
-//     catch(error) {
-//       done(error)
-//     }
+//     check( result == 4 )
 //   }, 100)
 // })
 //
 // example.go()
 // ```
 //
-// > **Important**: please note that if the example function receives
-// > an argument, the example will be assumed to be asynchronous and will
-// > timeout if the `done` function is never executed.
+// Please note that if the example function receives an argument, the example
+// will be assumed to not be complete until `check` is invoked and will timeout
+// if it is never executed. The default timeout span is `3000` milliseconds.
+// You can change the timeout by editing the `timeout` property of `Washington`:
 //
-// ### Sequential example
+// ```javascript
+// var example = require("washington")
+//
+// example.timeout = 10000
+// ```
+//
+// ### Set custom message on failing expectations
+//
+// You can set a custom message when an example fails and get then a nice
+// message in the `AssertionError`:
+//
+// ```javascript
+// var example = require("washington");
+//
+// example("2 + 2 should be 5", function (check) {
+//   check( 2 + 2 == 5 || "The sum doesn't result in 5");
+// });
+//
+// example.go();
+// ```
+//
+// You can also send in a full `Error` object:
+//
+// ```javascript
+// var example = require("washington");
+//
+// example("2 + 2 should be 5", function (check) {
+//   check( 2 + 2 == 5 || new Error("The sum doesn't result in 5") );
+// });
+//
+// example.go();
+// ```
+//
+// > You can read more about [Passive Assertions](https://github.com/xaviervia/washington/wiki/Passive-Assertions)
+//
+// ### Sequential execution
 //
 // Asynchronous examples are run one at a time. Washington is designed to do
 // this because many real life testing scenarios involve tests that interact
 // with the same objects or servers concurrently and knowing the state of the
-// server or object is significative to the example's completion. As of
-// version 0.3.0 there is no alternative to this behavior.
+// server or object is significative to the example's completion. There is no
+// plan for adding an option for running the examples simultaneously.
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 //
 // var flag    = false
 //
-// example("will set the flag to true", function (done) {
+// example("will set the flag to true", function (check) {
 //   setTimeout(function () {
-//     assert.equal(flag, false)
 //     flag = true
-//     done()
+//     check()
 //   }, 100)
 // })
 //
-// example("the flag should be set to true", function (done) {
+// example("the flag should be set to true", function (check) {
 //   setTimeout(function () {
-//     try {
-//       assert.equal(flag, true)
-//       done()
-//     }
-//
-//     catch(error) {
-//       done(error)
-//     }
-//   }, 100)
+//     check( flag )
+//   }, 10)
 // })
 //
 // example.go()
@@ -157,7 +180,7 @@
 //
 // example('Example', function () { 10 })
 // example('Pending example')
-// example('Failing example', function () { assert(1 === 2) })
+// example('Failing example', function (check) { check(1 === 2) })
 // example('Async example', function () {})
 //
 // example.go({
@@ -168,23 +191,18 @@
 //
 // ### Use it as a command
 //
-// > You need to install washington as global for using the command line
-// > tool. Do that by running `sudo npm install -g washington`
-//
-// **Washington** provides a command line tool for executing the specs in
-// a [**code document**]. The procedure is like this: you start with a file
-// that features some washington specs, for example `greet.js`
+// **Washington** provides a CLI for executing the examples without having to
+// invoke `.go()` manually.
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 //
 // function greet(name) {
 //   return "Hello " + name + "!"
 // }
 //
-// example("Lets greet Paulie", function () {
-//   assert.equal(greet("Paulie"), "Hello Paulie!")
+// example("Lets greet Paulie", function (check) {
+//   check( greet("Paulie") === "Hello Paulie!" )
 // })
 //
 // module.exports = greet
@@ -202,32 +220,28 @@
 // washington greet.js --start=2 --end=5 --match=WIP
 // ```
 //
-// If you want to just list the available tests, do a dry run
+// If you just want to list the available tests, do a dry run
 //
 // ```
 // washington greet.js --dry
 // ```
 //
-// The interesting thing about this (besides convenience) is that the
-// code file is a fully functional module, requirable and production ready.
-// Washington is added as a dependency but that is not really a concern
-// in most applications. The file itself does not contain an invocation to
-// actually run the examples, so the examples are just stored by Node unless
+// An interesting consequence of this approach is that the code file containing
+// the examples is a fully functional module, requirable and production ready.
+// Washington is added as a dependency, but that is not really a concern
+// in many applications. The file itself does not contain any invocations that
+// actually runs the examples, so they are just stored in memory unless
 // you run them manually from another script.
 //
-// In essence, what the command line tool does is requiring **Washington**
-// and the file and running Washington. You can also require the script
-// `greet.js` in another script that itself has some Washington specs
-// and run them all together from the command line. As a way of organizing
-// the examples, it is really concise and convenient.
+// In essence, what the command line tool does is requiring **Washington**,
+// requiring the target file and then running the example set. You can also
+// require the script `greet.js` in another script that itself has some
+// Washington examples and run them all together from the command line. As a
+// way of organizing the examples, it is really concise and convenient.
 //
-// An interesting gotcha is that the command line tool actually creates a
-// script named `.washington` in the current working directory that makes
-// the actual requiring, and it then executes that script. This is because
-// of the isolation policy of Node.js that limits access to data declared
-// but not explictly exported with `module.exports` if the required script
-// is located in a  different part of the directory tree. The `.washington`
-// script is removed once the execution is completed.
+// > Note that the CLI creates and then destroys a
+// > [`.washington` artifact file](https://github.com/xaviervia/washington/wiki/Command-line-quirk:-Node's-require-isolation-policy)
+// > in the working directory.
 //
 
 "use strict";
@@ -245,11 +259,14 @@ var Washington = function (message, func) {
 // Events
 // ------
 //
+// Washington provides a thorough event-driven interface for manipulating
+// information about the examples' results programmatically.
+//
 // ### `complete`
 //
 // Fires whenever the full report is ready.
 //
-// **Arguments for callback:**
+// **Arguments sent to the callback:**
 //
 // - `Object` report
 // - `Integer` exitCode
@@ -275,7 +292,7 @@ var Washington = function (message, func) {
 // Fires whenever an example ran. Fires just after the corresponding `success`,
 // `failure` or `pending` events by the same example.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Washington.Pending` | `Washington.Success` | `Washington.Failure` example
 // - `Object` report
@@ -293,7 +310,7 @@ var Washington = function (message, func) {
 // Fires whenever an example ran successfully. Fires just before the
 // corresponding `example` event.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Washington.Success` successObject
 // - `Object` report
@@ -303,7 +320,7 @@ var Washington = function (message, func) {
 // Fires whenever an example failed. Fires just before the corresponding
 // `example` event.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Washington.Failure` failureObject
 // - `Object` report
@@ -313,7 +330,7 @@ var Washington = function (message, func) {
 // Fires whenever an example is pending. Fires just before the corresponding
 // `example` event.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Washington.Pending` pendingObject
 // - `Object` report
@@ -322,7 +339,7 @@ var Washington = function (message, func) {
 //
 // Fires whenever an example was found to be asynchronous and became a Promise.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Washington.Promise` promiseObject
 // - `Object` report
@@ -333,10 +350,18 @@ var Washington = function (message, func) {
 // actually selected. The filtering options are sent to the listener for
 // reporting and debugging.
 //
-// **Arguments for callback**
+// **Arguments sent to the callback**
 //
 // - `Object` options
 // - `Object` report
+//
+// ### `dry`
+//
+// Fires for each example in the suite when doing a dry run.
+//
+// **Arguments sent to the callback**
+//
+// - `Washington.Example` exampleObject
 //
 // Properties
 // ----------
@@ -381,7 +406,6 @@ Washington.emit = Mediador.prototype.emit
 //
 // ```javascript
 // var example = require("washington")
-// var assert  = require("assert")
 // var color   = require("cli-color")
 //
 // example.use({
@@ -402,14 +426,14 @@ Washington.emit = Mediador.prototype.emit
 //   }
 // })
 //
-// example("Good", function () {
-//   assert.equal(1, 1)
+// example("Good", function (check) {
+//   check( 1 === 1 )
 // })
 //
 // example("Pending")
 //
-// example("Bad", function () {
-//   assert.equal(1, 2)
+// example("Bad", function (check) {
+//   check( 1 === 2 )
 // })
 //
 // example.go()
@@ -460,11 +484,6 @@ Washington.use = function (formatter) {
   }
 }
 
-// ### go()
-//
-// Runs the first example, which runs the second on complete and so on.
-// Once the last example runs it runs the `complete` method of Washington.
-//
 // ### go( options )
 //
 // Runs the examples. If `options` are provided, filters the examples to run
@@ -492,6 +511,7 @@ Washington.use = function (formatter) {
 //   - _optional_ `Integer` end
 //   - _optional_ `Regexp`|`String` match
 //   - _optional_ `Function` filter
+//   - _optional_ `Boolean` dry
 //
 Washington.go = function (options) {
 
@@ -700,6 +720,10 @@ Washington.Promise = require("./src/promise")
 //
 Washington.TimeoutError = require("./src/timeout-error")
 
+// - [`Washington.AssertionError`](src/assertion-error.md)
+//
+Washington.AssertionError = require("./src/assertion-error")
+
 //! Setup washington to the defaults.
 Washington.reset()
 
@@ -708,7 +732,8 @@ module.exports = Washington
 // Testing
 // -------
 //
-// Washington tests are written using only `assert`, because of course.
+// Washington tests are very low-level, because of course. It's almost a
+// miracle than a test library can be tested without collapsing in a paradox.
 //
 // To run the tests, clone this repo and run:
 //

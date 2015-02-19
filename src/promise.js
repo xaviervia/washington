@@ -19,6 +19,7 @@
 "use strict";
 
 var TimeoutError = require("./timeout-error")
+var AssertionError = require("./assertion-error")
 
 var Promise = function (original, timeout) {
 
@@ -76,7 +77,7 @@ var Promise = function (original, timeout) {
 //
 // - _optional_ `Function` error
 //
-Promise.prototype.done = function (error) {
+Promise.prototype.done = function (result) {
 
   //! Do nothing if the promise is already done
   if (!this.ready) {
@@ -84,11 +85,22 @@ Promise.prototype.done = function (error) {
     //! Set the promise as ready so that the timeout is discarded
     this.ready = true
 
-    //! If there is an error
-    if (error)
+    //! If the `result` is an Error
+    if (result instanceof Error)
 
       //! Call failed
-      this.original.failed(error)
+      this.original.failed(result)
+
+    //! If the `result` is `false`, create and fail with an AssertionError
+    else if (result === false)
+      this.original.failed(
+        new AssertionError("False as argument value, indicating assertion failure") )
+
+    //! If the `result` is a String, assume it was intended as the message
+    //! for a generic AssertionError
+    else if (typeof result === "string" || result instanceof String)
+      this.original.failed(
+        new AssertionError(result) )
 
     //! If there was no error, assume success
     else
