@@ -246,488 +246,514 @@
 
 "use strict";
 
-var Mediador   = require("mediador")
-var Formatter  = require("./src/formatter")
+(function (name, definition) {
 
-var Washington = function (message, func) {
+  //! AMD
+  if (typeof define === 'function')
+    define(definition)
 
-  //! Return a new instance of Example
-  return new Washington.Example(message, func)
+  //! Node.js
+  else if (typeof module !== 'undefined' && module.exports)
+    module.exports = definition()
 
-}
+  //! Browser
+  else {
+    var theModule = definition(), global = window, old = global[name];
 
-// Events
-// ------
-//
-// Washington provides a thorough event-driven interface for manipulating
-// information about the examples' results programmatically.
-//
-// ### `complete`
-//
-// Fires whenever the full report is ready.
-//
-// **Arguments sent to the callback:**
-//
-// - `Object` report
-// - `Integer` exitCode
-//
-// **Sample:**
-//
-// ```javascript
-// washington.on("complete", function (report, code) {
-//
-//   // Log the results by hand
-//   console.log("Successful: " + report.successful().length)
-//   console.log("Pending: " + report.pending().length)
-//   console.log("Failing: " + report.failing().length)
-//
-//   // Use the exit code to propagate failing status
-//   process.exit(code)
-//
-// })
-// ```
-//
-// ### `example`
-//
-// Fires whenever an example ran. Fires just after the corresponding `success`,
-// `failure` or `pending` events by the same example.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Pending` | `Washington.Success` | `Washington.Failure` example
-// - `Object` report
-//
-// **Sample:**
-//
-// ```javascript
-// washington.on("example", function (example, report) {
-//   console.log("Another example completed out of " + report.list.length)
-// })
-// ```
-//
-// ### `success`
-//
-// Fires whenever an example ran successfully. Fires just before the
-// corresponding `example` event.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Success` successObject
-// - `Object` report
-//
-// ### `failure`
-//
-// Fires whenever an example failed. Fires just before the corresponding
-// `example` event.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Failure` failureObject
-// - `Object` report
-//
-// ### `pending`
-//
-// Fires whenever an example is pending. Fires just before the corresponding
-// `example` event.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Pending` pendingObject
-// - `Object` report
-//
-// ### `promise`
-//
-// Fires whenever an example was found to be asynchronous and became a Promise.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Promise` promiseObject
-// - `Object` report
-//
-// ### `empty`
-//
-// Is emitted whenever washington was instructed to run but no examples where
-// actually selected. The filtering options are sent to the listener for
-// reporting and debugging.
-//
-// **Arguments sent to the callback**
-//
-// - `Object` options
-// - `Object` report
-//
-// ### `dry`
-//
-// Fires for each example in the suite when doing a dry run.
-//
-// **Arguments sent to the callback**
-//
-// - `Washington.Example` exampleObject
-//
-// Properties
-// ----------
-//
-// - list: `Array` of examples
-// - picked: `Array` of examples to actually be run
-// - listeners: `Object` containing the events as key and the listeners as
-//   value `Array`s
-// - timeout: `Integer` amount of time in milliseconds before timeout. If
-//   not set, default to `3000` milliseconds as specified in the `Promise`
-// - formatter: `Object` containing methods that listen to their corresponding
-//   events
-//
-// Methods
-// -------
-//
-// ### on( event, callback ) | on( eventHash )
-//
-// > See [`Mediador.on`](https://github.com/xaviervia/mediador)
-//
-Washington.on = Mediador.prototype.on
-
-// ### off( event, callback ) | off( eventHash )
-//
-// See [`Mediador.off`](https://github.com/xaviervia/mediador)
-//
-Washington.off = Mediador.prototype.off
-
-// ### emit( event, data )
-//
-// See [`Mediador.emit`](https://github.com/xaviervia/mediador)
-//
-Washington.emit = Mediador.prototype.emit
-
-// ### use( formatter )
-//
-// The `use` method allows you to change formatters easily.
-// The `formatter` object is simply an object where each method maps to an event
-// and Washington automatically hooks them and removes the previous formatter.
-//
-// For example, here is something like the minimalistic reporter from RSpec:
-//
-// ```javascript
-// var example = require("washington")
-// var color   = require("cli-color")
-//
-// example.use({
-//   success: function (success, report) {
-//     process.stdout.write(color.green("."))
-//   },
-//
-//   pending: function (pending, report) {
-//     process.stdout.write(color.yellow("-"))
-//   },
-//
-//   failure: function (failure, report) {
-//     process.stdout.write(color.red("X"))
-//   },
-//
-//   complete: function (report, code) {
-//     process.exit(code)
-//   }
-// })
-//
-// example("Good", function (check) {
-//   check( 1 === 1 )
-// })
-//
-// example("Pending")
-//
-// example("Bad", function (check) {
-//   check( 1 === 2 )
-// })
-//
-// example.go()
-// ```
-//
-// **Silencing the output**
-//
-// Silencing the output is pretty straightforward. If you send anything
-// to the `use` method that has no corresponding `example`, `success`, etc
-// methods itself, the result will be that the default formatter will be
-// removed but nothing added to replace it.
-//
-// ```javascript
-// var example = require("washington")
-//
-// example.use("silent")
-//
-// example("Will print nothing, do nothing")
-//
-// example.go()
-// ```
-//
-Washington.use = function (formatter) {
-
-  //! If there is a formatter set
-  if (Washington.formatter)
-
-    //! ...that formatter events should be removed
-    Washington.off(Washington.formatter)
-
-  //! The formatter may not be an object
-  try {
-
-    //! Verify if the formatter has properties that can be listed
-    Object.keys(formatter)
-
-    //! Hook all the formatter properties as events
-    Washington.on(formatter)
-
-    //! Save the formatter as the current formatter
-    Washington.formatter = formatter
-
-  }
-
-  //! If the argument is not an object just set the formatter as null
-  catch (notObject) {
-    Washington.formatter = null
-  }
-}
-
-// ### go( options )
-//
-// Runs the examples. If `options` are provided, filters the examples to run
-// based on the provided criteria.  Emits `complete` once the last example in
-// the picked range is emitted.
-//
-// ```javascript
-// var example = require("washington");
-//
-// example.go({
-//   start: 7,       // Will start from the 7th example on
-//   end: 10,        // Will stop at the 10th example
-//   match: /WIP/,   // Will only select examples matching /WIP/
-//   filter: function (example) {
-//     // Will only select asynchronous examples
-//     return example.function.length == 1
-//   }
-// })
-// ```
-//
-// #### Arguments
-//
-// - _optional_ `Object` options
-//   - _optional_ `Integer` start
-//   - _optional_ `Integer` end
-//   - _optional_ `Regexp`|`String` match
-//   - _optional_ `Function` filter
-//   - _optional_ `Boolean` dry
-//
-Washington.go = function (options) {
-
-  //! If the list is empty, just report that
-  if (!Washington.list || Washington.list.length === 0)
-    return Washington
-      .emit("empty", [options || {}])
-      .complete()
-
-  //! If filtering options are available, restrict "picked"
-  if (options) {
-
-    //! Expand only into "start" and "end" to simplify filtering
-    if (options.only) {
-      options.start = options.only
-      options.end = options.only
+    theModule.noConflict = function () {
+      global[name] = old
+      return theModule
     }
 
-    //! Subset to the `picked list if needed
-    Washington.picked = Washington.list.filter(function (example, index) {
-      if (options && options.start && index < options.start - 1) return false
-      if (options.end && index > options.end - 1) return false
-      if (options.match && !example.message.match(options.match)) return false
-      return true
-    })
+    global[name] = theModule
+  }
 
-    //! If a filter is provided, apply it
-    if (options.filter)
-      Washington.picked = Washington.picked.filter(options.filter)
+})('example', function () {
+
+  var Mediador   = require("mediador")
+  var Formatter  = require("./src/formatter")
+
+  var Washington = function (message, func) {
+
+    //! Return a new instance of Example
+    return new Washington.Example(message, func)
 
   }
 
-  //! Emit "empty" and "complete" if no examples selected
-  if (Washington.picked.length === 0)
-    Washington
-      .emit("empty", [options])
-      .complete()
+  // Events
+  // ------
+  //
+  // Washington provides a thorough event-driven interface for manipulating
+  // information about the examples' results programmatically.
+  //
+  // ### `complete`
+  //
+  // Fires whenever the full report is ready.
+  //
+  // **Arguments sent to the callback:**
+  //
+  // - `Object` report
+  // - `Integer` exitCode
+  //
+  // **Sample:**
+  //
+  // ```javascript
+  // washington.on("complete", function (report, code) {
+  //
+  //   // Log the results by hand
+  //   console.log("Successful: " + report.successful().length)
+  //   console.log("Pending: " + report.pending().length)
+  //   console.log("Failing: " + report.failing().length)
+  //
+  //   // Use the exit code to propagate failing status
+  //   process.exit(code)
+  //
+  // })
+  // ```
+  //
+  // ### `example`
+  //
+  // Fires whenever an example ran. Fires just after the corresponding `success`,
+  // `failure` or `pending` events by the same example.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Pending` | `Washington.Success` | `Washington.Failure` example
+  // - `Object` report
+  //
+  // **Sample:**
+  //
+  // ```javascript
+  // washington.on("example", function (example, report) {
+  //   console.log("Another example completed out of " + report.list.length)
+  // })
+  // ```
+  //
+  // ### `success`
+  //
+  // Fires whenever an example ran successfully. Fires just before the
+  // corresponding `example` event.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Success` successObject
+  // - `Object` report
+  //
+  // ### `failure`
+  //
+  // Fires whenever an example failed. Fires just before the corresponding
+  // `example` event.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Failure` failureObject
+  // - `Object` report
+  //
+  // ### `pending`
+  //
+  // Fires whenever an example is pending. Fires just before the corresponding
+  // `example` event.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Pending` pendingObject
+  // - `Object` report
+  //
+  // ### `promise`
+  //
+  // Fires whenever an example was found to be asynchronous and became a Promise.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Promise` promiseObject
+  // - `Object` report
+  //
+  // ### `empty`
+  //
+  // Is emitted whenever washington was instructed to run but no examples where
+  // actually selected. The filtering options are sent to the listener for
+  // reporting and debugging.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Object` options
+  // - `Object` report
+  //
+  // ### `dry`
+  //
+  // Fires for each example in the suite when doing a dry run.
+  //
+  // **Arguments sent to the callback**
+  //
+  // - `Washington.Example` exampleObject
+  //
+  // Properties
+  // ----------
+  //
+  // - list: `Array` of examples
+  // - picked: `Array` of examples to actually be run
+  // - listeners: `Object` containing the events as key and the listeners as
+  //   value `Array`s
+  // - timeout: `Integer` amount of time in milliseconds before timeout. If
+  //   not set, default to `3000` milliseconds as specified in the `Promise`
+  // - formatter: `Object` containing methods that listen to their corresponding
+  //   events
+  //
+  // Methods
+  // -------
+  //
+  // ### on( event, callback ) | on( eventHash )
+  //
+  // > See [`Mediador.on`](https://github.com/xaviervia/mediador)
+  //
+  Washington.on = Mediador.prototype.on
 
-  //! If this is just a dry run
-  else if(options && options.dry)
-    Washington.picked.forEach(function (example) {
-      Washington.emit("dry", [example]) })
+  // ### off( event, callback ) | off( eventHash )
+  //
+  // See [`Mediador.off`](https://github.com/xaviervia/mediador)
+  //
+  Washington.off = Mediador.prototype.off
 
-  //! Run the first example
-  else Washington.picked[0].run()
+  // ### emit( event, data )
+  //
+  // See [`Mediador.emit`](https://github.com/xaviervia/mediador)
+  //
+  Washington.emit = Mediador.prototype.emit
 
-}
+  // ### use( formatter )
+  //
+  // The `use` method allows you to change formatters easily.
+  // The `formatter` object is simply an object where each method maps to an event
+  // and Washington automatically hooks them and removes the previous formatter.
+  //
+  // For example, here is something like the minimalistic reporter from RSpec:
+  //
+  // ```javascript
+  // var example = require("washington")
+  // var color   = require("cli-color")
+  //
+  // example.use({
+  //   success: function (success, report) {
+  //     process.stdout.write(color.green("."))
+  //   },
+  //
+  //   pending: function (pending, report) {
+  //     process.stdout.write(color.yellow("-"))
+  //   },
+  //
+  //   failure: function (failure, report) {
+  //     process.stdout.write(color.red("X"))
+  //   },
+  //
+  //   complete: function (report, code) {
+  //     process.exit(code)
+  //   }
+  // })
+  //
+  // example("Good", function (check) {
+  //   check( 1 === 1 )
+  // })
+  //
+  // example("Pending")
+  //
+  // example("Bad", function (check) {
+  //   check( 1 === 2 )
+  // })
+  //
+  // example.go()
+  // ```
+  //
+  // **Silencing the output**
+  //
+  // Silencing the output is pretty straightforward. If you send anything
+  // to the `use` method that has no corresponding `example`, `success`, etc
+  // methods itself, the result will be that the default formatter will be
+  // removed but nothing added to replace it.
+  //
+  // ```javascript
+  // var example = require("washington")
+  //
+  // example.use("silent")
+  //
+  // example("Will print nothing, do nothing")
+  //
+  // example.go()
+  // ```
+  //
+  Washington.use = function (formatter) {
 
-// ### complete()
-//
-// Triggers the 'complete' event.
-//
-Washington.complete = function () {
-  Washington.emit(
-    "complete",
-    [
-      Washington,
-      Washington.failing().length
-    ]
-  )
-}
+    //! If there is a formatter set
+    if (Washington.formatter)
 
-// ### isComplete()
-//
-// Returns whether all the examples are ready or not.
-//
-// #### Returns
-//
-// - `Boolean` isComplete
-//
-Washington.isComplete = function () {
+      //! ...that formatter events should be removed
+      Washington.off(Washington.formatter)
 
-  //! Filter the list of examples searching for instances of Washington
-  //! or Washington.Promise
-  return Washington.picked
-    .filter(function (example) {
-      return (example instanceof Washington.Example) ||
-        (example instanceof Washington.Promise)
-    })
+    //! The formatter may not be an object
+    try {
 
-    //! If there was any instance of Washington or Washington.Promise
-    //! then the report is not complete
-    .length === 0
+      //! Verify if the formatter has properties that can be listed
+      Object.keys(formatter)
 
-}
+      //! Hook all the formatter properties as events
+      Washington.on(formatter)
 
-// ### successful()
-//
-// Returns the successful examples currently on the report.
-//
-// #### Returns
-//
-// - `Array` successfulExamples
-//
-Washington.successful = function () {
+      //! Save the formatter as the current formatter
+      Washington.formatter = formatter
 
-  //! Simply filter in all instances of Washington.Success from the list
-  return Washington.picked ? (
-      Washington.picked.filter(function (example) {
-        return example instanceof Washington.Success })
-    ) : []
+    }
 
-}
+    //! If the argument is not an object just set the formatter as null
+    catch (notObject) {
+      Washington.formatter = null
+    }
+  }
 
-// ### failing()
-//
-// Returns the failing examples currently on the report.
-//
-// #### Returns
-//
-// - `Array` failingExamples
-//
-Washington.failing = function () {
+  // ### go( options )
+  //
+  // Runs the examples. If `options` are provided, filters the examples to run
+  // based on the provided criteria.  Emits `complete` once the last example in
+  // the picked range is emitted.
+  //
+  // ```javascript
+  // var example = require("washington");
+  //
+  // example.go({
+  //   start: 7,       // Will start from the 7th example on
+  //   end: 10,        // Will stop at the 10th example
+  //   match: /WIP/,   // Will only select examples matching /WIP/
+  //   filter: function (example) {
+  //     // Will only select asynchronous examples
+  //     return example.function.length == 1
+  //   }
+  // })
+  // ```
+  //
+  // #### Arguments
+  //
+  // - _optional_ `Object` options
+  //   - _optional_ `Integer` start
+  //   - _optional_ `Integer` end
+  //   - _optional_ `Regexp`|`String` match
+  //   - _optional_ `Function` filter
+  //   - _optional_ `Boolean` dry
+  //
+  Washington.go = function (options) {
 
-  //! Simply filter in all instances of Washington.Failure from the list
-  return Washington.picked ? (
-      Washington.picked.filter(function (example) {
-        return example instanceof Washington.Failure })
-    ) : []
+    //! If the list is empty, just report that
+    if (!Washington.list || Washington.list.length === 0)
+      return Washington
+        .emit("empty", [options || {}])
+        .complete()
 
-}
+    //! If filtering options are available, restrict "picked"
+    if (options) {
 
-// ### pending()
-//
-// Returns the pending examples currently on the report.
-//
-// #### Returns
-//
-// - `Array` pendingExamples
-//
-Washington.pending = function () {
+      //! Expand only into "start" and "end" to simplify filtering
+      if (options.only) {
+        options.start = options.only
+        options.end = options.only
+      }
 
-  //! Simply filter in all instances of Washington.Pending from the list
-  return Washington.picked ? (
-      Washington.picked.filter(function (example) {
-        return example instanceof Washington.Pending })
-    ) : []
+      //! Subset to the `picked list if needed
+      Washington.picked = Washington.list.filter(function (example, index) {
+        if (options && options.start && index < options.start - 1) return false
+        if (options.end && index > options.end - 1) return false
+        if (options.match && !example.message.match(options.match)) return false
+        return true
+      })
 
-}
+      //! If a filter is provided, apply it
+      if (options.filter)
+        Washington.picked = Washington.picked.filter(options.filter)
 
-// ### duration()
-//
-// Returns the total duration of all tests run, in milliseconds.
-//
-// #### Returns
-//
-// - `Integer` duration
-//
-Washington.duration = function () {
+    }
 
-  //! Collect
-  var duration = 0
+    //! Emit "empty" and "complete" if no examples selected
+    if (Washington.picked.length === 0)
+      Washington
+        .emit("empty", [options])
+        .complete()
 
-  //! Add for each example that has duration
-  if (Washington.picked)
-    Washington.picked.forEach(function (example) {
-      duration += example.duration ? example.duration() : 0 })
+    //! If this is just a dry run
+    else if(options && options.dry)
+      Washington.picked.forEach(function (example) {
+        Washington.emit("dry", [example]) })
 
-  //! Return the total
-  return duration
+    //! Run the first example
+    else Washington.picked[0].run()
 
-}
+  }
 
-// ### reset()
-//
-// Sets washington to the defaults
-//
-// - Empties the `list` of examples
-// - Empties the `picked` examples
-// - Removes all event `listeners`
-// - Sets the `timeout` to null (that will cause the default to be used)
-// - Sets the default `formatter` to be used
-//
-Washington.reset = function () {
-  Washington.list      = null
-  Washington.picked    = null
-  Washington.listeners = null
-  Washington.timeout   = null
-  Washington.use(Formatter)
-}
+  // ### complete()
+  //
+  // Triggers the 'complete' event.
+  //
+  Washington.complete = function () {
+    Washington.emit(
+      "complete",
+      [
+        Washington,
+        Washington.failing().length
+      ]
+    )
+  }
 
-// Classes
-// -------
-//
-// - [`Washington.Example`](src/example.md)
-//
-Washington.Example = require("./src/example")(Washington)
+  // ### isComplete()
+  //
+  // Returns whether all the examples are ready or not.
+  //
+  // #### Returns
+  //
+  // - `Boolean` isComplete
+  //
+  Washington.isComplete = function () {
 
-// - [`Washington.Success`](src/success.md)
-//
-Washington.Success = require("./src/success")
+    //! Filter the list of examples searching for instances of Washington
+    //! or Washington.Promise
+    return Washington.picked
+      .filter(function (example) {
+        return (example instanceof Washington.Example) ||
+          (example instanceof Washington.Promise)
+      })
 
-// - [`Washington.Failure`](src/failure.md)
-//
-Washington.Failure = require("./src/failure")
+      //! If there was any instance of Washington or Washington.Promise
+      //! then the report is not complete
+      .length === 0
 
-// - [`Washington.Pending`](src/pending.md)
-//
-Washington.Pending = require("./src/pending")
+  }
 
-// - [`Washington.Promise`](src/promise.md)
-//
-Washington.Promise = require("./src/promise")
+  // ### successful()
+  //
+  // Returns the successful examples currently on the report.
+  //
+  // #### Returns
+  //
+  // - `Array` successfulExamples
+  //
+  Washington.successful = function () {
 
-// - [`Washington.TimeoutError`](src/timeout-error.md)
-//
-Washington.TimeoutError = require("./src/timeout-error")
+    //! Simply filter in all instances of Washington.Success from the list
+    return Washington.picked ? (
+        Washington.picked.filter(function (example) {
+          return example instanceof Washington.Success })
+      ) : []
 
-// - [`Washington.AssertionError`](src/assertion-error.md)
-//
-Washington.AssertionError = require("./src/assertion-error")
+  }
 
-//! Setup washington to the defaults.
-Washington.reset()
+  // ### failing()
+  //
+  // Returns the failing examples currently on the report.
+  //
+  // #### Returns
+  //
+  // - `Array` failingExamples
+  //
+  Washington.failing = function () {
 
-module.exports = Washington
+    //! Simply filter in all instances of Washington.Failure from the list
+    return Washington.picked ? (
+        Washington.picked.filter(function (example) {
+          return example instanceof Washington.Failure })
+      ) : []
+
+  }
+
+  // ### pending()
+  //
+  // Returns the pending examples currently on the report.
+  //
+  // #### Returns
+  //
+  // - `Array` pendingExamples
+  //
+  Washington.pending = function () {
+
+    //! Simply filter in all instances of Washington.Pending from the list
+    return Washington.picked ? (
+        Washington.picked.filter(function (example) {
+          return example instanceof Washington.Pending })
+      ) : []
+
+  }
+
+  // ### duration()
+  //
+  // Returns the total duration of all tests run, in milliseconds.
+  //
+  // #### Returns
+  //
+  // - `Integer` duration
+  //
+  Washington.duration = function () {
+
+    //! Collect
+    var duration = 0
+
+    //! Add for each example that has duration
+    if (Washington.picked)
+      Washington.picked.forEach(function (example) {
+        duration += example.duration ? example.duration() : 0 })
+
+    //! Return the total
+    return duration
+
+  }
+
+  // ### reset()
+  //
+  // Sets washington to the defaults
+  //
+  // - Empties the `list` of examples
+  // - Empties the `picked` examples
+  // - Removes all event `listeners`
+  // - Sets the `timeout` to null (that will cause the default to be used)
+  // - Sets the default `formatter` to be used
+  //
+  Washington.reset = function () {
+    Washington.list      = null
+    Washington.picked    = null
+    Washington.listeners = null
+    Washington.timeout   = null
+    Washington.use(Formatter)
+  }
+
+  // Classes
+  // -------
+  //
+  // - [`Washington.Example`](src/example.md)
+  //
+  Washington.Example = require("./src/example")(Washington)
+
+  // - [`Washington.Success`](src/success.md)
+  //
+  Washington.Success = require("./src/success")
+
+  // - [`Washington.Failure`](src/failure.md)
+  //
+  Washington.Failure = require("./src/failure")
+
+  // - [`Washington.Pending`](src/pending.md)
+  //
+  Washington.Pending = require("./src/pending")
+
+  // - [`Washington.Promise`](src/promise.md)
+  //
+  Washington.Promise = require("./src/promise")
+
+  // - [`Washington.TimeoutError`](src/timeout-error.md)
+  //
+  Washington.TimeoutError = require("./src/timeout-error")
+
+  // - [`Washington.AssertionError`](src/assertion-error.md)
+  //
+  Washington.AssertionError = require("./src/assertion-error")
+
+  //! Setup washington to the defaults.
+  Washington.reset()
+
+  return Washington
+
+})
 
 // Testing
 // -------
