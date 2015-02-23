@@ -1,4 +1,5 @@
 <!doctype html>
+<meta charset='utf-8'>
 <script type="text/javascript" src="../../../washington.js"></script>
 <script type="text/javascript">
   example.use({
@@ -13,6 +14,10 @@
     failure: function (example) {
       console.error("%c ☞ " + example.message, "color: #DD0000")
       console.error(example.error)
+    },
+
+    complete: function () {
+      console.log("Should be complete now!")
     }
   })
 
@@ -23,7 +28,7 @@
   example("Something that is still pending")
 
   example("A simple failing example", function () {
-    return 2 + 2 === 5 || Error("2 + 2 will not be 5, but what can one do")
+    return 2 + 2 === 5 || "2 + 2 will not be 5, but what can one do"
   })
 
   example("Something asynchronous will come here"/*, function (check) {
