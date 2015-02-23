@@ -786,6 +786,7 @@
   // ##### Returns
   //
   // - `Washington.Example` example
+  //
   Washington.Example = function (message, func) {
 
     //! Assign the properties
@@ -819,6 +820,7 @@
   //
   // - `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
   //   `Washington.Promise` adaptedExample
+  //
   Washington.Example.prototype.run = function () {
     var replacement
 
@@ -920,6 +922,7 @@
   // ##### Returns
   //
   // - `Washington.Example` next
+  //
   Washington.Example.prototype.next = function () {
 
     var next   = undefined
@@ -952,6 +955,7 @@
   // ##### Returns
   //
   // - `Washington.Promise` promise
+  //
   Washington.Example.prototype.promise = function () {
 
     //! Create the Promise (starts the timeout!)
@@ -978,6 +982,7 @@
   // ##### Returns
   //
   // - `Washington.Success` success
+  //
   Washington.Example.prototype.succeeded = function () {
 
     //! Get the duration
@@ -1014,6 +1019,7 @@
   // ##### Returns
   //
   // - `Washington.Failure` failure
+  //
   Washington.Example.prototype.failed = function (error) {
 
     //! Get the duration
@@ -1049,6 +1055,7 @@
   // ##### Returns
   //
   // - `Washington.Pending` pending
+  //
   Washington.Example.prototype.pending = function () {
 
     //! Create the Pending object
@@ -1071,9 +1078,43 @@
 
   }
 
-  // - [`Washington.Success`](src/success.md)
+  // Washington.Success
+  // ------------------
   //
-  Washington.Success = require("./src/success")
+  // Class representing a successful to complete the example.
+  //
+  // #### Properties
+  //
+  // - message: `String`
+  // - function: `Function`
+  // - original: `Washington`
+  //
+  // #### Constructor arguments
+  //
+  // - `Washington.Example` original
+  //
+  Washington.Success = function (original) {
+    this.message  = original.message
+    this.function = original.function
+    this.original = original
+  }
+
+  // ### duration()
+  //
+  // Returns an `Integer` with the duration of the original event, in
+  // milliseconds
+  //
+  // #### Returns
+  //
+  // - `Integer` duration
+  //
+  Washington.Success.prototype.duration = function() {
+
+    //! Defensive code never hurt anybody
+    if (this.original)
+      return this.original.duration
+
+  }
 
   // - [`Washington.Failure`](src/failure.md)
   //

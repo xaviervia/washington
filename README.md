@@ -548,6 +548,7 @@ instance, both to the general `list` and to the `picked` list.
 ##### Returns
 
 - `Washington.Example` example
+
 #### run()
 
 Runs the example.
@@ -566,6 +567,7 @@ If the example has no function at all, it will become a `Washington.Pending`
 
 - `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
   `Washington.Promise` adaptedExample
+
 Adapt it to a Failure forwarding the Error
 #### next()
 
@@ -578,6 +580,7 @@ complete.
 ##### Returns
 
 - `Washington.Example` next
+
 #### promise()
 
 Starts a [`Washington.Promise`](promise.md) pointing to the current
@@ -587,6 +590,7 @@ as argument. Returns the `Promise`.
 ##### Returns
 
 - `Washington.Promise` promise
+
 #### succeeded()
 
 Gets a [`Washington.Success`](success.md) object for this example.
@@ -596,6 +600,7 @@ Fires the `success` and `example` events on `Washington` passing the
 ##### Returns
 
 - `Washington.Success` success
+
 #### failed()
 
 Gets a [`Washington.Failure`](failure.md) object for this example.
@@ -605,6 +610,7 @@ Fires the `failure` and `example` events on `Washington` passing the
 ##### Returns
 
 - `Washington.Failure` failure
+
 #### pending()
 
 Gets a [`Washington.Pending`](pending.md) object for this example.
@@ -614,7 +620,30 @@ Fires the `pending` and `example` events on `Washington` passing the
 ##### Returns
 
 - `Washington.Pending` pending
-- [`Washington.Success`](src/success.md)
+
+Washington.Success
+------------------
+
+Class representing a successful to complete the example.
+
+#### Properties
+
+- message: `String`
+- function: `Function`
+- original: `Washington`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+
+### duration()
+
+Returns an `Integer` with the duration of the original event, in
+milliseconds
+
+#### Returns
+
+- `Integer` duration
 
 - [`Washington.Failure`](src/failure.md)
 
