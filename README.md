@@ -671,7 +671,19 @@ milliseconds
 
 - `Integer` duration
 
-- [`Washington.Pending`](src/pending.md)
+Washington.Pending
+------------------
+
+Class representing an example in a pending status.
+
+#### Properties
+
+- message: `String`
+- original: `Washington.Example`
+
+#### Constructor arguments
+
+- `Washington.Example` original
 
 - [`Washington.Promise`](src/promise.md)
 

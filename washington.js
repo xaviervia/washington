@@ -1157,9 +1157,24 @@
 
   }
 
-  // - [`Washington.Pending`](src/pending.md)
+  // Washington.Pending
+  // ------------------
   //
-  Washington.Pending = require("./src/pending")
+  // Class representing an example in a pending status.
+  //
+  // #### Properties
+  //
+  // - message: `String`
+  // - original: `Washington.Example`
+  //
+  // #### Constructor arguments
+  //
+  // - `Washington.Example` original
+  //
+  Washington.Pending = function (original) {
+    this.message  = original.message
+    this.original = original
+  }
 
   // - [`Washington.Promise`](src/promise.md)
   //
