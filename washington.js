@@ -1087,7 +1087,7 @@
   //
   // - message: `String`
   // - function: `Function`
-  // - original: `Washington`
+  // - original: `Washington.Example`
   //
   // #### Constructor arguments
   //
@@ -1116,9 +1116,46 @@
 
   }
 
-  // - [`Washington.Failure`](src/failure.md)
+  // Washington.Failure
+  // ------------------
   //
-  Washington.Failure = require("./src/failure")
+  // Class representing a failure to complete the example.
+  //
+  // #### Properties
+  //
+  // - message: `String`
+  // - function: `Function`
+  // - error: `Error`
+  // - original: `Washington.Example`
+  //
+  // #### Constructor arguments
+  //
+  // - `Washington.Example` original
+  // - `Error` error
+  //
+  Washington.Failure = function (original, error) {
+    this.message  = original.message
+    this.function = original.function
+    this.error    = error
+    this.original = original
+  }
+
+  // ### duration()
+  //
+  // Returns an `Integer` with the duration of the original event, in
+  // milliseconds
+  //
+  // #### Returns
+  //
+  // - `Integer` duration
+  //
+  Washington.Failure.prototype.duration = function() {
+
+    //! Defensive code never hurt anybody
+    if (this.original)
+      return this.original.duration
+
+  }
 
   // - [`Washington.Pending`](src/pending.md)
   //

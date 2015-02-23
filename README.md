@@ -630,7 +630,7 @@ Class representing a successful to complete the example.
 
 - message: `String`
 - function: `Function`
-- original: `Washington`
+- original: `Washington.Example`
 
 #### Constructor arguments
 
@@ -645,7 +645,31 @@ milliseconds
 
 - `Integer` duration
 
-- [`Washington.Failure`](src/failure.md)
+Washington.Failure
+------------------
+
+Class representing a failure to complete the example.
+
+#### Properties
+
+- message: `String`
+- function: `Function`
+- error: `Error`
+- original: `Washington.Example`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+- `Error` error
+
+### duration()
+
+Returns an `Integer` with the duration of the original event, in
+milliseconds
+
+#### Returns
+
+- `Integer` duration
 
 - [`Washington.Pending`](src/pending.md)
 
