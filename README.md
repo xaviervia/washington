@@ -533,6 +533,36 @@ Classes
 
 - [`Washington.Promise`](src/promise.md)
 
+### Washington.Formatter
+
+This is the default formatter
+#### success(example)
+
+Logs to `console.info` in green and adds a victory hand
+
+#### pending(example)
+
+Logs to `console.warn` in yellow and adds writing hand
+
+#### failure(example)
+
+Logs to `console.error` in red and adds a left pointing hand
+
+#### dry(example)
+
+Logs to `console.warn` whether no examples were selected or no examples
+were found
+
+#### empty(options)
+
+Logs to `console.warn` whether no examples were selected or no examples
+were found
+
+#### complete(report, code)
+
+Logs the amount of pending, successful and failing examples and terminates the
+process using the `code` as the exit status.
+
 - [`Washington.TimeoutError`](src/timeout-error.md)
 
 - [`Washington.AssertionError`](src/assertion-error.md)

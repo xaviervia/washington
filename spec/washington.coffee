@@ -149,16 +149,14 @@ module.exports = (done) ->
 
   flag = false
 
-  formatter = require "../src/formatter"
-
   jack washington, "on", (object)->
     if object != "example"
-      assert.equal object, formatter
+      assert.equal object, washington.Formatter
       flag = true
 
   washington.reset()
 
-  assert.equal washington.formatter, formatter
+  assert.equal washington.formatter, washington.Formatter
   assert.equal flag, true
 
   unjack washington, "on"
@@ -176,7 +174,7 @@ module.exports = (done) ->
     flag = false
 
   jack washington, "off", (object)->
-    assert.equal object, formatter
+    assert.equal object, washington.Formatter
     offFlag = true
 
   washington.use "something"
@@ -207,7 +205,7 @@ module.exports = (done) ->
       myformatFlag = true
 
   jack washington, "off", (object)->
-    assert.equal object, formatter
+    assert.equal object, washington.Formatter
     formatterFlag = true
 
   washington.use myformat

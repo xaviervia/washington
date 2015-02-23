@@ -1,4 +1,4 @@
-formatter  = require "./formatter"
+formatter  = require("../washington").Formatter
 assert     = require "assert"
 
 RED        = "\u001b[31m"
