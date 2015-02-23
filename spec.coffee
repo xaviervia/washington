@@ -62,7 +62,7 @@ require("./spec/washington") ->
               log "Run promise tests"
               log "-----------------"
               log ""
-              require("./src/promise.spec") ->
+              require("./spec/promise") ->
 
 
 
