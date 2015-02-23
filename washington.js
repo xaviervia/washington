@@ -880,17 +880,18 @@
 
           //! If the result value is an actual `Error`, adapt the Example to a
           //! Failure passing the received error
-          if (result instanceof Error)
+          else if (result instanceof Error)
             replacement = this.failed(result)
 
           //! If the result value is a `String`, we treat it as a the message
           //! of a generic Washington.AssertionError
-          if (typeof result === "string" || result instanceof String)
+          else if (typeof result === "string" || result instanceof String)
             replacement = this.failed(
               new Washington.AssertionError(result) )
 
           //! If the function succeeds, adapt it to Success
-          replacement = this.succeeded()
+          else
+            replacement = this.succeeded()
         }
 
         //! If it fails, adapt it to a Failure forwarding the Error
