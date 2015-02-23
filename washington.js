@@ -1087,7 +1087,8 @@
   //
   Washington.Promise = require("./src/promise")
 
-  // ### Washington.Formatter
+  // Washington.Formatter
+  // --------------------
   //
   // This is the default formatter
   Washington.Formatter = (function () {
@@ -1103,7 +1104,7 @@
 
       exampleRunRegexp: /at Example\.run \(.+?washington\/src\/example\.js:\d+:\d+\)/,
 
-      // #### success(example)
+      // ### success(example)
       //
       // Logs to `console.info` in green and adds a victory hand
       //
@@ -1113,7 +1114,7 @@
           GREEN, example.message, CLEAR, GREY, example.duration(), CLEAR )
       },
 
-      // #### pending(example)
+      // ### pending(example)
       //
       // Logs to `console.warn` in yellow and adds writing hand
       //
@@ -1123,7 +1124,7 @@
           YELLOW, example.message, CLEAR )
       },
 
-      // #### failure(example)
+      // ### failure(example)
       //
       // Logs to `console.error` in red and adds a left pointing hand
       //
@@ -1147,7 +1148,7 @@
           CLEAR, RED, stack.join("\n"), CLEAR )
       },
 
-      // #### dry(example)
+      // ### dry(example)
       //
       // Logs to `console.warn` whether no examples were selected or no examples
       // were found
@@ -1158,7 +1159,7 @@
           GREY, example.message, CLEAR )
       },
 
-      // #### empty(options)
+      // ### empty(options)
       //
       // Logs to `console.warn` whether no examples were selected or no examples
       // were found
@@ -1169,7 +1170,7 @@
           GREY, (Object.keys(options).length == 0 ? "found" : "selected"), CLEAR )
       },
 
-      // #### complete(report, code)
+      // ### complete(report, code)
       //
       // Logs the amount of pending, successful and failing examples and terminates the
       // process using the `code` as the exit status.

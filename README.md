@@ -622,32 +622,33 @@ Fires the `pending` and `example` events on `Washington` passing the
 
 - [`Washington.Promise`](src/promise.md)
 
-### Washington.Formatter
+Washington.Formatter
+--------------------
 
 This is the default formatter
-#### success(example)
+### success(example)
 
 Logs to `console.info` in green and adds a victory hand
 
-#### pending(example)
+### pending(example)
 
 Logs to `console.warn` in yellow and adds writing hand
 
-#### failure(example)
+### failure(example)
 
 Logs to `console.error` in red and adds a left pointing hand
 
-#### dry(example)
+### dry(example)
 
 Logs to `console.warn` whether no examples were selected or no examples
 were found
 
-#### empty(options)
+### empty(options)
 
 Logs to `console.warn` whether no examples were selected or no examples
 were found
 
-#### complete(report, code)
+### complete(report, code)
 
 Logs the amount of pending, successful and failing examples and terminates the
 process using the `code` as the exit status.
