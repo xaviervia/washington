@@ -270,7 +270,49 @@
 
 })('example', function () {
 
-  var Mediador   = require("mediador")
+  //! Inlined github.com/xaviervia/mediador dependency
+  var Mediador = function () {}
+
+  Mediador.prototype.on = function (event, callback, scope) {
+    if (!callback) for (var key in event) {
+      if (event[key] instanceof Function) this.on(key, event[key], event) }
+    else {
+      this.listeners = this.listeners || {}
+      this.listeners[event] = this.listeners[event] || []
+      if (this.listeners[event].indexOf(callback) === -1)
+        this.listeners[event].push({ callback: callback, scope: scope })
+    }
+    return this }
+
+  Mediador.prototype.emit = function (event, args) {
+    if (this.listeners && this.listeners instanceof Object &&
+        this.listeners[event] instanceof Array)
+        for (var index in this.listeners[event])
+          this.listeners[event][index].callback
+            .apply(this.listeners[event][index].scope, (args ? args : []).concat([this]))
+    return this }
+
+  Mediador.prototype.off = function (event, callback) {
+    if (!callback) {
+      for (var key in event)
+        if (event[key] instanceof Function)
+          this.off(key, event[key])
+    }
+    else
+      if (this.listeners && this.listeners instanceof Object &&
+          this.listeners[event] instanceof Array) {
+          var iterator  = 0
+          var index     = null
+          var max       = this.listeners[event].length
+          while (index === null || iterator < max) {
+            if (this.listeners[event][iterator].callback === callback)
+              index = iterator
+            iterator ++
+          }
+          this.listeners[event].splice(index, 1)
+      }
+    return this }
+
   var Formatter  = require("./src/formatter")
 
   var Washington = function (message, func) {
