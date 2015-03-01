@@ -1,5 +1,5 @@
-Promise = require "./promise"
-TimeoutError = require "./timeout-error"
+Promise = require("../washington").Promise
+TimeoutError = require("../washington").TimeoutError
 assert  = require "assert"
 
 CLEAR      = "\u001b[39m"
@@ -11,7 +11,7 @@ pending    = (reason)->
   throw new Error(reason)
 
 module.exports = (done) ->
-  
+
   #############################################################################
 
   log "Done successful: should call the succeeded from the example"

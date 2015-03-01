@@ -14,7 +14,7 @@ require("./spec/washington") ->
   log "Run formatter tests"
   log "-------------------"
   log ""
-  require("./src/formatter.spec") ->
+  require("./spec/formatter") ->
 
 
 
@@ -62,7 +62,7 @@ require("./spec/washington") ->
               log "Run promise tests"
               log "-----------------"
               log ""
-              require("./src/promise.spec") ->
+              require("./spec/promise") ->
 
 
 

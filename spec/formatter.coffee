@@ -1,4 +1,4 @@
-formatter  = require "./formatter"
+formatter  = require("../washington").Formatter
 assert     = require "assert"
 
 RED        = "\u001b[31m"
@@ -79,20 +79,20 @@ module.exports = (done) ->
   flag         = false
   message      = "This fails"
   error        =
-    stack: "ReferenceError: ArrayEllipsis is not defined\n
-    at null.function (/Users/fernando.canel/Code/remote/sydney/src/endpoint.js:653:15)\n
-    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:116:24)\n
-    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
-    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)\n
-    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:124:30)\n
-    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
-    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)\n
-    at Example.run (/Users/fernando.canel/Code/remote/washington/src/example.js:124:30)\n
-    at Example.next (/Users/fernando.canel/Code/remote/washington/src/example.js:167:20)\n
-    at Example.failed (/Users/fernando.canel/Code/remote/washington/src/example.js:265:10)"
+    stack: "Error: FAIL\n
+    at null.function (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:4:9)\n
+    at Washington.Example.run (/Users/fernando.canel/Code/remote/washington/washington.js:847:24)\n
+    at Function.Washington.go (/Users/fernando.canel/Code/remote/washington/washington.js:624:31)\n
+    at Object.<anonymous> (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:8:12)\n
+    at Module._compile (module.js:444:26)\n
+    at Object.Module._extensions..js (module.js:462:10)\n
+    at Module.load (module.js:339:32)\n
+    at Function.Module._load (module.js:294:12)\n
+    at Function.Module.runMain (module.js:485:10)\n
+    at startup (node.js:112:16)"
 
-  shortened    = "ReferenceError: ArrayEllipsis is not defined\n
-    at null.function (/Users/fernando.canel/Code/remote/sydney/src/endpoint.js:653:15)"
+  shortened    = "Error: FAIL\n
+  at null.function (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:4:9)"
 
   jack console, "error", ()->
     assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"

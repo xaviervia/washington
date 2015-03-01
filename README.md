@@ -520,23 +520,245 @@ Sets washington to the defaults
 - Sets the `timeout` to null (that will cause the default to be used)
 - Sets the default `formatter` to be used
 
-Classes
--------
+Washington.Example
+------------------
 
-- [`Washington.Example`](src/example.md)
+### Properties
 
-- [`Washington.Success`](src/success.md)
+- message: `String` the description of the example
+- function: `Function` the actual example
+- duration: `Integer` the amount of time it took to run, in milliseconds
 
-- [`Washington.Failure`](src/failure.md)
+### Methods
 
-- [`Washington.Pending`](src/pending.md)
+#### new Washington.Example( message, function )
 
-- [`Washington.Promise`](src/promise.md)
+Creates a new `Washington.Example` which adds itself to the global `Washington`
+instance, both to the general `list` and to the `picked` list.
 
-- [`Washington.TimeoutError`](src/timeout-error.md)
+> _Warning_: Creating a example consequently overwrites the contents of
+> the `picked` list. This makes sense since the example cannot proactively
+> filter itself once the criteria has been applied.
 
-- [`Washington.AssertionError`](src/assertion-error.md)
+##### Arguments
 
+- `String` message
+- `Function` function
+
+##### Returns
+
+- `Washington.Example` example
+
+#### run()
+
+Runs the example.
+
+If the example requires an argument, it is assumed that the result will
+be passed to the argument function, so the example becomes a promise and
+`run` returns the `Washington.Promise`
+
+If the example does not require an argument, it fails or succeeds according
+to whether the function throws an error or not. `run` then returns either a
+`Washington.Success` or `Washington.Failure`
+
+If the example has no function at all, it will become a `Washington.Pending`
+
+#### Returns
+
+- `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
+  `Washington.Promise` adaptedExample
+
+Adapt it to a Failure forwarding the Error
+#### next()
+
+Returns the next example on the picked list or `undefined` if this is the
+last example there.
+
+Runs the next example if available. Otherwise declares the batch to be
+complete.
+
+##### Returns
+
+- `Washington.Example` next
+
+#### promise()
+
+Starts a [`Washington.Promise`](promise.md) pointing to the current
+example. Fires the `promise` event in `Washington` passing the `Promise`
+as argument. Returns the `Promise`.
+
+##### Returns
+
+- `Washington.Promise` promise
+
+#### succeeded()
+
+Gets a [`Washington.Success`](success.md) object for this example.
+Fires the `success` and `example` events on `Washington` passing the
+`Success` as argument.
+
+##### Returns
+
+- `Washington.Success` success
+
+#### failed()
+
+Gets a [`Washington.Failure`](failure.md) object for this example.
+Fires the `failure` and `example` events on `Washington` passing the
+`Failure` as argument.
+
+##### Returns
+
+- `Washington.Failure` failure
+
+#### pending()
+
+Gets a [`Washington.Pending`](pending.md) object for this example.
+Fires the `pending` and `example` events on `Washington` passing the
+`Pending` as argument.
+
+##### Returns
+
+- `Washington.Pending` pending
+
+Washington.Success
+------------------
+
+Class representing a successful to complete the example.
+
+#### Properties
+
+- message: `String`
+- function: `Function`
+- original: `Washington.Example`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+
+### duration()
+
+Returns an `Integer` with the duration of the original event, in
+milliseconds
+
+#### Returns
+
+- `Integer` duration
+
+Washington.Failure
+------------------
+
+Class representing a failure to complete the example.
+
+#### Properties
+
+- message: `String`
+- function: `Function`
+- error: `Error`
+- original: `Washington.Example`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+- `Error` error
+
+### duration()
+
+Returns an `Integer` with the duration of the original event, in
+milliseconds
+
+#### Returns
+
+- `Integer` duration
+
+Washington.Pending
+------------------
+
+Class representing an example in a pending status.
+
+#### Properties
+
+- message: `String`
+- original: `Washington.Example`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+
+Washington.Promise
+------------------
+
+Represents a promise that the example will be ready eventually.
+
+If the example is not ready in 3 seconds it fails automatically with timeout.
+You can configure the timeout in the second argument as milliseconds.
+
+#### Properties
+
+- original: `Washington.Example`
+- ready: `Boolean`
+
+#### Constructor arguments
+
+- `Washington.Example` original
+- _optional_ `Integer`: timeout
+
+### done( error )
+
+Run the `done` method when the promise is fulfilled. Only runs if
+the promise was not `ready`.
+
+If there is no argument, the example is assumed to have succeeded and the
+promise will call the `succeeded` method of the original example.
+
+If there is an argument, the example is assumed to have failed and the
+argument is assumed to be an error. The error is then forwarded to the
+`failed` method of the original example.
+
+#### Arguments
+
+- _optional_ `Function` error
+
+Washington.Formatter
+--------------------
+
+This is the default formatter
+### success(example)
+
+Logs to `console.info` in green and adds a victory hand
+
+### pending(example)
+
+Logs to `console.warn` in yellow and adds writing hand
+
+### failure(example)
+
+Logs to `console.error` in red and adds a left pointing hand
+
+### dry(example)
+
+Logs to `console.warn` whether no examples were selected or no examples
+were found
+
+### empty(options)
+
+Logs to `console.warn` whether no examples were selected or no examples
+were found
+
+### complete(report, code)
+
+Logs the amount of pending, successful and failing examples and terminates the
+process using the `code` as the exit status.
+
+Washington.TimeoutError
+-----------------------
+
+Represents an error generated by timeout
+Washington.AssertionError
+-------------------------
+
+Represents an error generated by a passive assertion (the example's return
+value)
 Testing
 -------
 
