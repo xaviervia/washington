@@ -1300,7 +1300,7 @@
 
     return {
 
-      exampleRunRegexp: /at Example\.run \(.+?washington\/src\/example\.js:\d+:\d+\)/,
+      exampleRunRegexp: /at Washington\.Example\.run \(.+?washington\/washington\.js:\d+:\d+\)/,
 
       // ### success(example)
       //
