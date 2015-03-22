@@ -1,5 +1,4 @@
 example = require "../washington"
-assert     = require "assert"
 
 example "async good", (done)->
   setTimeout ->

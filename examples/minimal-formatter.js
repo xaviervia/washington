@@ -1,5 +1,4 @@
 var example = require("washington")
-var assert  = require("assert")
 
 var RED        = "\u001b[31m"
 var GREEN      = "\u001b[32m"
@@ -24,14 +23,14 @@ example.use({
   }
 })
 
-example("Good", function () {
-  assert.equal(1, 1)
+example("Good", function (compare) {
+  compare(1, 1)
 })
 
 example("Pending")
 
-example("Bad", function () {
-  assert.equal(1, 2)
+example("Bad", function (compare) {
+  compare(1, 2)
 })
 
 example.go()

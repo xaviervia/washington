@@ -1,4 +1,4 @@
-var example = require("washington")
+var example = require("../washington")
 var assert  = require("assert")
 
 example("2 + 2 will be 4 but the done will never fire", function (done) {
