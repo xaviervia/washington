@@ -147,7 +147,7 @@ module.exports = (done) ->
 
           washington.timeout = 400
           washington.reset()
-          assert.equal washington.timeout == null, true
+          assert.equal washington.timeout == undefined, true
 
           cleanup()
 
@@ -164,4 +164,3 @@ module.exports = (done) ->
   , 100
 
 module.exports(->) if process.argv[1] == __filename
-

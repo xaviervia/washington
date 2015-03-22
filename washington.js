@@ -608,6 +608,8 @@
       if (options.filter)
         Washington.picked = Washington.picked.filter(options.filter)
 
+      //! Store the options to be able to retrieve them later
+      Washington.options = options
     }
 
     //! Emit "empty" and "complete" if no examples selected
@@ -752,10 +754,11 @@
   // - Sets the default `formatter` to be used
   //
   Washington.reset = function () {
-    Washington.list      = null
-    Washington.picked    = null
-    Washington.listeners = null
-    Washington.timeout   = null
+    Washington.list      = undefined
+    Washington.picked    = undefined
+    Washington.listeners = undefined
+    Washington.timeout   = undefined
+    Washington.options   = undefined
     Washington.use(Washington.Formatter)
   }
 
@@ -1336,46 +1339,56 @@
       //
       // Logs to `console.info` in green and adds a victory hand
       //
-      success: function (example) {
-        console.info(
-          "%s ✌ %s%s%s (%dms)%s",
-          GREEN, example.message, CLEAR, GREY, example.duration(), CLEAR )
+      success: function (example, report) {
+        if ( !report.options ||
+            (!report.options.pending && !report.options.failure))
+          console.info(
+            "%s ✌ %s%s%s (%dms)%s",
+            GREEN, example.message, CLEAR, GREY, example.duration(), CLEAR )
       },
 
       // ### pending(example)
       //
       // Logs to `console.warn` in yellow and adds writing hand
       //
-      pending: function (example) {
-        console.warn(
-          "%s ✍ %s%s",
-          YELLOW, example.message, CLEAR )
+      pending: function (example, report) {
+        if ( !report.options ||
+            (!report.options.success && !report.options.failure))
+          console.warn(
+            "%s ✍ %s%s",
+            YELLOW, example.message, CLEAR )
       },
 
       // ### failure(example)
       //
       // Logs to `console.error` in red and adds a left pointing hand
       //
-      failure: function (example) {
-        var stack = []
-        var stop = false
-        var index = 0
-        var baseStack = example.error.stack.split("\n")
+      failure: function (example, report) {
+        var stack, stop, index, baseStack;
 
-        while ( !stop && index < baseStack.length) {
-          if (!baseStack[index].match(this.exampleRunRegexp) &&
-              !baseStack[index].match(this.promiseDoneRegexp) &&
-              !baseStack[index].match(this.timeoutRegexp) )
-            stack.push(baseStack[index])
-          else stop = true
+        if ( !report.options ||
+            (!report.options.success && !report.options.pending)) {
 
-          index ++
+          stack = []
+          stop = false
+          index = 0
+          baseStack = example.error.stack.split("\n")
+
+          while ( !stop && index < baseStack.length) {
+            if (!baseStack[index].match(this.exampleRunRegexp) &&
+                !baseStack[index].match(this.promiseDoneRegexp) &&
+                !baseStack[index].match(this.timeoutRegexp) )
+              stack.push(baseStack[index])
+            else stop = true
+
+            index ++
+          }
+
+          console.error(
+            "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
+            RED, example.message, CLEAR, GREY, example.duration(),
+            CLEAR, RED, stack.join("\n"), CLEAR )
         }
-
-        console.error(
-          "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
-          RED, example.message, CLEAR, GREY, example.duration(),
-          CLEAR, RED, stack.join("\n"), CLEAR )
       },
 
       // ### dry(example)

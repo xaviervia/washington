@@ -43,8 +43,9 @@ module.exports = (done) ->
     flag = true
 
   formatter.success
-    message: "This will succeed"
-    duration: -> 34
+      message: "This will succeed"
+      duration: -> 34
+    , {}
 
   assert.equal flag, true
 
@@ -66,7 +67,8 @@ module.exports = (done) ->
     flag = true
 
   formatter.pending
-    message: "This is pending"
+      message: "This is pending"
+    , {}
 
   assert.equal flag, true
 
@@ -108,9 +110,10 @@ module.exports = (done) ->
     flag = true
 
   formatter.failure
-    message: "This fails"
-    error: error
-    duration: -> 56
+      message: "This fails"
+      error: error
+      duration: -> 56
+    , {}
 
   assert.equal flag, true
 
@@ -144,9 +147,10 @@ module.exports = (done) ->
     flag = true
 
   formatter.failure
-    message: "This fails"
-    error: error
-    duration: -> 56
+      message: "This fails"
+      error: error
+      duration: -> 56
+    , {}
 
   assert.equal flag, true
 
@@ -179,9 +183,10 @@ module.exports = (done) ->
     flag = true
 
   formatter.failure
-    message: "This fails"
-    error: error
-    duration: -> 56
+      message: "This fails"
+      error: error
+      duration: -> 56
+    , {}
 
   assert.equal flag, true
 
@@ -449,6 +454,126 @@ module.exports = (done) ->
 
   unjack process, "exit"
   unjack console, "warn"
+
+  #############################################################################
+
+  log "No output in success when pending flag active"
+
+  flag         = true
+
+  jack console, "log", () ->
+    flag = false
+
+  formatter.success
+      message: "This is successful"
+    ,
+      options:
+        pending: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "log"
+
+  #############################################################################
+
+  log "No output in success when failure flag active"
+
+  flag         = true
+
+  jack console, "log", () ->
+    flag = false
+
+  formatter.success
+      message: "This is successful"
+    ,
+      options:
+        failure: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "log"
+
+  #############################################################################
+
+  log "No output in pending when failure flag active"
+
+  flag         = true
+
+  jack console, "warn", () ->
+    flag = false
+
+  formatter.pending
+      message: "This is pending"
+    ,
+      options:
+        failure: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"
+
+  #############################################################################
+
+  log "No output in pending when success flag active"
+
+  flag         = true
+
+  jack console, "warn", () ->
+    flag = false
+
+  formatter.pending
+      message: "This is pending"
+    ,
+      options:
+        success: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"
+
+  #############################################################################
+
+  log "No output in failure when success flag active"
+
+  flag         = true
+
+  jack console, "error", () ->
+    flag = false
+
+  formatter.failure
+      message: "This is failure"
+    ,
+      options:
+        success: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "error"
+
+  #############################################################################
+
+  log "No output in failure when pending flag active"
+
+  flag         = true
+
+  jack console, "error", () ->
+    flag = false
+
+  formatter.failure
+      message: "This is failure"
+    ,
+      options:
+        pending: true
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "error"
 
   #############################################################################
 

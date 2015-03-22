@@ -62,7 +62,15 @@ if (!interpolated) {
     "  --silent                 # Silences the output. Only \n" +
     "                           # the exit code is used     \n" +
     "  --plain                  # Use plain format with     \n" +
-    "                           # dots, dashes and crosses"
+    "                           # dots, dashes and crosses  \n" +
+    "\n" +
+    "Default formatter specific flags:\n" +
+    "  --success                # Only successful examples  \n" +
+    "                           # will be printed out       \n" +
+    "  --pending                # Only pending examples     \n" +
+    "                           # will be printed out       \n" +
+    "  --failure                # Only failing examples     \n" +
+    "                           # will be printed out       "
   )
   process.exit()
 }
