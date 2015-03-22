@@ -189,6 +189,93 @@ module.exports = (done) ->
 
   #############################################################################
 
+  log "Should succeed on === `done` arguments"
+
+  washington.use "silent"
+
+  flag = false
+
+  example = washington "Will succeed because arguments are ===", (done) ->
+    done "supposed to fail?", "supposed to fail?"
+
+  washington.on "success", (current)->
+    assert current.original is example
+    flag = true
+
+  example.run()
+
+  assert.equal flag, true
+
+  cleanup()
+
+  #############################################################################
+
+  log "Should fail on !== `done` arguments"
+
+  washington.use "silent"
+
+  flag = false
+
+  example = washington "Will succeed because arguments are ===", (done) ->
+    done "supposed to fail?", "will fail!"
+
+  washington.on "failure", (current)->
+    assert current.original is example
+    flag = true
+
+  example.run()
+
+  assert.equal flag, true
+
+  cleanup()
+
+  #############################################################################
+
+  log "Should fail on !== `done` arguments and have arguments as error props"
+
+  washington.use "silent"
+
+  flag = false
+
+  example = washington "Will succeed because arguments are ===", (done) ->
+    done "supposed to fail?", "will fail!"
+
+  washington.on "failure", (current)->
+    assert current.original is example
+    assert current.error.got is "supposed to fail?"
+    assert current.error.want is "will fail!"
+    flag = true
+
+  example.run()
+
+  assert.equal flag, true
+
+  cleanup()
+
+  #############################################################################
+
+  log "Should fail and have the `got` and `want` in the message when done is called with two different arguments"
+
+  washington.use "silent"
+
+  flag = false
+
+  example = washington "Will fail because of different arguments", (done)->
+    done "what we got", "what we want"
+
+  washington.on "failure", (current) ->
+    assert current.error instanceof washington.AssertionError
+    assert.equal current.error.message, "\n\tgot:\twhat we got\n\twant:\twhat we want"
+    flag = true
+
+  example.run()
+
+  assert.equal flag, true
+
+  cleanup()
+
+  #############################################################################
+
   done()
 
 module.exports(->) if process.argv[1] == __filename

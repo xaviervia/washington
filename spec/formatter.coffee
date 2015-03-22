@@ -118,6 +118,42 @@ module.exports = (done) ->
 
   #############################################################################
 
+  log "Should log to error in red with the shortened stack from Promise"
+
+  flag         = false
+  message      = "This fails"
+  error        =
+    stack: "AssertionError: False as argument value, indicating assertion failure\n
+    at Washington.Promise.done (/Users/fernando.canel/Code/remote/washington/washington.js:1287:13)\n
+    at /Users/fernando.canel/Code/remote/washington/washington.js:850:30\n
+    at null.function (/Users/fernando.canel/Code/remote/washington/examples/promise-failure.js:4:3)"
+
+  shortened    = "AssertionError: False as argument value, indicating assertion failure"
+
+  jack console, "error", ()->
+    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[1], RED
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+    assert.equal arguments[4], GREY
+    assert.equal arguments[5], "56"
+    assert.equal arguments[6], CLEAR
+    assert.equal arguments[7], RED
+    assert.equal arguments[8], shortened
+    assert.equal arguments[9], CLEAR
+    flag = true
+
+  formatter.failure
+    message: "This fails"
+    error: error
+    duration: -> 56
+
+  assert.equal flag, true
+
+  unjack hijack, "error"
+
+  #############################################################################
+
   log "Complete should list colored the successes, pending and failures and duration"
 
   flag         = false
