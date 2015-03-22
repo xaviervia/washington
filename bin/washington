@@ -58,12 +58,19 @@ if (!interpolated) {
     "  --dry                    # List the examples without \n" +
     "                           # actually running them     \n" +
     "  -v --version             # Prints the current        \n" +
-    "                           # version number"
+    "                           # version number            \n" +
+    "  --silent                 # Silences the output. Only \n" +
+    "                           # the exit code is used"
   )
   process.exit()
 }
 
 interpolated = interpolated.replace("{{options}}", JSON.stringify(options))
+
+if (options.silent)
+  interpolated = interpolated.replace("{{silent}}", "washington.use(require(\"washington/silent\"))")
+else
+  interpolated = interpolated.replace("{{silent}}", "")
 
 fs.writeFileSync(
   process.cwd() + "/.washington",

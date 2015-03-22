@@ -1,4 +1,5 @@
 var washington = require("washington")
 var other      = require("./{{file}}")
 
+{{silent}}
 washington.go({{options}})
