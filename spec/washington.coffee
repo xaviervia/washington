@@ -165,31 +165,6 @@ module.exports = (done) ->
 
   #############################################################################
 
-  log "Use should simply remove is the argument is not an object"
-
-  flag = true
-  offFlag = false
-
-  jack washington, "on", (object)->
-    flag = false
-
-  jack washington, "off", (object)->
-    assert.equal object, washington.Formatter
-    offFlag = true
-
-  washington.use "something"
-
-  assert.equal washington.formatter, null
-  assert.equal flag, true
-  assert.equal offFlag, true
-
-  unjack washington, "on"
-  unjack washington, "off"
-
-  cleanup()
-
-  #############################################################################
-
   log "You should be able to replace the formatter by a different one"
 
   myformatFlag   = false
