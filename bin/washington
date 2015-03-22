@@ -15,6 +15,12 @@ process.argv.forEach(function (argument, index) {
 
   if (index < 2) return
 
+  //! If version is requested, show version and exit
+  if (argument === "-v" || argument === "--version") {
+    console.log(require("../package").version)
+    process.exit()
+  }
+
   //! Match arguments for filtering
   if (match = argument.match(/^--([a-z]+)=(.+)$/))
     options[match[1]] = isNaN(+match[2]) ? match[2] : +match[2]
