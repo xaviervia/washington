@@ -60,7 +60,9 @@ if (!interpolated) {
     "  -v --version             # Prints the current        \n" +
     "                           # version number            \n" +
     "  --silent                 # Silences the output. Only \n" +
-    "                           # the exit code is used"
+    "                           # the exit code is used     \n" +
+    "  --plain                  # Use plain format with     \n" +
+    "                           # dots, dashes and crosses"
   )
   process.exit()
 }
@@ -71,6 +73,11 @@ if (options.silent)
   interpolated = interpolated.replace("{{silent}}", "washington.use(require(\"washington/silent\"))")
 else
   interpolated = interpolated.replace("{{silent}}", "")
+
+if (options.plain)
+  interpolated = interpolated.replace("{{plain}}", "washington.use(require(\"washington/plain\"))")
+else
+  interpolated = interpolated.replace("{{plain}}", "")
 
 fs.writeFileSync(
   process.cwd() + "/.washington",
