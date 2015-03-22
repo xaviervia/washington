@@ -1,6 +1,6 @@
 {
   "name": "washington",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "Example Driven Development. Because little George sets a good example",
   "main": "washington.js",
   "scripts": {
