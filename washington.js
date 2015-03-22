@@ -1328,8 +1328,8 @@
 
     return {
 
-      exampleRunRegexp: /at Washington\.Example\.run \(.+?washington\/washington\.js:\d+:\d+\)/,
-      promiseDoneRegexp: /at Washington\.Promise\.done \(.+?washington\/washington\.js:\d+:\d+\)/,
+      exampleRunRegexp: /Washington\.Example\.run \(.+?washington\/washington\.js:\d+:\d+\)/,
+      promiseDoneRegexp: /Washington\.Promise\.done \(.+?washington\/washington\.js:\d+:\d+\)/,
 
       // ### success(example)
       //
