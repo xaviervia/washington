@@ -10,8 +10,9 @@
 // Low footprint. Unique features:
 //
 // - [Passive assertions](https://github.com/xaviervia/washington/wiki/Passive-Assertions).
-//   Throw errors or use return values.
-// - Stupidly simple asynchronous example support.
+//   Throw errors, use the callback function or just set return values. No need
+//   for any separate assertion library.
+// - Stupidly simple asynchronous support.
 // - Programmatically usable report (`washington.failing().length`)
 //
 // You can also see the introductory website on
@@ -30,13 +31,13 @@
 // ### Basic example
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
 // example("2 + 2 should be 4", function (check) {
-//   check( 2 + 2, 4 )
-// })
+//   check( 2 + 2, 4 );
+// });
 //
-// example.go()
+// example.go();
 // ```
 //
 // **Washington** runs the examples when the `go` method is called. By default,
@@ -54,13 +55,13 @@
 // ### Failing example
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
 // example("2 + 2 should be 5", function (check) {
-//   check( 2 + 2, 5 )
-// })
+//   check( 2 + 2, 5 );
+// });
 //
-// example.go()
+// example.go();
 // ```
 //
 // ### Pending example
@@ -69,11 +70,11 @@
 // > [**Jasmine**](jasmine.github.io)
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
-// example("2 + 2 should be 4")
+// example("2 + 2 should be 4");
 //
-// example.go()
+// example.go();
 // ```
 //
 // ### Asynchronous example
@@ -88,16 +89,16 @@
 // `check` function is received by the example function as an argument.
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
 // example("2 + 2 will be 4", function (check) {
-//   var result = 2 + 2
+//   var result = 2 + 2;
 //   setTimeout(function () {
-//     check( result, 4 )
-//   }, 100)
-// })
+//     check( result, 4 );
+//   }, 100);
+// });
 //
-// example.go()
+// example.go();
 // ```
 //
 // Please note that if the example function receives an argument, the example
@@ -106,9 +107,9 @@
 // You can change the timeout by editing the `timeout` property of `Washington`:
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
-// example.timeout = 10000
+// example.timeout = 10000;
 // ```
 //
 // ### Set custom message on failing expectations
@@ -149,24 +150,24 @@
 // plan for adding an option for running the examples simultaneously.
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
-// var flag    = false
+// var flag    = false;
 //
 // example("will set the flag to true", function (check) {
 //   setTimeout(function () {
-//     flag = true
-//     check()
-//   }, 100)
-// })
+//     flag = true;
+//     check();
+//   }, 100);
+// });
 //
 // example("the flag should be set to true", function (check) {
 //   setTimeout(function () {
-//     check( flag )
-//   }, 10)
-// })
+//     check( flag );
+//   }, 10);
+// });
 //
-// example.go()
+// example.go();
 // ```
 //
 // ### Dry run (no actual execution)
@@ -176,16 +177,16 @@
 // Useful for listing available examples.
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
-// example('Example', function () { 10 })
-// example('Pending example')
-// example('Failing example', function (check) { check(1 === 2) })
-// example('Async example', function () {})
+// example('Example', function () { 10 });
+// example('Pending example');
+// example('Failing example', function (check) { check(1 === 2) });
+// example('Async example', function () {});
 //
 // example.go({
 //   dry: true
-// })
+// });
 //
 // ```
 //
@@ -195,17 +196,17 @@
 // invoke `.go()` manually.
 //
 // ```javascript
-// var example = require("washington")
+// var example = require("washington");
 //
 // function greet(name) {
-//   return "Hello " + name + "!"
+//   return "Hello " + name + "!";
 // }
 //
 // example("Lets greet Paulie", function (check) {
-//   check( greet("Paulie") === "Hello Paulie!" )
-// })
+//   check( greet("Paulie"), "Hello Paulie!" );
+// });
 //
-// module.exports = greet
+// module.exports = greet;
 // ```
 //
 // Then you call the command line tool with the file as argument
@@ -342,14 +343,14 @@
   // washington.on("complete", function (report, code) {
   //
   //   // Log the results by hand
-  //   console.log("Successful: " + report.successful().length)
-  //   console.log("Pending: " + report.pending().length)
-  //   console.log("Failing: " + report.failing().length)
+  //   console.log("Successful: " + report.successful().length);
+  //   console.log("Pending: " + report.pending().length);
+  //   console.log("Failing: " + report.failing().length);
   //
   //   // Use the exit code to propagate failing status
-  //   process.exit(code)
+  //   process.exit(code);
   //
-  // })
+  // });
   // ```
   //
   // ### `example`
@@ -366,8 +367,8 @@
   //
   // ```javascript
   // washington.on("example", function (example, report) {
-  //   console.log("Another example completed out of " + report.list.length)
-  // })
+  //   console.log("Another example completed out of " + report.list.length);
+  // });
   // ```
   //
   // ### `success`
@@ -470,38 +471,38 @@
   // For example, here is something like the minimalistic reporter from RSpec:
   //
   // ```javascript
-  // var example = require("washington")
-  // var color   = require("cli-color")
+  // var example = require("washington");
+  // var color   = require("cli-color");
   //
   // example.use({
   //   success: function (success, report) {
-  //     process.stdout.write(color.green("."))
+  //     process.stdout.write(color.green("."));
   //   },
   //
   //   pending: function (pending, report) {
-  //     process.stdout.write(color.yellow("-"))
+  //     process.stdout.write(color.yellow("-"));
   //   },
   //
   //   failure: function (failure, report) {
-  //     process.stdout.write(color.red("X"))
+  //     process.stdout.write(color.red("X"));
   //   },
   //
   //   complete: function (report, code) {
-  //     process.exit(code)
+  //     process.exit(code);
   //   }
-  // })
+  // });
   //
   // example("Good", function (check) {
-  //   check( 1 === 1 )
-  // })
+  //   check( 1, 1 );
+  // });
   //
-  // example("Pending")
+  // example("Pending");
   //
   // example("Bad", function (check) {
-  //   check( 1 === 2 )
-  // })
+  //   check( 1, 2 );
+  // });
   //
-  // example.go()
+  // example.go();
   // ```
   //
   // **Silencing the output**
@@ -512,13 +513,13 @@
   // removed but nothing added to replace it.
   //
   // ```javascript
-  // var example = require("washington")
+  // var example = require("washington");
   //
-  // example.use("silent")
+  // example.use("silent");
   //
-  // example("Will print nothing, do nothing")
+  // example("Will print nothing, do nothing");
   //
-  // example.go()
+  // example.go();
   // ```
   //
   Washington.use = function (formatter) {
@@ -1236,7 +1237,7 @@
     }, timeout ? timeout : 3000 )
   }
 
-  // ### done( error )
+  // ### done( [ result [, want] ] )
   //
   // Run the `done` method when the promise is fulfilled. Only runs if
   // the promise was not `ready`.
@@ -1248,9 +1249,18 @@
   // argument is assumed to be an error. The error is then forwarded to the
   // `failed` method of the original example.
   //
+  // If there are two arguments, the first argument is assumed to be what the
+  // example got as a result while the second argument is assumed to be what
+  // was wanted to get as an outcome. The two arguments are then compared
+  // using the `===` operator. If the comparison returns `true` the example is
+  // considered to be passing: else, an `AssertionError` with the `got` and
+  // `want` properties set to the first and second arguments, and a message
+  // explaining the comparison.
+  //
   // #### Arguments
   //
-  // - _optional_ `Function` error
+  // - _optional_ `Object` result
+  // - _optional_ `Object` want
   //
   Washington.Promise.prototype.done = function (result, want) {
 
