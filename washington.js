@@ -1330,6 +1330,7 @@
 
       exampleRunRegexp: /Washington\.Example\.run \(.+?washington\/washington\.js:\d+:\d+\)/,
       promiseDoneRegexp: /Washington\.Promise\.done \(.+?washington\/washington\.js:\d+:\d+\)/,
+      timeoutRegexp: /_onTimeout \(.+?washington\/washington\.js:\d+:\d+\)/,
 
       // ### success(example)
       //
@@ -1363,7 +1364,8 @@
 
         while ( !stop && index < baseStack.length) {
           if (!baseStack[index].match(this.exampleRunRegexp) &&
-              !baseStack[index].match(this.promiseDoneRegexp) )
+              !baseStack[index].match(this.promiseDoneRegexp) &&
+              !baseStack[index].match(this.timeoutRegexp) )
             stack.push(baseStack[index])
           else stop = true
 

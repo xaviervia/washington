@@ -154,6 +154,41 @@ module.exports = (done) ->
 
   #############################################################################
 
+  log "Should log to error in red with the shortened stack from a timeout"
+
+  flag         = false
+  message      = "This fails"
+  error        =
+    stack: "TimeoutError: Did you forgot to run the `done` function when ready?\n
+    at null._onTimeout (/Users/fernando.canel/.nvm/v0.10.35/lib/node_modules/washington/washington.js:1235:23)\n
+    at Timer.listOnTimeout (timers.js:88:15)"
+
+  shortened    = "TimeoutError: Did you forgot to run the `done` function when ready?"
+
+  jack console, "error", ()->
+    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[1], RED
+    assert.equal arguments[2], message
+    assert.equal arguments[3], CLEAR
+    assert.equal arguments[4], GREY
+    assert.equal arguments[5], "56"
+    assert.equal arguments[6], CLEAR
+    assert.equal arguments[7], RED
+    assert.equal arguments[8], shortened
+    assert.equal arguments[9], CLEAR
+    flag = true
+
+  formatter.failure
+    message: "This fails"
+    error: error
+    duration: -> 56
+
+  assert.equal flag, true
+
+  unjack hijack, "error"
+
+  #############################################################################
+
   log "Complete should list colored the successes, pending and failures and duration"
 
   flag         = false
