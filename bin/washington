@@ -46,15 +46,19 @@ if (!interpolated) {
     "Usage: \n"                                               +
     "  washington <filename> [<options>]\n\n"                   +
     "Options: \n"                                             +
-    "  --only=<position>        # Only run the example in \n" +
-    "                           # that position\n"            +
-    "  --start=<position>       # Only run examples after \n" +
-    "                           # that position           \n" +
-    "  --end=<position>         # Run examples before that\n" +
-    "                           # position                \n" +
-    "  --match=<regexp>         # Run only examples that  \n" +
-    "                           # match the given regular \n" +
-    "                           # expression"
+    "  --only=<position>        # Only run the example in   \n" +
+    "                           # that position             \n" +
+    "  --start=<position>       # Only run examples after   \n" +
+    "                           # that position             \n" +
+    "  --end=<position>         # Run examples before that  \n" +
+    "                           # position                  \n" +
+    "  --match=<regexp>         # Run only examples that    \n" +
+    "                           # match the given regular   \n" +
+    "                           # expression                \n" +
+    "  --dry                    # List the examples without \n" +
+    "                           # actually running them     \n" +
+    "  -v --version             # Prints the current        \n" +
+    "                           # version number"
   )
   process.exit()
 }
