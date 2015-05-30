@@ -221,6 +221,12 @@
 // washington greet.js --start=2 --end=5 --match=WIP
 // ```
 //
+// You can force the formatter to use only ascii characters with:
+//
+// ```
+// washington greet.js --ascii
+// ```
+//
 // If you just want to list the available tests, do a dry run
 //
 // ```
