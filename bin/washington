@@ -70,7 +70,14 @@ if (!interpolated) {
     "  --pending                # Only pending examples     \n" +
     "                           # will be printed out       \n" +
     "  --failure                # Only failing examples     \n" +
-    "                           # will be printed out       "
+    "                           # will be printed out       \n" +
+    "  --ascii                  # Print alternative ASCII   \n" +
+    "                           # symbols in stdout instead \n" +
+    "                           # of standard unicode:      \n" +
+    "                           # ✌ -> v                    \n" +
+    "                           # ✍ -> -                    \n" +
+    "                           # ☞ -> x                    \n" +
+    "                           # ☂ -> o                     "
   )
   process.exit()
 }

@@ -555,14 +555,42 @@ module.exports = (done) ->
 
   message      = "This is dry"
   jack console, "warn", () ->
-    assert.equal arguments[0], "%s ☂ %s%s"
+    assert.equal arguments[0], "%s %s %s%s"
     assert.equal arguments[1], GREY
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
+    assert.equal arguments[2], "☂"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+
     flag = true
 
   formatter.dry
     message: "This is dry"
+
+  assert.equal flag, true
+
+  unjack process, "exit"
+  unjack console, "warn"
+
+  #############################################################################
+
+  log "In grey with ascii sign if dry mode with --ascii"
+
+  flag         = false
+
+  message      = "This is dry"
+  jack console, "warn", () ->
+    assert.equal arguments[0], "%s %s %s%s"
+    assert.equal arguments[1], GREY
+    assert.equal arguments[2], "o"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    flag = true
+
+  formatter.dry
+      message: "This is dry"
+    ,
+      options:
+        ascii: true
 
   assert.equal flag, true
 

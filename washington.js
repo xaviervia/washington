@@ -1408,10 +1408,11 @@
       // Logs to `console.warn` whether no examples were selected or no examples
       // were found
       //
-      dry: function (example) {
+      dry: function (example, report) {
+        var sign = report && report.options && report.options.ascii ? "o" : "☂"
         console.warn(
-          "%s ☂ %s%s",
-          GREY, example.message, CLEAR )
+          "%s %s %s%s",
+          GREY, sign, example.message, CLEAR )
       },
 
       // ### empty(options)
