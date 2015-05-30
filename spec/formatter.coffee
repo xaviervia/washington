@@ -32,13 +32,14 @@ module.exports = (done) ->
   message      = "This will succeed"
 
   jack console, "info", ()->
-    assert.equal arguments[0], "%s ✌ %s%s%s (%dms)%s"
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s"
     assert.equal arguments[1], GREEN
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
-    assert.equal arguments[4], GREY
-    assert.equal arguments[5], "34"
-    assert.equal arguments[6], CLEAR
+    assert.equal arguments[2], "✌"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "34"
+    assert.equal arguments[7], CLEAR
 
     flag = true
 
@@ -53,22 +54,79 @@ module.exports = (done) ->
 
   #############################################################################
 
+  log "Should log use ascii variation whenever a success occurs with --ascii"
+
+  flag         = false
+  message      = "This will succeed"
+
+  jack console, "info", ()->
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s"
+    assert.equal arguments[1], GREEN
+    assert.equal arguments[2], "v"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "34"
+    assert.equal arguments[7], CLEAR
+
+    flag = true
+
+  formatter.success
+      message: "This will succeed"
+      duration: -> 34
+    ,
+      options:
+        ascii: true
+
+  assert.equal flag, true
+
+  unjack hijack, "info"
+
+  #############################################################################
+
   log "Should log to warn in yellow and normal whenever a pending occurs"
 
   flag         = false
   message      = "This is pending"
 
   jack console, "warn", ()->
-    assert.equal arguments[0], "%s ✍ %s%s"
+    assert.equal arguments[0], "%s %s %s%s"
     assert.equal arguments[1], YELLOW
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
+    assert.equal arguments[2], "✍"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
 
     flag = true
 
   formatter.pending
       message: "This is pending"
     , {}
+
+  assert.equal flag, true
+
+  unjack hijack, "warn"
+
+  #############################################################################
+
+  log "Should log to warn with ascii whenever a pending occurs with --ascii"
+
+  flag         = false
+  message      = "This is pending"
+
+  jack console, "warn", ()->
+    assert.equal arguments[0], "%s %s %s%s"
+    assert.equal arguments[1], YELLOW
+    assert.equal arguments[2], "-"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+
+    flag = true
+
+  formatter.pending
+      message: "This is pending"
+    ,
+      options:
+        ascii: true
 
   assert.equal flag, true
 
@@ -97,16 +155,18 @@ module.exports = (done) ->
   at null.function (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:4:9)"
 
   jack console, "error", ()->
-    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s%s\n %s %s%s"
     assert.equal arguments[1], RED
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
-    assert.equal arguments[4], GREY
-    assert.equal arguments[5], "56"
-    assert.equal arguments[6], CLEAR
-    assert.equal arguments[7], RED
-    assert.equal arguments[8], shortened
-    assert.equal arguments[9], CLEAR
+    assert.equal arguments[2], "☞"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "56"
+    assert.equal arguments[7], CLEAR
+    assert.equal arguments[8], RED
+    assert.equal arguments[9], "☞"
+    assert.equal arguments[10], shortened
+    assert.equal arguments[11], CLEAR
     flag = true
 
   formatter.failure
@@ -114,6 +174,56 @@ module.exports = (done) ->
       error: error
       duration: -> 56
     , {}
+
+  assert.equal flag, true
+
+  unjack hijack, "error"
+
+  #############################################################################
+
+
+  log "Should log to error with ascii whenever a failure occurs with --ascii"
+
+  flag         = false
+  message      = "This fails"
+  error        =
+    stack: "Error: FAIL\n
+    at null.function (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:4:9)\n
+    at Washington.Example.run (/Users/fernando.canel/Code/remote/washington/washington.js:847:24)\n
+    at Function.Washington.go (/Users/fernando.canel/Code/remote/washington/washington.js:624:31)\n
+    at Object.<anonymous> (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:8:12)\n
+    at Module._compile (module.js:444:26)\n
+    at Object.Module._extensions..js (module.js:462:10)\n
+    at Module.load (module.js:339:32)\n
+    at Function.Module._load (module.js:294:12)\n
+    at Function.Module.runMain (module.js:485:10)\n
+    at startup (node.js:112:16)"
+
+  shortened    = "Error: FAIL\n
+  at null.function (/Users/fernando.canel/Code/remote/washington/examples/asyncFailSync.js:4:9)"
+
+  jack console, "error", ()->
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s%s\n %s %s%s"
+    assert.equal arguments[1], RED
+    assert.equal arguments[2], "x"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "56"
+    assert.equal arguments[7], CLEAR
+    assert.equal arguments[8], RED
+    assert.equal arguments[9], "x"
+    assert.equal arguments[10], shortened
+    assert.equal arguments[11], CLEAR
+    flag = true
+
+  formatter.failure
+      message: "This fails"
+      error: error
+      duration: -> 56
+    ,
+      options:
+        ascii: true
 
   assert.equal flag, true
 
@@ -134,16 +244,18 @@ module.exports = (done) ->
   shortened    = "AssertionError: False as argument value, indicating assertion failure"
 
   jack console, "error", ()->
-    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s%s\n %s %s%s"
     assert.equal arguments[1], RED
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
-    assert.equal arguments[4], GREY
-    assert.equal arguments[5], "56"
-    assert.equal arguments[6], CLEAR
-    assert.equal arguments[7], RED
-    assert.equal arguments[8], shortened
-    assert.equal arguments[9], CLEAR
+    assert.equal arguments[2], "☞"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "56"
+    assert.equal arguments[7], CLEAR
+    assert.equal arguments[8], RED
+    assert.equal arguments[9], "☞"
+    assert.equal arguments[10], shortened
+    assert.equal arguments[11], CLEAR
     flag = true
 
   formatter.failure
@@ -170,16 +282,18 @@ module.exports = (done) ->
   shortened    = "TimeoutError: Did you forgot to run the `done` function when ready?"
 
   jack console, "error", ()->
-    assert.equal arguments[0], "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s"
+    assert.equal arguments[0], "%s %s %s%s%s (%dms)%s%s\n %s %s%s"
     assert.equal arguments[1], RED
-    assert.equal arguments[2], message
-    assert.equal arguments[3], CLEAR
-    assert.equal arguments[4], GREY
-    assert.equal arguments[5], "56"
-    assert.equal arguments[6], CLEAR
-    assert.equal arguments[7], RED
-    assert.equal arguments[8], shortened
-    assert.equal arguments[9], CLEAR
+    assert.equal arguments[2], "☞"
+    assert.equal arguments[3], message
+    assert.equal arguments[4], CLEAR
+    assert.equal arguments[5], GREY
+    assert.equal arguments[6], "56"
+    assert.equal arguments[7], CLEAR
+    assert.equal arguments[8], RED
+    assert.equal arguments[9], "☞"
+    assert.equal arguments[10], shortened
+    assert.equal arguments[11], CLEAR
     flag = true
 
   formatter.failure

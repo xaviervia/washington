@@ -1340,11 +1340,14 @@
       // Logs to `console.info` in green and adds a victory hand
       //
       success: function (example, report) {
+        var sign = report && report.options && report.options.ascii ? "v" : "✌"
+
         if ( !report.options ||
             (!report.options.pending && !report.options.failure))
           console.info(
-            "%s ✌ %s%s%s (%dms)%s",
-            GREEN, example.message, CLEAR, GREY, example.duration(), CLEAR )
+            "%s %s %s%s%s (%dms)%s",
+            GREEN, sign, example.message, CLEAR, GREY, example.duration(), CLEAR
+          )
       },
 
       // ### pending(example)
@@ -1352,11 +1355,13 @@
       // Logs to `console.warn` in yellow and adds writing hand
       //
       pending: function (example, report) {
+        var sign = report && report.options && report.options.ascii ? "-" : "✍"
+
         if ( !report.options ||
             (!report.options.success && !report.options.failure))
           console.warn(
-            "%s ✍ %s%s",
-            YELLOW, example.message, CLEAR )
+            "%s %s %s%s",
+            YELLOW, sign, example.message, CLEAR )
       },
 
       // ### failure(example)
@@ -1364,7 +1369,8 @@
       // Logs to `console.error` in red and adds a left pointing hand
       //
       failure: function (example, report) {
-        var stack, stop, index, baseStack;
+        var stack, stop, index, baseStack
+        var sign = report && report.options && report.options.ascii ? "x" : "☞"
 
         if ( !report.options ||
             (!report.options.success && !report.options.pending)) {
@@ -1385,9 +1391,9 @@
           }
 
           console.error(
-            "%s ☞ %s%s%s (%dms)%s%s\n ☞ %s%s",
-            RED, example.message, CLEAR, GREY, example.duration(),
-            CLEAR, RED, stack.join("\n"), CLEAR )
+            "%s %s %s%s%s (%dms)%s%s\n %s %s%s",
+            RED, sign, example.message, CLEAR, GREY, example.duration(),
+            CLEAR, RED, sign, stack.join("\n"), CLEAR )
         }
       },
 
