@@ -6,7 +6,11 @@
   "scripts": {
     "test": "node testEntrypoint"
   },
-  "keywords": ["washington", "unit testing", "test"],
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
   "license": "BSD-2-Clause",
   "dependencies": {

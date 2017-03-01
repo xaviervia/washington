@@ -1,8 +1,6 @@
-const {List} = require('immutable-ext')
-const Task = require('folktale/data/task')
-
-const formatter = require('./formatter')
-const runSuite = require('washington.core/runSuite')
+const formatterTerminal = require('washington.formatter.terminal')
+// const formatterBrowser = require('washington.formatter.browser')
+const runSuite = require('washington.core')
 const example = require('./example')
 const suite = require('./suite')
 
@@ -15,16 +13,17 @@ const getEnvironmentFormatter = () => {
   }
 }
 
-const washington = (testSuite, safe = false, formatter) => {
-  const runResult = runSuite(testSuite)
+const washington = (testSuite, safe = false) => {
+  const suiteTask = runSuite(
+    testSuite instanceof Array
+      ? testSuite
+      : [testSuite]
+  )
 
   if (safe) {
-    return runResult
+    return suiteTask
   } else {
-    const format = formatter || getEnvironmentFormatter()
-    List(runResult.reverse())
-      .traverse(Task.of, format)
-      .run()
+    formatterTerminal(suiteTask).run()
   }
 }
 
