@@ -1,0 +1,15 @@
+{
+  "name": "washington.core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node testEntrypoint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zazen": "^0.8.2"
+  }
+}

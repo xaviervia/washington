@@ -2,9 +2,9 @@ const {List} = require('immutable-ext')
 const Task = require('folktale/data/task')
 
 const formatter = require('./formatter')
-const runSuite = require('./src/runSuite')
-const example = require('./src/helpers/example')
-const suite = require('./src/helpers/suite')
+const runSuite = require('washington.core/runSuite')
+const example = require('./example')
+const suite = require('./suite')
 
 const getEnvironmentFormatter = () => {
   try {
