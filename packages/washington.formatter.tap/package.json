@@ -1,7 +1,7 @@
 {
   "name": "washington.formatter.terminal",
   "version": "1.0.0",
-  "description": "Colorful terminal output formatter for the Washington unit test library",
+  "description": "",
   "main": "formatterTerminal.js",
   "scripts": {
     "test": "node testEntrypoint"

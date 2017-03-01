@@ -12,10 +12,6 @@ module.exports = [
         {
           description: 'testing',
           result: Success()
-        },
-        {
-          description: 'to be ignored',
-          result: Pending()
         }
       ])
 
