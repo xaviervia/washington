@@ -1,6 +1,6 @@
-# washington
+# Washington
 
-**washington** is a pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API.
+A pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API.
 
 ## Cheat sheet
 
@@ -266,7 +266,7 @@ Combining the simplicity
 
 Tests for Washington are written in Washington. I really believe in [dogfooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) and [ain’t afraid of self reference](https://xkcd.com/917/).
 
-This library is transpiler free. I <3 Babel but it’s not necessary for this.
+This library is transpiler free. I ❤️ Babel but it’s not necessary for this.
 
 ## License
 
