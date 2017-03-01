@@ -1,14 +1,14 @@
 {
   "name": "washington.core",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Core functionality of the Washington unit test library",
+  "main": "runSuite.js",
   "scripts": {
     "test": "node testEntrypoint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["washington", "unit testing", "test"],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
   "dependencies": {
     "folktale": "^2.0.0-alpha2",
     "immutable": "^3.8.1",
