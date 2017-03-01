@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "manualTestSuite": "node manualTestSuite",
-    "withHelper": "node withHelper"
+    "withHelper": "node withHelper",
+    "forCLI": "washington forCLI"
   },
   "keywords": [],
   "author": "",
