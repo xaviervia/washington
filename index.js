@@ -6,6 +6,8 @@ const Task = require('folktale/data/task')
 const {characters} = require('./constants')
 const formatter = require('./formatter')
 const getTestResult = require('./src/getTestResult')
+const example = require('./src/helpers/example')
+const suite = require('./src/helpers/suite')
 
 const cleanStackTrace = stackTraceString =>
   stackTraceString
@@ -77,5 +79,8 @@ const washington = (testSuite, safe = false, formatter) => {
       .run()
   }
 }
+
+washington.example = example
+washington.suite = suite
 
 module.exports = washington
