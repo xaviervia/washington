@@ -4,7 +4,7 @@ A pure, functional—as much as JavaScript allows—unit testing tool with a str
 
 ## Cheat sheet
 
-Using washington programmatically (works both in the terminal and in the web):
+Using Washington programmatically (works both in the terminal and in the web):
 
 ```javascript
 import washington, {example} from 'washington'
