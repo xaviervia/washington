@@ -1,4 +1,4 @@
-const washington = require('../')
+const washington = require('washington')
 
 const add = x => y => x + y
 

@@ -1,0 +1,37 @@
+lerna(verbose) GitUtilities.isInitialized    ()
+lerna(verbose) GitUtilities.isInitialized    () => true
+lerna(verbose) GitUtilities.getTopLevelDirectory()
+lerna(verbose) GitUtilities.getTopLevelDirectory() => "."
+lerna(verbose) FileSystemUtilities.existsSync("./lerna.json")
+lerna(verbose) FileSystemUtilities.existsSync("./lerna.json") => true
+lerna(verbose) FileSystemUtilities.readFileSync("./lerna.json")
+lerna(verbose) FileSystemUtilities.readFileSync("./lerna.json") => "{\n  \"lerna\": \"2.0.0-beta.38\",\n  \"packages\": [\n    \"packages/*\"\n  ],\n  \"version\": \"0.0.0\"\n}"
+lerna(verbose) FileSystemUtilities.existsSync("./package.json")
+lerna(verbose) FileSystemUtilities.existsSync("./package.json") => true
+lerna(verbose) FileSystemUtilities.readFileSync("./package.json")
+lerna(verbose) FileSystemUtilities.readFileSync("./package.json") => "{\n  \"devDependencies\": {\n    \"lerna\": \"2.0.0-beta.38\"\n  }\n}"
+lerna(info)    Lerna v2.0.0-beta.38
+lerna(verbose) FileSystemUtilities.existsSync("./package.json")
+lerna(verbose) FileSystemUtilities.existsSync("./package.json") => true
+lerna(verbose) FileSystemUtilities.existsSync("./lerna.json")
+lerna(verbose) FileSystemUtilities.existsSync("./lerna.json") => true
+lerna(verbose) FileSystemUtilities.existsSync("./VERSION")
+lerna(verbose) FileSystemUtilities.existsSync("./VERSION") => false
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.cli/package.json")
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.cli/package.json") => true
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.core/package.json")
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.core/package.json") => true
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.examples/package.json")
+lerna(verbose) FileSystemUtilities.existsSync("./packages/washington.examples/package.json") => true
+lerna(error)   Errored while collecting packages and package graph
+    SyntaxError: /Users/fernando.canel/Code/me/washington/packages/washington.examples/package.json: Unexpected token } in JSON at position 261
+        at JSON.parse (<anonymous>)
+        at Object.Module._extensions..json (module.js:588:27)
+        at Module.load (module.js:488:32)
+        at tryModuleLoad (module.js:447:12)
+        at Function.Module._load (module.js:439:3)
+        at Module.require (module.js:498:17)
+        at require (internal/module.js:20:19)
+        at /Users/fernando.canel/.config/yarn/global/node_modules/lerna/lib/PackageUtilities.js:88:29
+        at Array.forEach (native)
+        at /Users/fernando.canel/.config/yarn/global/node_modules/lerna/lib/PackageUtilities.js:81:12

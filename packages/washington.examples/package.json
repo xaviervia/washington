@@ -1,0 +1,16 @@
+{
+  "name": "washington.examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "manualTestSuite": "node manualTestSuite",
+    "withHelper": "node withHelper"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "washington": "1.0.0"
+  },
+  "license": "ISC"
+}
