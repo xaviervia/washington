@@ -3,20 +3,23 @@ const runSuite = require('./runSuite')
 module.exports = [
   {
     description: 'runSuite: a successful test',
-    test: () => {
-      const result = runSuite([
+    test: check => {
+      runSuite([
         {
           description: '1 is 1',
           test: () => 1,
           expectedValue: 1
         }
       ])
-
-      return {
-        type: result[0].result['@@type'],
-        description: result[0].description,
-        expectedValue: result[0].expectedValue
-      }
+        .map(resultList => {
+          const result = resultList.toJSON()
+          check({
+            type: result[0].result['@@type'],
+            description: result[0].description,
+            expectedValue: result[0].expectedValue
+          })
+        })
+        .run()
     },
     expectedValue: {
       type: 'Success',
@@ -27,21 +30,24 @@ module.exports = [
 
   {
     description: 'runSuite: a failing test (assertion error)',
-    test: () => {
-      const result = runSuite([
+    test: check => {
+      runSuite([
         {
           description: '1 will fail to be 2',
           test: () => 1,
           expectedValue: 2
         }
       ])
-
-      return {
-        type: result[0].result['@@type'],
-        message: result[0].result['@@value'].message,
-        description: result[0].description,
-        expectedValue: result[0].expectedValue
-      }
+        .map(resultArray => {
+          const result = resultArray.toJSON()
+          check({
+            type: result[0].result['@@type'],
+            message: result[0].result['@@value'].message,
+            description: result[0].description,
+            expectedValue: result[0].expectedValue
+          })
+        })
+        .run()
     },
     expectedValue: {
       type: 'Failure',
@@ -53,21 +59,24 @@ module.exports = [
 
   {
     description: 'runSuite: a failing test (crashing)',
-    test: () => {
-      const result = runSuite([
+    test: check => {
+      runSuite([
         {
           description: 'there is no Narnia',
           test: () => { throw new Error('no Narnia') },
           expectedValue: 'Narnia?'
         }
       ])
-
-      return {
-        type: result[0].result['@@type'],
-        message: result[0].result['@@value'].message,
-        description: result[0].description,
-        expectedValue: result[0].expectedValue
-      }
+        .map(resultArray => {
+          const result = resultArray.toJSON()
+          check({
+            type: result[0].result['@@type'],
+            message: result[0].result['@@value'].message,
+            description: result[0].description,
+            expectedValue: result[0].expectedValue
+          })
+        })
+        .run()
     },
     expectedValue: {
       type: 'Failure',
@@ -79,21 +88,51 @@ module.exports = [
 
   {
     description: 'runSuite: a pending test',
-    test: () => {
-      const result = runSuite([
+    test: check => {
+      runSuite([
         {
           description: 'buy milk'
         }
       ])
-
-      return {
-        type: result[0].result['@@type'],
-        description: result[0].description
-      }
+        .map(resultArray => {
+          const result = resultArray.toJSON()
+          check({
+            type: result[0].result['@@type'],
+            description: result[0].description
+          })
+        })
+        .run()
     },
     expectedValue: {
       type: 'Pending',
       description: 'buy milk'
+    }
+  },
+
+  {
+    description: 'runSuite: an async test',
+    test: check => {
+      runSuite([
+        {
+          description: 'buy milk in a while',
+          test: check => setTimeout(() => check('milk')),
+          expectedValue: 'milk'
+        }
+      ])
+        .map(resultArray => {
+          const result = resultArray.toJSON()
+          check({
+            type: result[0].result['@@type'],
+            description: result[0].description,
+            expectedValue: result[0].expectedValue
+          })
+        })
+        .run()
+    },
+    expectedValue: {
+      type: 'Success',
+      description: 'buy milk in a while',
+      expectedValue: 'milk'
     }
   }
 ]

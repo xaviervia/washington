@@ -1,12 +1,14 @@
 const {id} = require('zazen')
 const {set, prop} = require('partial.lenses')
-const {Failure, Pending, Success} = require('./data/status')
+const {List} = require('immutable-ext')
+const Task = require('folktale/data/task')
 const {deepEqual} = require('assert')
 
-const matchesExpectation = ({expectedValue}) => result => {
+const {Failure, Pending, Success} = require('./data/status')
+
+const matchesExpectation = ({expectedValue}, result) => {
   try {
     deepEqual(result, expectedValue)
-
     return Success()
   } catch (e) {
     return Failure(e)
@@ -14,24 +16,47 @@ const matchesExpectation = ({expectedValue}) => result => {
 }
 
 const hackToEnsureUniqueNameDespiteUglification = {
-  ensureUniqueWashingtonNameDespiteUglification: example => {
-    if (example.test == null) return Pending()
+  ensureUniqueWashingtonNameDespiteUglification: (example, callback) => {
+    if (example.test == null) return callback(Pending())
 
     try {
-      return matchesExpectation(example)(example.test())
+      // Arity of 1 in the test indicates callback
+      if (example.test.length === 1) {
+        const thatHackAgain = {
+          ensureUniqueWashingtonNameDespiteUglification: result =>
+            callback(matchesExpectation(example, result))
+        }
+
+        example.test(
+          thatHackAgain.ensureUniqueWashingtonNameDespiteUglification
+        )
+      } else {
+        callback(
+          matchesExpectation(example, example.test())
+        )
+      }
     } catch (e) {
-      return Failure(e)
+      callback(Failure(e))
     }
   }
 }
 
 const getTestResult = example =>
-  set(
-    prop('result'),
-    hackToEnsureUniqueNameDespiteUglification
-      .ensureUniqueWashingtonNameDespiteUglification(example),
-    example
-  )
+  Task
+    .task(({resolve}) => {
+      hackToEnsureUniqueNameDespiteUglification
+        .ensureUniqueWashingtonNameDespiteUglification(
+          example,
+          result => {
+            resolve(set(
+              prop('result'),
+              result,
+              example
+            ))
+          }
+        )
+    })
+    .map(setStatus)
 
 const cleanStackTrace = stackTraceString =>
   stackTraceString
@@ -67,6 +92,5 @@ const setStatus = example => set(
 )
 
 module.exports = suite =>
-  suite
-    .map(getTestResult)
-    .map(setStatus)
+  List(suite)
+    .traverse(Task.of, getTestResult)
