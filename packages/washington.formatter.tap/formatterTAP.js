@@ -1,21 +1,13 @@
 const {set, prop} = require('partial.lenses')
-const {green, red, yellow} = require('chalk')
 const {task} = require('folktale/data/task')
-const {unicode, ascii} = require('./characters')
 
 const id = x => x
-const characters = unicode
 
-const formatFailure = (description, {message, stack}) =>
-  red(`${characters.failure} ${description}
-${characters.failure} ${message}
-${stack.map(line => `  ${line}`).join('\n')}`)
+const formatFailure = description => `not ok - ${description}`
 
-const formatPending = description =>
-  yellow(`${characters.pending} ${description}`)
+const formatPending = description => `ok - ${description} # pending`
 
-const formatSuccess = description =>
-  green(`${characters.success} ${description}`)
+const formatSuccess = description => `ok - ${description}`
 
 const setMessage = example => set(
   prop('message'),
@@ -33,6 +25,8 @@ module.exports = suiteTask =>
   suiteTask
     .map(resultList => resultList.map(setMessage))
     .chain(resultList => task(({resolve}) => {
+      console.log('TAP version 13')
+      console.log(`1..${resultList.toJSON().length}`)
       resultList.map(({message}) => { console.log(message) })
 
       resolve(resultList)

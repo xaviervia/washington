@@ -1,8 +1,8 @@
 {
-  "name": "washington.formatter.terminal",
+  "name": "washington.formatter.tap",
   "version": "2.0.0-rc.0",
-  "description": "",
-  "main": "formatterTerminal.js",
+  "description": "Test Anything Protocol (TAP) terminal output formatter for the Washington unit test library",
+  "main": "formatterTAP.js",
   "scripts": {
     "test": "node testEntrypoint"
   },
@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "folktale": "^2.0.0-alpha2",
-    "chalk": "^1.1.3",
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
