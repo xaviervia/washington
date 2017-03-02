@@ -7,10 +7,14 @@
     "withHelper": "node withHelper",
     "forCLI": "washington forCLI"
   },
-  "keywords": ["examples", "washington"],
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
   "dependencies": {
-    "washington": "1.0.0"
+    "washington": "2.0.0-rc.0"
   },
-  "license": "ISC"
+  "license": "BSD-2-Clause"
 }

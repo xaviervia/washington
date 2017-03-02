@@ -16,15 +16,19 @@
     "type": "git",
     "url": "git+https://github.com/xaviervia/washington.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/xaviervia/washington/issues"
   },
   "homepage": "https://github.com/xaviervia/washington#readme",
   "dependencies": {
-    "washington.formatter.terminal": "1.0.0",
-    "washington.core": "1.0.0"
+    "washington.formatter.terminal": "2.0.0-rc.0",
+    "washington.core": "2.0.0-rc.0"
   }
 }

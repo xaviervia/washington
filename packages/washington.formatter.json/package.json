@@ -2,11 +2,14 @@
   "name": "washington.formatter.json",
   "version": "2.0.0-rc.0",
   "description": "",
-  "main": "index.js",
+  "main": "formatterJSON.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node testEntrypoint"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "washington.core": "2.0.0-rc.0"
+  }
 }

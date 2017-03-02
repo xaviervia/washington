@@ -6,13 +6,17 @@
   "scripts": {
     "test": "node testEntrypoint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Vía Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
   "dependencies": {
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
-    "washington.core": "1.0.0"
+    "washington.core": "2.0.0-rc.0"
   }
 }
