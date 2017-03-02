@@ -1,6 +1,6 @@
 # Washington
 
-A pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API.
+A pure, functional—as much as it can be in JavaScript—unit testing tool with a straightforward API.
 
 ## Cheat sheet
 
@@ -241,7 +241,7 @@ But sure some of you disagree! Well, if you for some reason you really like Wash
 
 ## Why do you say this is functional?
 
-Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes Washington example format. In this sense Washington aims to be future proof.
+Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. In this sense Washington aims to be also future proof.
 
 > Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
 
@@ -260,7 +260,7 @@ Combining the simplicity
 ## Why "Washington"?
 
 - George Washington gave us all a good example
-- We all know he can’t lie
+- We all know that he can’t lie
 
 ## Collaborating
 
