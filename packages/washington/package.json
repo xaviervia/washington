@@ -1,6 +1,6 @@
 {
   "name": "washington",
-  "version": "2.0.0-rc.0",
+  "version": "2.0.0-rc.1",
   "description": "A pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API",
   "main": "index.js",
   "bin": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/xaviervia/washington#readme",
   "dependencies": {
-    "washington.formatter.terminal": "2.0.0-rc.0",
-    "washington.core": "2.0.0-rc.0"
+    "washington.formatter.terminal": "^2.0.0-rc.1",
+    "washington.core": "^2.0.0-rc.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "washington.examples",
-  "version": "2.0.0-rc.0",
+  "version": "2.0.0-rc.1",
   "description": "Usage examples of the Washington unit test library",
   "scripts": {
     "manualTestSuite": "node manualTestSuite",
@@ -17,9 +17,9 @@
   ],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
   "dependencies": {
-    "washington": "2.0.0-rc.0",
-    "washington.formatter.json": "2.0.0-rc.0",
-    "washington.formatter.tap": "2.0.0-rc.0"
+    "washington": "^2.0.0-rc.1",
+    "washington.formatter.json": "^2.0.0-rc.1",
+    "washington.formatter.tap": "^2.0.0-rc.1"
   },
   "license": "BSD-2-Clause"
 }
