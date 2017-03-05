@@ -1,21 +1,20 @@
 const {set, prop} = require('partial.lenses')
 const {green, red, yellow, grey} = require('chalk')
 const {task} = require('folktale/data/task')
-const {unicode, ascii} = require('./characters')
 
 const id = x => x
 const characters = unicode
 
 const formatFailure = (description, {message, stack}) =>
-  red(`${characters.failure} ${description}
-${characters.failure} ${message}
+  red(`${description}
+${message}
 ${stack.map(line => `  ${line}`).join('\n')}`)
 
 const formatPending = description =>
-  yellow(`${characters.pending} ${description}`)
+  yellow(`${description}`)
 
 const formatSuccess = description =>
-  green(`${characters.success} ${description}`)
+  green(`${description}`)
 
 const setMessage = example => set(
   prop('message'),
@@ -49,15 +48,15 @@ module.exports = suiteTask =>
       const totalsToPrint = [
         {
           total: totals.success,
-          message: green(`${totals.success} ${characters.success}`)
+          message: green(`${totals.success}`)
         },
         {
           total: totals.pending,
-          message: yellow(`${totals.pending} ${characters.pending}`)
+          message: yellow(`${totals.pending}`)
         },
         {
           total: totals.failure,
-          message: red(`${totals.failure} ${characters.failure}`)
+          message: red(`${totals.failure}`)
         }
       ].filter(({total}) => total > 0).map(({message}) => message).join(grey(' • '))
       console.log(totalsToPrint)

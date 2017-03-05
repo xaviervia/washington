@@ -6,7 +6,7 @@ const formatterTerminal = require('./')
 
 module.exports = [
   {
-    description: 'success is green and has a ✌',
+    description: 'success is green',
     test: check => {
       const resultList = List([
         {
@@ -27,10 +27,10 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: green('✌ testing')
+    expectedValue: green('testing')
   },
   {
-    description: 'pending is yellow and has a ✍',
+    description: 'pending is yellow',
     test: check => {
       const resultList = List([
         {
@@ -47,10 +47,10 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: yellow('✍ testing')
+    expectedValue: yellow('testing')
   },
   {
-    description: 'failure is red and has a ☞',
+    description: 'failure is red',
     test: check => {
       const resultList = List([
         {
@@ -70,8 +70,8 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: red(`☞ testing
-☞ assertion error
+    expectedValue: red(`testing
+assertion error
   something
   multiline`)
   }
