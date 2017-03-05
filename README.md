@@ -47,7 +47,7 @@ Assertions are done with `assert.deepEqual`, so this works out of the box as wel
 
 ```javascript
 example(
-  '"a" contains [1, "2", false]',
+  'the object should have the expected structure',
   check => check({ a: [1, '2', false] }),
   { a: [1, '2', false] }
 )
