@@ -1,3 +1,8 @@
+all: bootstrap test
+
+bootstrap:
+	npm run bootstrap
+
 test:
 	cd packages/washington.core && npm test
 	cd packages/washington.formatter.browser && npm test
