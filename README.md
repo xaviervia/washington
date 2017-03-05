@@ -6,7 +6,7 @@ A pure, functional—as much as it can be in JavaScript—unit testing tool with
 
 ## Cheat sheet
 
-Using Washington programmatically (works both in the terminal and in the web):
+#### Programmatically:
 
 ```javascript
 import washington, {example} from 'washington'
@@ -16,7 +16,7 @@ washington(
 )
 ```
 
-From the command line:
+#### From the command line:
 
 ```javascript
 // test.js
@@ -29,31 +29,49 @@ export default example('1 + 1 is 2', check => check(1 + 1), 2)
 > washington test.js
 ```
 
-Asynchronous examples work out of the box:
+#### Asynchronous examples work out of the box:
 
 ```javascript
 example('value will be 1', check => setTimeout(() => check(1)), 1)
 ```
 
-Assertions are done with `assert.deepEqual`, so this works out of the box as well:
+#### Assertions are done with `assert.deepEqual`, so this works out of the box as well:
 
 ```javascript
 example('foo is the same as bar', check => check({a: 1}), {a: 1})
 ```
 
-There is a shorthand for synchronous examples: just return the value:
+#### There is a shorthand for synchronous examples: just return the value:
 
 ```javascript
 example('1 + 1 is 2 and synchronously so', () => 1 + 1, 2)
 ```
 
-Examples without a test scenario are considered pending. Washington is your unit test to do list:
+#### Examples without a test scenario are considered pending. Washington is your unit test to-do list:
 
 ```javascript
 example('so test, many unit')
 ```
 
-The `example` helper function is completely optional. Its just a shorthand to create the example object. You can do this as well:
+#### To make it work in the browser, just replace the output formatter:
+
+```javascript
+import washington, {example, suite} from 'washington'
+import washingtonFormatterBrowser from 'washington.formatter.browser'
+
+const suiteTask = washington(
+  example('1 + 2 is 3', check => check(1 + 2), 3),
+  { safe: true }
+)
+
+washingtonFormatterBrowser(suiteTask).run()
+```
+
+There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
+
+#### The `example` helper function is completely optional.
+
+Its just a shorthand to create the example object. You can do this as well:
 
 ```javascript
 import washington from 'washington'
@@ -67,7 +85,7 @@ washington({
 
 Choose the style that suits you better.
 
-A test suite is just an array of tests:
+#### A test suite is just an array of tests:
 
 ```javascript
 import washington from 'washington'
@@ -246,18 +264,6 @@ But sure some of you disagree! Well, if you for some reason you really like Wash
 Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. In this sense Washington aims to be also future proof.
 
 > Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
-
-## A vision: the code document
-
-Combining the simplicity
-
-## Output format
-
-**TODO**
-
-## Advanced usage
-
-**TODO** you will be able to consume the output of the tests programmatically with a `folktale` Task.
 
 ## Why "Washington"?
 
