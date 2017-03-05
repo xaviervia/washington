@@ -128,6 +128,58 @@ washington(
 )
 ```
 
+#### Output [TAP](https://testanything.org/) instead of the default colors:
+
+```javascript
+const washington = require('washington')
+const washingtonFormatterTAP = require('washington.formatter.tap')
+const {example, suite} = washington
+
+const suiteTask = washington(
+  suite(
+    example('1 + 1 is 2', check => check(1 + 1), 2),
+    example('2 + 2 is 4', check => check(2 + 2), 4)
+  ),
+  {safe: true}
+)
+
+washingtonFormatterTAP(suiteTask).run()
+```
+
+#### Get JSON output instead of the default colors:
+
+```javascript
+const washington = require('washington')
+const washingtonFormatterJSON = require('washington.formatter.json')
+const {example, suite} = washington
+
+const suiteTask = washington(
+  suite(
+    example('1 + 1 is 2', check => check(1 + 1), 2),
+    example('2 + 2 is not 5', check => check(2 + 2), 5),
+    example('get chocolate as well')
+  ),
+  {safe: true}
+)
+
+washingtonFormatterJSON(suiteTask)
+  .map(result => {
+    console.log('object structure result', result)
+     // => [ { status: 'success',
+     //    description: '1 + 1 is 2',
+     //    expectedValue: 2 },
+     //  { status: 'failure',
+     //    description: '2 + 2 is not 5',
+     //    expectedValue: 5,
+     //    message: '4 deepEqual 5',
+     //    stack:
+     //     [ 'AssertionError: 4 deepEqual 5',
+     //       'at matchesExpectation …' ] },
+     //  { status: 'pending', description: 'get chocolate as well' } ]  
+  })
+  .run()
+```
+
 ## A simple setup for a project using Washington as a test tool
 
 Washington is a library and a CLI, not a testing framework. This means that it does not enforce any file structure for testing and does not do any discovery of files in your project. So, how do you set it up to use it in yours?
@@ -183,7 +235,7 @@ module.exports = [
   …
 ```
 
-> Note that the above code is not using the washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a [plethora of opportunities to organize your tests as it better pleases you](#a-proposal-the-code-document).
+> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a [plethora of opportunities to organize your tests as it better pleases you](#a-proposal-the-code-document).
 
 ### Working with multiple test files
 
@@ -194,8 +246,8 @@ example-project/
   src/
     addition.js
     addition.test.js
-+     multiplication.js
-+     multiplication.test.js
++    multiplication.js
++    multiplication.test.js
   package.json
 ```
 
@@ -226,7 +278,18 @@ module.exports = [
 ]
 ```
 
-Well, the exported values of these two test files (`addition.test.js` and `multiplication.test.js`) are just arrays. There is a very simple solution here:
+Well, the exported values of these two test files (`addition.test.js` and `multiplication.test.js`) are just arrays. There is a very simple solution here. Let’s create and `src/index.test.js`:
+
+```diff
+example-project/
+  src/
+    addition.js
+    addition.test.js
+    multiplication.js
+    multiplication.test.js
++    index.test.js
+  package.json
+```
 
 ```javascript
 // src/index.test.js

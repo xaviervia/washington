@@ -6,7 +6,9 @@
     "manualTestSuite": "node manualTestSuite",
     "withHelper": "node withHelper",
     "forCLI": "washington forCLI",
-    "singleTestCLI": "washington singleTestCLI"
+    "singleTestCLI": "washington singleTestCLI",
+    "withTAPFormatter": "node withTAPFormatter",
+    "withJSONFormatter": "node withJSONFormatter"
   },
   "keywords": [
     "washington",
@@ -15,7 +17,9 @@
   ],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
   "dependencies": {
-    "washington": "2.0.0-rc.0"
+    "washington": "2.0.0-rc.0",
+    "washington.formatter.json": "2.0.0-rc.0",
+    "washington.formatter.tap": "2.0.0-rc.0"
   },
   "license": "BSD-2-Clause"
 }
