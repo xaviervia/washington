@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
   "license": "BSD-2-Clause",
+  "dependencies": {
+    "partial.lenses": "^9.4.1"
+  },
   "devDependencies": {
     "washington.core": "2.0.0-rc.0",
     "folktale": "^2.0.0-alpha2",
