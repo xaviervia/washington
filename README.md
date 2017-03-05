@@ -41,10 +41,16 @@ export default example('1 + 1 is 2', check => check(1 + 1), 2)
 example('value will be 1', check => setTimeout(() => check(1)), 1)
 ```
 
-#### Assertions are done with `assert.deepEqual`, so this works out of the box as well:
+#### You can compare complex object/array structures, no problem:
+
+Assertions are done with `assert.deepEqual`, so this works out of the box as well.
 
 ```javascript
-example('foo is the same as bar', check => check({a: 1}), {a: 1})
+example(
+  '"a" contains [1, "2", false]',
+  check => check({ a: [1, '2', false] }),
+  { a: [1, '2', false] }
+)
 ```
 
 #### There is a shorthand for synchronous examples: just return the value:
