@@ -1,5 +1,4 @@
 const {set, prop} = require('partial.lenses')
-const {task} = require('folktale/data/task')
 
 const id = x => x
 

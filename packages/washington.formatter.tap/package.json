@@ -14,6 +14,7 @@
   "author": "Fernando Vía Canel <fernando.via@gmail.com>",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "folktale": "^2.0.0-alpha2",
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
