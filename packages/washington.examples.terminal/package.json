@@ -5,7 +5,8 @@
   "scripts": {
     "manualTestSuite": "node manualTestSuite",
     "withHelper": "node withHelper",
-    "forCLI": "washington forCLI"
+    "forCLI": "washington forCLI",
+    "singleTestCLI": "washington singleTestCLI"
   },
   "keywords": [
     "washington",

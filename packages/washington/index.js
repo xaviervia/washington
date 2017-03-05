@@ -4,14 +4,14 @@ const runSuite = require('washington.core')
 const example = require('./example')
 const suite = require('./suite')
 
-const washington = (testSuite, safe = false) => {
+const washington = (testSuite, options = {}) => {
   const suiteTask = runSuite(
     testSuite instanceof Array
       ? testSuite
       : [testSuite]
   )
 
-  if (safe) {
+  if (options.safe) {
     return suiteTask
   } else {
     formatterTerminal(suiteTask)

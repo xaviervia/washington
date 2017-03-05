@@ -1,10 +1,11 @@
-const {id} = require('zazen')
 const {set, prop} = require('partial.lenses')
 const {List} = require('immutable-ext')
 const Task = require('folktale/data/task')
 const {deepEqual} = require('assert')
 
 const {Failure, Pending, Success} = require('./data/status')
+
+const id = x => x
 
 const matchesExpectation = ({expectedValue}, result) => {
   try {

@@ -1,5 +1,3 @@
-const {type} = require('zazen')
-
 const Pending = x => ({
   '@@value': x,
   '@@type': 'Pending',

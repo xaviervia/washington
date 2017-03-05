@@ -3,6 +3,9 @@
   "packages": [
     "packages/washington",
     "packages/washington.core",
+    "packages/washington.examples.browser",
+    "packages/washington.examples.terminal",
+    "packages/washington.formatter.browser",
     "packages/washington.formatter.terminal",
     "packages/washington.formatter.tap",
     "packages/washington.formatter.json"

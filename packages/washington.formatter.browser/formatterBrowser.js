@@ -1,19 +1,17 @@
 const {set, prop} = require('partial.lenses')
-const {green, red, yellow, grey} = require('chalk')
 const {task} = require('folktale/data/task')
+const {red, yellow, green} = require('./colors')
 
 const id = x => x
 
-const formatFailure = (description, {message, stack}) =>
-  red(`${description}
+const formatFailure = (description, {message, stack}) => [
+  `%c ${description}
 ${message}
-${stack.map(line => `  ${line}`).join('\n')}`)
+${stack.map(line => `  ${line}`).join('\n')}`, `color: ${red}`]
 
-const formatPending = description =>
-  yellow(`${description}`)
+const formatPending = description => [`%c ${description}`, `color: ${yellow}`]
 
-const formatSuccess = description =>
-  green(`${description}`)
+const formatSuccess = description => [`%c ${description}`, `color: ${green}`]
 
 const setMessage = example => set(
   prop('message'),
@@ -31,7 +29,7 @@ module.exports = suiteTask =>
   suiteTask
     .map(resultList => resultList.map(setMessage))
     .chain(resultList => task(({resolve}) => {
-      resultList.map(({message}) => { console.log(message) })
+      resultList.map(({message}) => { console.log(...message) })
 
       const totals = resultList
         .toJSON()
@@ -47,18 +45,18 @@ module.exports = suiteTask =>
       const totalsToPrint = [
         {
           total: totals.success,
-          message: green(`${totals.success} successful`)
+          message: `${totals.success} successful`
         },
         {
           total: totals.pending,
-          message: yellow(`${totals.pending} pending`)
+          message: `${totals.pending} pending`
         },
         {
           total: totals.failure,
-          message: red(`${totals.failure} failing`)
+          message: `${totals.failure} failing`
         }
-      ].filter(({total}) => total > 0).map(({message}) => message).join(grey(' • '))
-      console.log('\n' + totalsToPrint)
+      ].filter(({total}) => total > 0).map(({message}) => message).join(' • ')
+      console.log(totalsToPrint)
 
       resolve(resultList)
     }))
