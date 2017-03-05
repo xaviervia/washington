@@ -19,6 +19,8 @@
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
-    "washington.core": "2.0.0-rc.0"
+    "washington.core": "2.0.0-rc.0",
+    "immutable": "^3.8.1",
+    "immutable-ext": "^1.0.8"
   }
 }
