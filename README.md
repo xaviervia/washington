@@ -4,6 +4,10 @@
 
 A pure, functional—as much as it can be in JavaScript—unit testing tool with a straightforward API.
 
+```
+> yarn add washington --dev
+```
+
 ## Cheat sheet
 
 #### Programmatically:
