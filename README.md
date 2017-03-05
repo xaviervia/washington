@@ -247,7 +247,7 @@ module.exports = [
   …
 ```
 
-> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a [plethora of opportunities to organize your tests as it better pleases you](#a-proposal-the-code-document).
+> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a plethora of opportunities to organize your tests as it better pleases you.
 
 ### Working with multiple test files
 
@@ -332,7 +332,7 @@ There are two reasons:
 1. You can namespace you example descriptions. `'Addition: 1 and 1 give 2'`.
 2. If you need a deeply nested structure of tests, there’s probably room for simplification in the app/library.
 
-But sure some of you disagree! Well, if you for some reason you really like Washington’s approach and would like to use it, but you also really want to get a nested structure of tests, remember: examples are just plain JavaScript objects. You are more than welcome to add a `namespace` or `breadcrumbs` property to them and use it in a custom formatter to organize the output of the test suite. Go ahead to the [advanced usage](#advanced-usage) section for an explanation of how to write a formatter (it’s not hard either).
+But sure some of you disagree! Well, if you for some reason you really like Washington’s approach and would like to use it, but you also really want to get a nested structure of tests, remember: examples are just plain JavaScript objects. You are more than welcome to add a `namespace` or `breadcrumbs` property to them and use it in a custom formatter to organize the output of the test suite.
 
 ## Why do you say this is functional?
 
