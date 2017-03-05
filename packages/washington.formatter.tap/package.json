@@ -1,0 +1,25 @@
+{
+  "name": "washington.formatter.tap",
+  "version": "2.0.0-rc.1",
+  "description": "Test Anything Protocol (TAP) terminal output formatter for the Washington unit test library",
+  "main": "formatterTAP.js",
+  "scripts": {
+    "test": "node testEntrypoint"
+  },
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Vía Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "folktale": "^2.0.0-alpha2",
+    "partial.lenses": "^9.4.1"
+  },
+  "devDependencies": {
+    "washington.core": "^2.0.0-rc.1",
+    "immutable": "^3.8.1",
+    "immutable-ext": "^1.0.8"
+  }
+}

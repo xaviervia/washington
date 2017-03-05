@@ -1,0 +1,21 @@
+{
+  "name": "washington.formatter.json",
+  "version": "2.0.0-rc.1",
+  "description": "",
+  "main": "formatterJSON.js",
+  "scripts": {
+    "test": "node testEntrypoint"
+  },
+  "keywords": [],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "partial.lenses": "^9.4.1"
+  },
+  "devDependencies": {
+    "washington.core": "^2.0.0-rc.1",
+    "folktale": "^2.0.0-alpha2",
+    "immutable": "^3.8.1",
+    "immutable-ext": "^1.0.8"
+  }
+}

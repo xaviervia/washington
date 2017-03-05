@@ -1,0 +1,25 @@
+{
+  "name": "washington.core",
+  "version": "2.0.0-rc.1",
+  "description": "Core functionality of the Washington unit test library",
+  "main": "runSuite.js",
+  "scripts": {
+    "test": "node testEntrypoint"
+  },
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "folktale": "^2.0.0-alpha2",
+    "immutable": "^3.8.1",
+    "immutable-ext": "^1.0.8",
+    "partial.lenses": "^9.4.1"
+  },
+  "devDependencies": {
+    "chalk": "^1.1.3"
+  }
+}

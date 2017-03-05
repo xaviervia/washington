@@ -1,798 +1,360 @@
-Washington
-==========
+# Washington
 
-> Little George sets a good example
+[![https://travis-ci.org/xaviervia/washington.svg?branch=master](https://travis-ci.org/xaviervia/washington.svg?branch=master)](https://travis-ci.org/xaviervia/washington/builds) [![npm version](https://img.shields.io/npm/v/washington.svg?maxAge=10000)](https://www.npmjs.com/package/washington)
 
-[ ![Codeship Status for xaviervia/washington](https://codeship.io/projects/b9498dd0-d7b0-0131-28b3-76d451bab93b/status)](https://codeship.io/projects/23932)
+A pure, functional—as much as it can be in JavaScript—unit testing tool with a straightforward API.
 
-Example Driven Development for Node.js.
-
-Low footprint. Unique features:
-
-- [Passive assertions](https://github.com/xaviervia/washington/wiki/Passive-Assertions).
-  Throw errors, use the callback function or just set return values. No need
-  for any separate assertion library.
-- Stupidly simple asynchronous support.
-- Programmatically usable report (`washington.failing().length`)
-
-You can also see the introductory website on
-[xaviervia.github.io/washington](http://xaviervia.github.io/washington)
-
-Installation
-------------
+## Installation
 
 ```
-npm install -g washington
+npm install washington --dev
 ```
 
-Usage
------
+## Cheat sheet
 
-### Basic example
+#### Programmatically:
 
 ```javascript
-var example = require("washington");
+import washington, {example} from 'washington'
 
-example("2 + 2 should be 4", function (check) {
-  check( 2 + 2, 4 );
-});
-
-example.go();
+washington(
+  example('1 + 1 is 2', check => check(1 + 1), 2)
+)
 ```
 
-**Washington** runs the examples when the `go` method is called. By default,
-each successful, pending or failing example is printed to the console and
-the application ends with an exit code of `0` (success) if no example failed,
-or with the amount of failing examples (more than `0` means failure).
-
-> Note: I'm naming the module `example` even when the internal name is
-> `Washington` and I'll maintain this inconsistency accross the
-> documentation. This is because I strongly recommend using `example` to
-> make the purpose explicit. Please bear in mind that all of `Washington`
-> methods as stated in the documentation below are accessible through
-> `example` in these introductory snippets.
-
-### Failing example
+#### From the command line:
 
 ```javascript
-var example = require("washington");
+// test.js
+import {example} from 'washington'
 
-example("2 + 2 should be 5", function (check) {
-  check( 2 + 2, 5 );
-});
-
-example.go();
+export default example('1 + 1 is 2', check => check(1 + 1), 2)
 ```
 
-### Pending example
+```
+> washington test.js
+```
 
-> Oh yes, I missed having "pending". I'm looking at you,
-> [**Jasmine**](jasmine.github.io)
+#### Asynchronous examples work out of the box:
 
 ```javascript
-var example = require("washington");
-
-example("2 + 2 should be 4");
-
-example.go();
+example('value will be 1', check => setTimeout(() => check(1)), 1)
 ```
 
-### Asynchronous example
+#### You can compare complex object/array structures, no problem:
 
-The main difference between synchronous and asynchronous examples is that
-asynchronous ones require to be told:
-
-- When is the example complete
-- What has been the error, if any
-
-This is achieved by waiting for the `check` function to be invoked. The
-`check` function is received by the example function as an argument.
+Assertions are done with `assert.deepEqual`, so this works out of the box as well.
 
 ```javascript
-var example = require("washington");
-
-example("2 + 2 will be 4", function (check) {
-  var result = 2 + 2;
-  setTimeout(function () {
-    check( result, 4 );
-  }, 100);
-});
-
-example.go();
+example(
+  'the object should have the expected structure',
+  check => check({ a: [1, '2', false] }),
+  { a: [1, '2', false] }
+)
 ```
 
-Please note that if the example function receives an argument, the example
-will be assumed to not be complete until `check` is invoked and will timeout
-if it is never executed. The default timeout span is `3000` milliseconds.
-You can change the timeout by editing the `timeout` property of `Washington`:
+#### There is a shorthand for synchronous examples: just return the value:
 
 ```javascript
-var example = require("washington");
-
-example.timeout = 10000;
+example('1 + 1 is 2 and synchronously so', () => 1 + 1, 2)
 ```
 
-### Set custom message on failing expectations
-
-You can set a custom message when an example fails and get then a nice
-message in the `AssertionError`:
+#### Examples without a test scenario are considered pending. Washington is your unit test to-do list:
 
 ```javascript
-var example = require("washington");
-
-example("2 + 2 should be 5", function (check) {
-  check( 2 + 2 == 5 || "The sum doesn't result in 5");
-});
-
-example.go();
+example('so test, many unit')
 ```
 
-You can also send in a full `Error` object:
+#### To make it work in the browser, just replace the output formatter:
 
 ```javascript
-var example = require("washington");
+import washington, {example, suite} from 'washington'
+import washingtonFormatterBrowser from 'washington.formatter.browser'
 
-example("2 + 2 should be 5", function (check) {
-  check( 2 + 2 == 5 || new Error("The sum doesn't result in 5") );
-});
+const suiteTask = washington(
+  example('1 + 2 is 3', check => check(1 + 2), 3),
+  { safe: true }
+)
 
-example.go();
+washingtonFormatterBrowser(suiteTask).run()
 ```
 
-> You can read more about [Passive Assertions](https://github.com/xaviervia/washington/wiki/Passive-Assertions)
+There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
 
-### Sequential execution
+#### The `example` helper function is completely optional.
 
-Asynchronous examples are run one at a time. Washington is designed to do
-this because many real life testing scenarios involve tests that interact
-with the same objects or servers concurrently and knowing the state of the
-server or object is significative to the example's completion. There is no
-plan for adding an option for running the examples simultaneously.
+Its just a shorthand to create the example object. You can do this as well:
 
 ```javascript
-var example = require("washington");
-
-var flag    = false;
-
-example("will set the flag to true", function (check) {
-  setTimeout(function () {
-    flag = true;
-    check();
-  }, 100);
-});
-
-example("the flag should be set to true", function (check) {
-  setTimeout(function () {
-    check( flag );
-  }, 10);
-});
-
-example.go();
-```
-
-### Dry run (no actual execution)
-
-Dry run lists the examples without actually running them.
-
-Useful for listing available examples.
-
-```javascript
-var example = require("washington");
-
-example('Example', function () { 10 });
-example('Pending example');
-example('Failing example', function (check) { check(1 === 2) });
-example('Async example', function () {});
-
-example.go({
-  dry: true
-});
-
-```
-
-### Use it as a command
-
-**Washington** provides a CLI for executing the examples without having to
-invoke `.go()` manually.
-
-```javascript
-var example = require("washington");
-
-function greet(name) {
-  return "Hello " + name + "!";
-}
-
-example("Lets greet Paulie", function (check) {
-  check( greet("Paulie"), "Hello Paulie!" );
-});
-
-module.exports = greet;
-```
-
-Then you call the command line tool with the file as argument
-
-```
-washington greet.js
-```
-
-You can also use the `--only`, `--start`, `--end` and `--match` filtering options:
-
-```
-washington greet.js --start=2 --end=5 --match=WIP
-```
-
-You can force the formatter to use only ascii characters with:
-
-```
-washington greet.js --ascii
-```
-
-If you just want to list the available tests, do a dry run
-
-```
-washington greet.js --dry
-```
-
-An interesting consequence of this approach is that the code file containing
-the examples is a fully functional module, requirable and production ready.
-Washington is added as a dependency, but that is not really a concern
-in many applications. The file itself does not contain any invocations that
-actually runs the examples, so they are just stored in memory unless
-you run them manually from another script.
-
-In essence, what the command line tool does is requiring **Washington**,
-requiring the target file and then running the example set. You can also
-require the script `greet.js` in another script that itself has some
-Washington examples and run them all together from the command line. As a
-way of organizing the examples, it is really concise and convenient.
-
-> Note that the CLI creates and then destroys a
-> [`.washington` artifact file](https://github.com/xaviervia/washington/wiki/Command-line-quirk:-Node's-require-isolation-policy)
-> in the working directory.
-
-Events
-------
-
-Washington provides a thorough event-driven interface for manipulating
-information about the examples' results programmatically.
-
-### `complete`
-
-Fires whenever the full report is ready.
-
-**Arguments sent to the callback:**
-
-- `Object` report
-- `Integer` exitCode
-
-**Sample:**
-
-```javascript
-washington.on("complete", function (report, code) {
-
-  // Log the results by hand
-  console.log("Successful: " + report.successful().length);
-  console.log("Pending: " + report.pending().length);
-  console.log("Failing: " + report.failing().length);
-
-  // Use the exit code to propagate failing status
-  process.exit(code);
-
-});
-```
-
-### `example`
-
-Fires whenever an example ran. Fires just after the corresponding `success`,
-`failure` or `pending` events by the same example.
-
-**Arguments sent to the callback**
-
-- `Washington.Pending` | `Washington.Success` | `Washington.Failure` example
-- `Object` report
-
-**Sample:**
-
-```javascript
-washington.on("example", function (example, report) {
-  console.log("Another example completed out of " + report.list.length);
-});
-```
-
-### `success`
-
-Fires whenever an example ran successfully. Fires just before the
-corresponding `example` event.
-
-**Arguments sent to the callback**
-
-- `Washington.Success` successObject
-- `Object` report
-
-### `failure`
-
-Fires whenever an example failed. Fires just before the corresponding
-`example` event.
-
-**Arguments sent to the callback**
-
-- `Washington.Failure` failureObject
-- `Object` report
-
-### `pending`
-
-Fires whenever an example is pending. Fires just before the corresponding
-`example` event.
-
-**Arguments sent to the callback**
-
-- `Washington.Pending` pendingObject
-- `Object` report
-
-### `promise`
-
-Fires whenever an example was found to be asynchronous and became a Promise.
-
-**Arguments sent to the callback**
-
-- `Washington.Promise` promiseObject
-- `Object` report
-
-### `empty`
-
-Is emitted whenever washington was instructed to run but no examples where
-actually selected. The filtering options are sent to the listener for
-reporting and debugging.
-
-**Arguments sent to the callback**
-
-- `Object` options
-- `Object` report
-
-### `dry`
-
-Fires for each example in the suite when doing a dry run.
-
-**Arguments sent to the callback**
-
-- `Washington.Example` exampleObject
-
-Properties
-----------
-
-- list: `Array` of examples
-- picked: `Array` of examples to actually be run
-- listeners: `Object` containing the events as key and the listeners as
-  value `Array`s
-- timeout: `Integer` amount of time in milliseconds before timeout. If
-  not set, default to `3000` milliseconds as specified in the `Promise`
-- formatter: `Object` containing methods that listen to their corresponding
-  events
-
-Methods
--------
-
-### on( event, callback ) | on( eventHash )
-
-> See [`Mediador.on`](https://github.com/xaviervia/mediador)
-
-### off( event, callback ) | off( eventHash )
-
-See [`Mediador.off`](https://github.com/xaviervia/mediador)
-
-### emit( event, data )
-
-See [`Mediador.emit`](https://github.com/xaviervia/mediador)
-
-### use( formatter )
-
-The `use` method allows you to change formatters easily.
-The `formatter` object is simply an object where each method maps to an event
-and Washington automatically hooks them and removes the previous formatter.
-
-For example, here is something like the minimalistic reporter from RSpec:
-
-```javascript
-var example = require("washington");
-var color   = require("cli-color");
-
-example.use({
-  success: function (success, report) {
-    process.stdout.write(color.green("."));
-  },
-
-  pending: function (pending, report) {
-    process.stdout.write(color.yellow("-"));
-  },
-
-  failure: function (failure, report) {
-    process.stdout.write(color.red("X"));
-  },
-
-  complete: function (report, code) {
-    process.exit(code);
-  }
-});
-
-example("Good", function (check) {
-  check( 1, 1 );
-});
-
-example("Pending");
-
-example("Bad", function (check) {
-  check( 1, 2 );
-});
-
-example.go();
-```
-
-**Silencing the output**
-
-Silencing the output is pretty straightforward. If you send anything
-to the `use` method that has no corresponding `example`, `success`, etc
-methods itself, the result will be that the default formatter will be
-removed but nothing added to replace it.
-
-```javascript
-var example = require("washington");
-
-example.use("silent");
-
-example("Will print nothing, do nothing");
-
-example.go();
-```
-
-### go( options )
-
-Runs the examples. If `options` are provided, filters the examples to run
-based on the provided criteria.  Emits `complete` once the last example in
-the picked range is emitted.
-
-```javascript
-var example = require("washington");
-
-example.go({
-  start: 7,       // Will start from the 7th example on
-  end: 10,        // Will stop at the 10th example
-  match: /WIP/,   // Will only select examples matching /WIP/
-  filter: function (example) {
-    // Will only select asynchronous examples
-    return example.function.length == 1
-  }
+import washington from 'washington'
+
+washington({
+  description: '1 + 1 is 2',
+  test: check => check(1 + 1),
+  expectedValue: 2
 })
 ```
 
-#### Arguments
-
-- _optional_ `Object` options
-  - _optional_ `Integer` start
-  - _optional_ `Integer` end
-  - _optional_ `Regexp`|`String` match
-  - _optional_ `Function` filter
-  - _optional_ `Boolean` dry
-
-### complete()
-
-Triggers the 'complete' event.
-
-### isComplete()
-
-Returns whether all the examples are ready or not.
-
-#### Returns
-
-- `Boolean` isComplete
-
-### successful()
-
-Returns the successful examples currently on the report.
-
-#### Returns
-
-- `Array` successfulExamples
-
-### failing()
-
-Returns the failing examples currently on the report.
-
-#### Returns
-
-- `Array` failingExamples
-
-### pending()
-
-Returns the pending examples currently on the report.
-
-#### Returns
-
-- `Array` pendingExamples
-
-### duration()
-
-Returns the total duration of all tests run, in milliseconds.
-
-#### Returns
-
-- `Integer` duration
-
-### reset()
-
-Sets washington to the defaults
-
-- Empties the `list` of examples
-- Empties the `picked` examples
-- Removes all event `listeners`
-- Sets the `timeout` to null (that will cause the default to be used)
-- Sets the default `formatter` to be used
-
-Washington.Example
-------------------
-
-### Properties
-
-- message: `String` the description of the example
-- function: `Function` the actual example
-- duration: `Integer` the amount of time it took to run, in milliseconds
-
-### Methods
-
-#### new Washington.Example( message, function )
-
-Creates a new `Washington.Example` which adds itself to the global `Washington`
-instance, both to the general `list` and to the `picked` list.
-
-> _Warning_: Creating a example consequently overwrites the contents of
-> the `picked` list. This makes sense since the example cannot proactively
-> filter itself once the criteria has been applied.
-
-##### Arguments
-
-- `String` message
-- `Function` function
-
-##### Returns
-
-- `Washington.Example` example
-
-#### run()
-
-Runs the example.
-
-If the example requires an argument, it is assumed that the result will
-be passed to the argument function, so the example becomes a promise and
-`run` returns the `Washington.Promise`
-
-If the example does not require an argument, it fails or succeeds according
-to whether the function throws an error or not. `run` then returns either a
-`Washington.Success` or `Washington.Failure`
-
-If the example has no function at all, it will become a `Washington.Pending`
-
-#### Returns
-
-- `Washington.Pending` | `Washington.Failure` | `Washington.Success` |
-  `Washington.Promise` adaptedExample
-
-Adapt it to a Failure forwarding the Error
-#### next()
-
-Returns the next example on the picked list or `undefined` if this is the
-last example there.
-
-Runs the next example if available. Otherwise declares the batch to be
-complete.
-
-##### Returns
-
-- `Washington.Example` next
-
-#### promise()
-
-Starts a [`Washington.Promise`](promise.md) pointing to the current
-example. Fires the `promise` event in `Washington` passing the `Promise`
-as argument. Returns the `Promise`.
-
-##### Returns
-
-- `Washington.Promise` promise
-
-#### succeeded()
-
-Gets a [`Washington.Success`](success.md) object for this example.
-Fires the `success` and `example` events on `Washington` passing the
-`Success` as argument.
-
-##### Returns
-
-- `Washington.Success` success
-
-#### failed()
-
-Gets a [`Washington.Failure`](failure.md) object for this example.
-Fires the `failure` and `example` events on `Washington` passing the
-`Failure` as argument.
-
-##### Returns
-
-- `Washington.Failure` failure
-
-#### pending()
-
-Gets a [`Washington.Pending`](pending.md) object for this example.
-Fires the `pending` and `example` events on `Washington` passing the
-`Pending` as argument.
-
-##### Returns
-
-- `Washington.Pending` pending
-
-Washington.Success
-------------------
-
-Class representing a successful to complete the example.
-
-#### Properties
-
-- message: `String`
-- function: `Function`
-- original: `Washington.Example`
-
-#### Constructor arguments
-
-- `Washington.Example` original
-
-### duration()
-
-Returns an `Integer` with the duration of the original event, in
-milliseconds
-
-#### Returns
-
-- `Integer` duration
-
-Washington.Failure
-------------------
-
-Class representing a failure to complete the example.
-
-#### Properties
-
-- message: `String`
-- function: `Function`
-- error: `Error`
-- original: `Washington.Example`
-
-#### Constructor arguments
-
-- `Washington.Example` original
-- `Error` error
-
-### duration()
-
-Returns an `Integer` with the duration of the original event, in
-milliseconds
-
-#### Returns
-
-- `Integer` duration
-
-Washington.Pending
-------------------
-
-Class representing an example in a pending status.
-
-#### Properties
-
-- message: `String`
-- original: `Washington.Example`
-
-#### Constructor arguments
-
-- `Washington.Example` original
-
-Washington.Promise
-------------------
-
-Represents a promise that the example will be ready eventually.
-
-If the example is not ready in 3 seconds it fails automatically with timeout.
-You can configure the timeout in the second argument as milliseconds.
-
-#### Properties
-
-- original: `Washington.Example`
-- ready: `Boolean`
-
-#### Constructor arguments
-
-- `Washington.Example` original
-- _optional_ `Integer`: timeout
-
-### done( [ result [, want] ] )
-
-Run the `done` method when the promise is fulfilled. Only runs if
-the promise was not `ready`.
-
-If there is no argument, the example is assumed to have succeeded and the
-promise will call the `succeeded` method of the original example.
-
-If there is an argument, the example is assumed to have failed and the
-argument is assumed to be an error. The error is then forwarded to the
-`failed` method of the original example.
-
-If there are two arguments, the first argument is assumed to be what the
-example got as a result while the second argument is assumed to be what
-was wanted to get as an outcome. The two arguments are then compared
-using the `===` operator. If the comparison returns `true` the example is
-considered to be passing: else, an `AssertionError` with the `got` and
-`want` properties set to the first and second arguments, and a message
-explaining the comparison.
-
-#### Arguments
-
-- _optional_ `Object` result
-- _optional_ `Object` want
-
-Washington.Formatter
---------------------
-
-This is the default formatter
-### success(example)
-
-Logs to `console.info` in green and adds a victory hand
-
-### pending(example)
-
-Logs to `console.warn` in yellow and adds writing hand
-
-### failure(example)
-
-Logs to `console.error` in red and adds a left pointing hand
-
-### dry(example)
-
-Logs to `console.warn` whether no examples were selected or no examples
-were found
-
-### empty(options)
-
-Logs to `console.warn` whether no examples were selected or no examples
-were found
-
-### complete(report, code)
-
-Logs the amount of pending, successful and failing examples and terminates the
-process using the `code` as the exit status.
-
-Washington.TimeoutError
------------------------
-
-Represents an error generated by timeout
-Washington.AssertionError
--------------------------
-
-Represents an error generated by a passive assertion (the example's return
-value)
-Testing
--------
-
-Washington tests are very low-level, because of course. It's almost a
-miracle than a test library can be tested without collapsing in a paradox.
-
-To run the tests, clone this repo and run:
-
-```
-npm install
-npm test
+Choose the style that suits you better.
+
+#### A test suite is just an array of tests:
+
+```javascript
+import washington from 'washington'
+
+washington([
+  {
+    description: '1 + 1 is 2',
+    test: check => check(1 + 1),
+    expectedValue: 2
+  },
+  {
+    description: '2 + 2 is 4',
+    test: check => check(2 + 2),
+    expectedValue: 4
+  }
+])
 ```
 
-License
--------
+…or
 
-Copyright 2014 Xavier Via
+```javascript
+import washington, {example} from 'washington'
 
-BSD 2 Clause license.
+washington([
+  example('1 + 1 is 2', check => check(1 + 1), 2),
+  example('2 + 2 is 4', check => check(2 + 2), 4)
+])
+```
 
-See [LICENSE](LICENSE) attached.
+…or with the fancy `suite` (that just creates an Array with the arguments, but damn it looks sweet):
+
+```javascript
+import washington, {example, suite} from 'washington'
+
+washington(
+  suite(
+    example('1 + 1 is 2', check => check(1 + 1), 2),
+    example('2 + 2 is 4', check => check(2 + 2), 4)
+  )
+)
+```
+
+#### Output [TAP](https://testanything.org/) instead of the default colors:
+
+```javascript
+const washington = require('washington')
+const washingtonFormatterTAP = require('washington.formatter.tap')
+const {example, suite} = washington
+
+const suiteTask = washington(
+  suite(
+    example('1 + 1 is 2', check => check(1 + 1), 2),
+    example('2 + 2 is 4', check => check(2 + 2), 4)
+  ),
+  {safe: true}
+)
+
+washingtonFormatterTAP(suiteTask).run()
+```
+
+#### Get JSON output instead of the default colors:
+
+```javascript
+const washington = require('washington')
+const washingtonFormatterJSON = require('washington.formatter.json')
+const {example, suite} = washington
+
+const suiteTask = washington(
+  suite(
+    example('1 + 1 is 2', check => check(1 + 1), 2),
+    example('2 + 2 is not 5', check => check(2 + 2), 5),
+    example('get chocolate as well')
+  ),
+  {safe: true}
+)
+
+washingtonFormatterJSON(suiteTask)
+  .map(result => {
+    console.log('object structure result', result)
+     // => [ { status: 'success',
+     //    description: '1 + 1 is 2',
+     //    expectedValue: 2 },
+     //  { status: 'failure',
+     //    description: '2 + 2 is not 5',
+     //    expectedValue: 5,
+     //    message: '4 deepEqual 5',
+     //    stack:
+     //     [ 'AssertionError: 4 deepEqual 5',
+     //       'at matchesExpectation …' ] },
+     //  { status: 'pending', description: 'get chocolate as well' } ]  
+  })
+  .run()
+```
+
+## A simple setup for a project using Washington as a test tool
+
+Washington is a library and a CLI, not a testing framework. This means that it does not enforce any file structure for testing and does not do any discovery of files in your project. So, how do you set it up to use it in yours?
+
+Say you have a project with the structure:
+
+```
+example-project/
+  src/
+    addition.js
+    addition.test.js
+  package.json
+```
+
+…and `addition.js` looks like:
+
+```javascript
+// src/addition.js
+function addition (x, y) {
+  return x + y
+}
+
+module.exports = addition
+```
+
+Then you can write the tests in the `addition.test.js` as follows:
+
+```javascript
+// src/addition.test.js
+const addition = require('./addition')
+
+module.exports = [
+  {
+    description: 'adding 1 and 1 gives 2',
+    test: check => check(addition(1, 1)),
+    expectedValue: 2
+  },
+  {
+    description: 'adding 1 and 3 gives 4',
+    test: check => check(addition(1, 3)),
+    expectedValue: 4
+  }
+]
+```
+
+…and in the `package.json` set the test script to use Washington with that file as input:
+
+```json
+  …
+  "scripts": {
+    "test": "washington src/addition.test.js"
+  }
+  …
+```
+
+> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a plethora of opportunities to organize your tests as it better pleases you.
+
+### Working with multiple test files
+
+OK, so what if I have another file in my project, that I want to test? Let’s add multiplication:
+
+```diff
+example-project/
+  src/
+    addition.js
+    addition.test.js
++    multiplication.js
++    multiplication.test.js
+  package.json
+```
+
+```javascript
+// src/multiplication.js
+function multiplication (x, y) {
+  return x * y
+}
+
+module.exports = multiplication
+```
+
+```javascript
+// src/multiplication.test.js
+const multiplication = require('./multiplication')
+
+module.exports = [
+  {
+    description: 'multiplying 1 by 1 gives 1',
+    test: check => check(multiplication(1, 1)),
+    expectedValue: 1
+  },
+  {
+    description: 'multiplying 2 by 3 gives 6',
+    test: check => check(multiplication(2, 3)),
+    expectedValue: 6
+  }
+]
+```
+
+Well, the exported values of these two test files (`addition.test.js` and `multiplication.test.js`) are just arrays. There is a very simple solution here. Let’s create and `src/index.test.js`:
+
+```diff
+example-project/
+  src/
+    addition.js
+    addition.test.js
+    multiplication.js
+    multiplication.test.js
++    index.test.js
+  package.json
+```
+
+```javascript
+// src/index.test.js
+const additionTest = require('./addition.test')
+const multiplicationTest = require('./multiplication.test')
+
+module.exports = additionTest.concat(multiplicationTest)
+```
+
+…and in the `package.json`:
+
+```json
+  …
+  "scripts": {
+    "test": "washington src/index.test"
+  }
+  …
+```
+
+Remember, there is nothing fancy going on here, your test are just data, so you can feel free to manipulate them that way. You can make a script that grabs all `.test.js` file by a glob pattern and concat them all together if you feel so inclined. Washington’s only concern is that you pass in an array of example objects.
+
+#### But what about namespaces?
+
+Washington is an opinionated tool regarding namespaces. Washington thinks you don’t need them.
+
+There are two reasons:
+
+1. You can namespace you example descriptions. `'Addition: 1 and 1 give 2'`.
+2. If you need a deeply nested structure of tests, there’s probably room for simplification in the app/library.
+
+But sure some of you disagree! Well, if you for some reason you really like Washington’s approach and would like to use it, but you also really want to get a nested structure of tests, remember: examples are just plain JavaScript objects. You are more than welcome to add a `namespace` or `breadcrumbs` property to them and use it in a custom formatter to organize the output of the test suite.
+
+## Why do you say this is functional?
+
+Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. In this sense Washington aims to be also future proof.
+
+> Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
+
+## Why "Washington"?
+
+- George Washington gave us all a good example
+- We all know that he can’t lie
+
+## Collaborating
+
+Tests for Washington are written in Washington. I really believe in [dogfooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) and [ain’t afraid of self reference](https://xkcd.com/917/).
+
+This library is transpiler free. I ❤️ Babel but it’s not necessary for this.
+
+## License
+
+Copyright 2014 Fernando Vía Canel
+
+BSD 2 Clause license
+
+[See LICENSE](LICENSE)

@@ -1,0 +1,34 @@
+{
+  "name": "washington",
+  "version": "2.0.0-rc.1",
+  "description": "A pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API",
+  "main": "index.js",
+  "bin": {
+    "washington": "./bin/washington.js"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaviervia/washington.git"
+  },
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/xaviervia/washington/issues"
+  },
+  "homepage": "https://github.com/xaviervia/washington#readme",
+  "dependencies": {
+    "washington.formatter.terminal": "^2.0.0-rc.1",
+    "washington.core": "^2.0.0-rc.1"
+  }
+}
