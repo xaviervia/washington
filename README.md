@@ -18,6 +18,8 @@ npm install -g washington
 
 ## Cheat sheet
 
+Washington exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
+
 #### From the command line:
 
 ```javascript
@@ -76,8 +78,6 @@ module.exports = [
 
 #### You can compare complex object/array structures, no problem:
 
-Assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message), so you Washington can compare between object structures:
-
 ```javascript
 module.exports = [
   {
@@ -88,10 +88,13 @@ module.exports = [
 ]
 ```
 
+Assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message).
+
 #### There is a shorthand for synchronous examples: just return the value
 
 ```javascript
 const add = (x, y) => x + y
+
 module.exports = [
   {
     it: 'returns 2 synchronously when adding 1 and 1',
@@ -133,31 +136,14 @@ const suiteTask = washington(
   { safe: true }
 )
 
-washingtonFormatterBrowser(suiteTask).run()
+suiteTask
+  .chain(washingtonFormatterBrowser)
+  .run()
 ```
 
 There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
 
-#### A test suite is just an array of tests:
-
-```javascript
-const washington = require('washington')
-
-const add = (x, y) => x + y
-
-washington([
-  {
-    it: 'returns 2 when adding 1 and 1',
-    when: check => check(add(1, 1)),
-    shouldEqual: 2
-  },
-  {
-    it: 'returns 4 when adding 2 and 2',
-    when: check => check(add(2, 2)),
-    shouldEqual: 4
-  }
-])
-```
+### Other formatters
 
 #### Output [TAP](https://testanything.org/) instead of the default colors:
 
@@ -183,10 +169,18 @@ const suiteTask = washington(
   {safe: true}
 )
 
-washingtonFormatterTAP(suiteTask).run()
+suiteTask
+  .chain(washingtonFormatterTAP)
+  .run()
 ```
 
 #### Get JSON output instead of the default colors:
+
+Unlike the TAP and default output formatters, `washington.formatter.json` does not set any exit code for the process, so unless you do that yourself the command will not be interpreted as failing by other commands (such as `npm`, `yarn`, `make`, …). The JSON output formatter is meant for programmatic usage. Maybe you want to use the results of the suite for something else other than unit testing? Displaying results of the test suite interactively in a REPL, or in the browser, sending them over a network…
+
+I always thought that a library like this might be useful for exercises such as [code koans](https://github.com/edgecase/ruby_koans).
+
+If you are interested in using it you can [check the JSON example object structure](packages/washington.formatter.json) // TODO
 
 ```javascript
 const washington = require('washington')
@@ -213,10 +207,12 @@ const suiteTask = washington(
   {safe: true}
 )
 
-washingtonFormatterJSON(suiteTask)
+suiteTask
+  .map(washingtonFormatterJSON)
   .map(result => {
     console.log('object structure result', result)
-     // => [ { status: 'success',
+     // => [
+     //  { status: 'success',
      //    description: '1 + 1 is 2',
      //    expectedValue: 2 },
      //  { status: 'failure',
@@ -228,6 +224,43 @@ washingtonFormatterJSON(suiteTask)
      //       'at matchesExpectation …' ] },
      //  { status: 'pending', description: 'get chocolate as well' } ]  
   })
+  .run()
+```
+
+## API
+
+The `washington` function takes two arguments and can return a `Task` when running `safe`:
+
+```javascript
+const suiteTask = washington(
+  testSuite, // explained in the previous examples
+  {
+    // When set to be `safe`, washington will not actually run anything.
+    // Instead, it will return a Folktale Task that you can consume
+    // to add your own output formatter or manipulate the result in any
+    // other way
+    safe: true
+  }
+)
+```
+
+The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. This operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
+
+To use the suite programmatically, you might want use the `washington.core` directly:
+
+```javascript
+const runSuiteTask = require('washington.core')
+
+const testSuite = [
+  {
+    it: 'returns 1',
+    when: () => 1,
+    shouldEqual: 1
+  }
+]
+
+runSuiteTask(testSuite)
+  .map(result => result.map(console.log))
   .run()
 ```
 
