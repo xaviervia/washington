@@ -10,35 +10,60 @@ A pure, functional—as much as it can be in JavaScript—unit testing tool with
 npm install washington --dev
 ```
 
-## Cheat sheet
+Washington provides a CLI, so you can install it globally to get the `washington` command:
 
-#### Programmatically:
-
-```javascript
-import washington, {example} from 'washington'
-
-washington(
-  example('1 + 1 is 2', check => check(1 + 1), 2)
-)
 ```
+npm install -g washington
+```
+
+## Cheat sheet
 
 #### From the command line:
 
 ```javascript
-// test.js
-import {example} from 'washington'
-
-export default example('1 + 1 is 2', check => check(1 + 1), 2)
+// tests.js
+module.exports = [
+  {
+    it: '1 + 1 is 2',
+    when: check => check(1 + 1),
+    shouldEqual: 2
+  },
+  {
+    it: '2 + 2 is 4',
+    when: check => check(2 + 2),
+    shouldEqual: 4
+  }
+]
 ```
 
 ```
 > washington test.js
 ```
 
+#### Programmatically:
+
+```javascript
+const washington = require('washington')
+
+washington([
+  {
+    it: '1 + 1 is 2',
+    when: check => check(1 + 1),
+    shouldEqual: 2
+  }
+])
+```
+
 #### Asynchronous examples work out of the box:
 
 ```javascript
-example('value will be 1', check => setTimeout(() => check(1)), 1)
+module.exports = [
+  {
+    it: 'will be 1',
+    when: check => setTimeout(() => check(1)),
+    shouldEqual: 1
+  }
+]
 ```
 
 #### You can compare complex object/array structures, no problem:
@@ -46,33 +71,54 @@ example('value will be 1', check => setTimeout(() => check(1)), 1)
 Assertions are done with `assert.deepEqual`, so this works out of the box as well.
 
 ```javascript
-example(
-  'the object should have the expected structure',
-  check => check({ a: [1, '2', false] }),
-  { a: [1, '2', false] }
-)
+module.exports = [
+  {
+    it: 'the object should have the expected structure',
+    when: check => check({ a: [1, '2', false] }),
+    shouldEqual: { a: [1, '2', false] }
+  }
+]
 ```
 
 #### There is a shorthand for synchronous examples: just return the value:
 
 ```javascript
-example('1 + 1 is 2 and synchronously so', () => 1 + 1, 2)
+module.exports = [
+  {
+    it: '1 + 1 is 2 and synchronously so',
+    when: () => 1 + 1,
+    shouldEqual: 2
+  }
+]
 ```
 
 #### Examples without a test scenario are considered pending. Washington is your unit test to-do list:
 
 ```javascript
-example('so test, many unit')
+module.exports = [
+  {
+    it: 'so test, many unit'
+  },
+  {
+    it: 'buys milk'
+  }
+]
 ```
 
 #### To make it work in the browser, just replace the output formatter:
 
 ```javascript
-import washington, {example, suite} from 'washington'
+import washington from 'washington'
 import washingtonFormatterBrowser from 'washington.formatter.browser'
 
 const suiteTask = washington(
-  example('1 + 2 is 3', check => check(1 + 2), 3),
+  [
+    {
+      it: '1 + 2 is 3',
+      when: check => check(1 + 2),
+      shouldEqual: 3
+    }
+  ],
   { safe: true }
 )
 
@@ -81,63 +127,23 @@ washingtonFormatterBrowser(suiteTask).run()
 
 There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
 
-#### The `example` helper function is completely optional.
-
-Its just a shorthand to create the example object. You can do this as well:
-
-```javascript
-import washington from 'washington'
-
-washington({
-  description: '1 + 1 is 2',
-  test: check => check(1 + 1),
-  expectedValue: 2
-})
-```
-
-Choose the style that suits you better.
-
 #### A test suite is just an array of tests:
 
 ```javascript
-import washington from 'washington'
+const washington = require('washington')
 
 washington([
   {
-    description: '1 + 1 is 2',
-    test: check => check(1 + 1),
-    expectedValue: 2
+    it: 'gives back 2 when adding 1 and 1',
+    when: check => check(1 + 1),
+    shouldEqual: 2
   },
   {
-    description: '2 + 2 is 4',
-    test: check => check(2 + 2),
-    expectedValue: 4
+    it: 'gives back 4 when adding 2 and 2',
+    when: check => check(2 + 2),
+    shouldEqual: 4
   }
 ])
-```
-
-…or
-
-```javascript
-import washington, {example} from 'washington'
-
-washington([
-  example('1 + 1 is 2', check => check(1 + 1), 2),
-  example('2 + 2 is 4', check => check(2 + 2), 4)
-])
-```
-
-…or with the fancy `suite` (that just creates an Array with the arguments, but damn it looks sweet):
-
-```javascript
-import washington, {example, suite} from 'washington'
-
-washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is 4', check => check(2 + 2), 4)
-  )
-)
 ```
 
 #### Output [TAP](https://testanything.org/) instead of the default colors:
@@ -145,13 +151,20 @@ washington(
 ```javascript
 const washington = require('washington')
 const washingtonFormatterTAP = require('washington.formatter.tap')
-const {example, suite} = washington
 
 const suiteTask = washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is 4', check => check(2 + 2), 4)
-  ),
+  [
+    {
+      it: 'gives back 2 when adding 1 and 1',
+      when: check => check(1 + 1),
+      shouldEqual: 2
+    },
+    {
+      it: 'gives back 4 when adding 2 and 2',
+      when: check => check(2 + 2),
+      shouldEqual: 4
+    }    
+  ],
   {safe: true}
 )
 
@@ -163,14 +176,23 @@ washingtonFormatterTAP(suiteTask).run()
 ```javascript
 const washington = require('washington')
 const washingtonFormatterJSON = require('washington.formatter.json')
-const {example, suite} = washington
 
 const suiteTask = washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is not 5', check => check(2 + 2), 5),
-    example('get chocolate as well')
-  ),
+  [
+    {
+      it: 'gives back 2 when adding 1 and 1',
+      when: check => check(1 + 1),
+      shouldEqual: 2
+    },
+    {
+      it: 'gives back 4 when adding 2 and 2',
+      when: check => check(2 + 2),
+      shouldEqual: 4
+    },
+    {
+      it: 'get chocolate as well'
+    }
+  ],
   {safe: true}
 )
 
@@ -225,13 +247,13 @@ const addition = require('./addition')
 
 module.exports = [
   {
-    description: 'adding 1 and 1 gives 2',
-    test: check => check(addition(1, 1)),
+    it: 'adding 1 and 1 gives 2',
+    when: check => check(addition(1, 1)),
     expectedValue: 2
   },
   {
-    description: 'adding 1 and 3 gives 4',
-    test: check => check(addition(1, 3)),
+    it: 'adding 1 and 3 gives 4',
+    when: check => check(addition(1, 3)),
     expectedValue: 4
   }
 ]
@@ -246,8 +268,6 @@ module.exports = [
   }
   …
 ```
-
-> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a plethora of opportunities to organize your tests as it better pleases you.
 
 ### Working with multiple test files
 
@@ -278,14 +298,14 @@ const multiplication = require('./multiplication')
 
 module.exports = [
   {
-    description: 'multiplying 1 by 1 gives 1',
-    test: check => check(multiplication(1, 1)),
-    expectedValue: 1
+    it: 'multiplying 1 by 1 gives 1',
+    when: check => check(multiplication(1, 1)),
+    shouldEqual: 1
   },
   {
-    description: 'multiplying 2 by 3 gives 6',
-    test: check => check(multiplication(2, 3)),
-    expectedValue: 6
+    it: 'multiplying 2 by 3 gives 6',
+    when: check => check(multiplication(2, 3)),
+    shouldEqual: 6
   }
 ]
 ```
