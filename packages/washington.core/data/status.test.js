@@ -2,48 +2,48 @@ const {Pending, Failure, Success} = require('./status')
 
 module.exports = [
   {
-    description: 'Pending supports map',
-    test: () => Pending(2).map(x => x + 2)['@@value'],
-    expectedValue: 4
+    it: 'Pending supports map',
+    when: () => Pending(2).map(x => x + 2)['@@value'],
+    shouldEqual: 4
   },
   {
-    description: 'Pending supports fold',
-    test: () => Pending(3).fold(x => x),
-    expectedValue: 3
+    it: 'Pending supports fold',
+    when: () => Pending(3).fold(x => x),
+    shouldEqual: 3
   },
   {
-    description: 'Pending supports match',
-    test: () => Pending(4).match({Pending: x => x + 2})['@@value'],
-    expectedValue: Pending(6)['@@value']
+    it: 'Pending supports match',
+    when: () => Pending(4).match({Pending: x => x + 2})['@@value'],
+    shouldEqual: Pending(6)['@@value']
   },
   {
-    description: 'Failure supports map',
-    test: () => Failure(2).map(x => x + 2)['@@value'],
-    expectedValue: 4
+    it: 'Failure supports map',
+    when: () => Failure(2).map(x => x + 2)['@@value'],
+    shouldEqual: 4
   },
   {
-    description: 'Failure supports fold',
-    test: () => Failure(3).fold(x => x),
-    expectedValue: 3
+    it: 'Failure supports fold',
+    when: () => Failure(3).fold(x => x),
+    shouldEqual: 3
   },
   {
-    description: 'Failure supports match',
-    test: () => Failure(4).match({Failure: x => x + 2})['@@value'],
-    expectedValue: Failure(6)['@@value']
+    it: 'Failure supports match',
+    when: () => Failure(4).match({Failure: x => x + 2})['@@value'],
+    shouldEqual: Failure(6)['@@value']
   },
   {
-    description: 'Success supports map',
-    test: () => Success(2).map(x => x + 2)['@@value'],
-    expectedValue: 4
+    it: 'Success supports map',
+    when: () => Success(2).map(x => x + 2)['@@value'],
+    shouldEqual: 4
   },
   {
-    description: 'Success supports fold',
-    test: () => Success(3).fold(x => x),
-    expectedValue: 3
+    it: 'Success supports fold',
+    when: () => Success(3).fold(x => x),
+    shouldEqual: 3
   },
   {
-    description: 'Success supports match',
-    test: () => Success(4).match({Success: x => x + 2})['@@value'],
-    expectedValue: Success(6)['@@value']
+    it: 'Success supports match',
+    when: () => Success(4).match({Success: x => x + 2})['@@value'],
+    shouldEqual: Success(6)['@@value']
   }
 ]

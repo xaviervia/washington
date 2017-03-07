@@ -7,9 +7,9 @@ const {Failure, Pending, Success} = require('./data/status')
 
 const id = x => x
 
-const matchesExpectation = ({expectedValue}, result) => {
+const matchesExpectation = ({shouldEqual}, result) => {
   try {
-    deepEqual(result, expectedValue)
+    deepEqual(result, shouldEqual)
     return Success()
   } catch (e) {
     return Failure(e)
@@ -18,22 +18,22 @@ const matchesExpectation = ({expectedValue}, result) => {
 
 const hackToEnsureUniqueNameDespiteUglification = {
   ensureUniqueWashingtonNameDespiteUglification: (example, callback) => {
-    if (example.test == null) return callback(Pending())
+    if (example.when == null) return callback(Pending())
 
     try {
-      // Arity of 1 in the test indicates callback
-      if (example.test.length === 1) {
+      // Arity of 1 in the `when` function indicates a callback
+      if (example.when.length === 1) {
         const thatHackAgain = {
           ensureUniqueWashingtonNameDespiteUglification: result =>
             callback(matchesExpectation(example, result))
         }
 
-        example.test(
+        example.when(
           thatHackAgain.ensureUniqueWashingtonNameDespiteUglification
         )
       } else {
         callback(
-          matchesExpectation(example, example.test())
+          matchesExpectation(example, example.when())
         )
       }
     } catch (e) {
@@ -92,6 +92,34 @@ const setStatus = example => set(
   example
 )
 
+const exampleToJSON = example => ({
+  it: example.it,
+  result: example.result
+    .match({
+      Failure: result => ({
+        type: 'failure',
+        message: result.message,
+        stack: result.stack,
+        original: result.original
+      }),
+      Success: () => ({
+        type: 'success'
+      }),
+      Pending: () => ({
+        type: 'pending'
+      })
+    })
+    .fold(id),
+  when: example.when,
+  shouldEqual: example.shouldEqual
+})
+
+const resultListToJSON = resultList =>
+  resultList
+    .map(exampleToJSON)
+    .toJSON()
+
 module.exports = suite =>
   List(suite)
     .traverse(Task.of, getTestResult)
+    .map(resultListToJSON)

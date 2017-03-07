@@ -1,138 +1,144 @@
-const runSuite = require('./runSuite')
+const {task} = require('folktale/data/task')
+const runSuiteTask = require('./runSuiteTask')
 
 module.exports = [
   {
-    description: 'runSuite: a successful test',
-    test: check => {
-      runSuite([
+    it: 'runSuiteTask: a successful test',
+    when: check => {
+      runSuiteTask([
         {
-          description: '1 is 1',
-          test: () => 1,
-          expectedValue: 1
+          it: '1 is 1',
+          when: () => 1,
+          shouldEqual: 1
         }
       ])
-        .map(resultList => {
-          const result = resultList.toJSON()
+        .chain(suiteResult => task(({resolve}) => {
           check({
-            type: result[0].result['@@type'],
-            description: result[0].description,
-            expectedValue: result[0].expectedValue
+            type: suiteResult[0].result.type,
+            it: suiteResult[0].it,
+            shouldEqual: suiteResult[0].shouldEqual
           })
-        })
+
+          resolve()
+        }))
         .run()
     },
-    expectedValue: {
-      type: 'Success',
-      description: '1 is 1',
-      expectedValue: 1
+    shouldEqual: {
+      type: 'success',
+      it: '1 is 1',
+      shouldEqual: 1
     }
   },
 
   {
-    description: 'runSuite: a failing test (assertion error)',
-    test: check => {
-      runSuite([
+    it: 'runSuiteTask: a failing test (assertion error)',
+    when: check => {
+      runSuiteTask([
         {
-          description: '1 will fail to be 2',
-          test: () => 1,
-          expectedValue: 2
+          it: '1 will fail to be 2',
+          when: () => 1,
+          shouldEqual: 2
         }
       ])
-        .map(resultArray => {
-          const result = resultArray.toJSON()
+        .chain(suiteResult => task(({resolve}) => {
           check({
-            type: result[0].result['@@type'],
-            message: result[0].result['@@value'].message,
-            description: result[0].description,
-            expectedValue: result[0].expectedValue
+            type: suiteResult[0].result.type,
+            message: suiteResult[0].result.message,
+            it: suiteResult[0].it,
+            shouldEqual: suiteResult[0].shouldEqual
           })
-        })
+
+          resolve()
+        }))
         .run()
     },
-    expectedValue: {
-      type: 'Failure',
+    shouldEqual: {
+      type: 'failure',
       message: '1 deepEqual 2',
-      description: '1 will fail to be 2',
-      expectedValue: 2
+      it: '1 will fail to be 2',
+      shouldEqual: 2
     }
   },
 
   {
-    description: 'runSuite: a failing test (crashing)',
-    test: check => {
-      runSuite([
+    it: 'runSuiteTask: a failing test (crashing)',
+    when: check => {
+      runSuiteTask([
         {
-          description: 'there is no Narnia',
-          test: () => { throw new Error('no Narnia') },
-          expectedValue: 'Narnia?'
+          it: 'there is no Narnia',
+          when: () => { throw new Error('no Narnia') },
+          shouldEqual: 'Narnia?'
         }
       ])
-        .map(resultArray => {
-          const result = resultArray.toJSON()
+        .chain(suiteResult => task(({resolve}) => {
           check({
-            type: result[0].result['@@type'],
-            message: result[0].result['@@value'].message,
-            description: result[0].description,
-            expectedValue: result[0].expectedValue
+            type: suiteResult[0].result.type,
+            message: suiteResult[0].result.message,
+            it: suiteResult[0].it,
+            shouldEqual: suiteResult[0].shouldEqual
           })
-        })
+
+          resolve()
+        }))
         .run()
     },
-    expectedValue: {
-      type: 'Failure',
+    shouldEqual: {
+      type: 'failure',
       message: 'no Narnia',
-      description: 'there is no Narnia',
-      expectedValue: 'Narnia?'
+      it: 'there is no Narnia',
+      shouldEqual: 'Narnia?'
     }
   },
 
   {
-    description: 'runSuite: a pending test',
-    test: check => {
-      runSuite([
+    it: 'runSuiteTask: a pending test',
+    when: check => {
+      runSuiteTask([
         {
-          description: 'buy milk'
+          it: 'buy milk'
         }
       ])
-        .map(resultArray => {
-          const result = resultArray.toJSON()
+        .chain(suiteResult => task(({resolve}) => {
           check({
-            type: result[0].result['@@type'],
-            description: result[0].description
+            type: suiteResult[0].result.type,
+            it: suiteResult[0].it
           })
-        })
+
+          resolve()
+        }))
         .run()
     },
-    expectedValue: {
-      type: 'Pending',
-      description: 'buy milk'
+    shouldEqual: {
+      type: 'pending',
+      it: 'buy milk'
     }
   },
 
   {
-    description: 'runSuite: an async test',
-    test: check => {
-      runSuite([
+    it: 'runSuiteTask: an async test',
+    when: check => {
+      runSuiteTask([
         {
-          description: 'buy milk in a while',
-          test: check => setTimeout(() => check('milk')),
-          expectedValue: 'milk'
+          it: 'buy milk in a while',
+          when: check => setTimeout(() => check('milk')),
+          shouldEqual: 'milk'
         }
       ])
-        .map(resultArray => {
-          const result = resultArray.toJSON()
+        .chain(suiteResult => task(({resolve}) => {
           check({
-            type: result[0].result['@@type'],
-            description: result[0].description,
-            expectedValue: result[0].expectedValue
+            type: suiteResult[0].result.type,
+            it: suiteResult[0].it,
+            shouldEqual: suiteResult[0].shouldEqual
           })
-        })
+
+          resolve()
+        }))
         .run()
     },
-    expectedValue: {
-      type: 'Success',
-      description: 'buy milk in a while',
-      expectedValue: 'milk'
+    shouldEqual: {
+      type: 'success',
+      it: 'buy milk in a while',
+      shouldEqual: 'milk'
     }
   }
 ]

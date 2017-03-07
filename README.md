@@ -57,7 +57,7 @@ washington([
     when: check => check(add(1, 1)),
     shouldEqual: 2
   }
-])
+]).run()
 ```
 
 #### Asynchronous examples work out of the box:
@@ -227,6 +227,10 @@ suiteTask
   .run()
 ```
 
+## Writing your own formatter:
+
+// TODO
+
 ## API
 
 The `washington` function takes two arguments and can return a `Task` when running `safe`:
@@ -245,24 +249,6 @@ const suiteTask = washington(
 ```
 
 The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. This operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
-
-To use the suite programmatically, you might want use the `washington.core` directly:
-
-```javascript
-const runSuiteTask = require('washington.core')
-
-const testSuite = [
-  {
-    it: 'returns 1',
-    when: () => 1,
-    shouldEqual: 1
-  }
-]
-
-runSuiteTask(testSuite)
-  .map(result => result.map(console.log))
-  .run()
-```
 
 ## A simple setup for a project using Washington as a test tool
 
