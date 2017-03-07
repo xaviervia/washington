@@ -24,12 +24,12 @@ npm install -g washington
 // tests.js
 module.exports = [
   {
-    it: '1 + 1 is 2',
+    it: 'returns 2 when adding 1 and 1',
     when: check => check(1 + 1),
     shouldEqual: 2
   },
   {
-    it: '2 + 2 is 4',
+    it: 'returns 4 when adding 2 and 2',
     when: check => check(2 + 2),
     shouldEqual: 4
   }
@@ -47,7 +47,7 @@ const washington = require('washington')
 
 washington([
   {
-    it: '1 + 1 is 2',
+    it: 'returns 2 when adding 1 and 1',
     when: check => check(1 + 1),
     shouldEqual: 2
   }
@@ -59,7 +59,7 @@ washington([
 ```javascript
 module.exports = [
   {
-    it: 'will be 1',
+    it: 'will eventually be 1',
     when: check => setTimeout(() => check(1)),
     shouldEqual: 1
   }
@@ -73,19 +73,19 @@ Assertions are done with `assert.deepEqual`, so this works out of the box as wel
 ```javascript
 module.exports = [
   {
-    it: 'the object should have the expected structure',
+    it: 'has the expected data structure',
     when: check => check({ a: [1, '2', false] }),
     shouldEqual: { a: [1, '2', false] }
   }
 ]
 ```
 
-#### There is a shorthand for synchronous examples: just return the value:
+#### There is a shorthand for synchronous examples: just return the value
 
 ```javascript
 module.exports = [
   {
-    it: '1 + 1 is 2 and synchronously so',
+    it: 'returns 2 synchronously when adding 1 and 1',
     when: () => 1 + 1,
     shouldEqual: 2
   }
@@ -97,7 +97,7 @@ module.exports = [
 ```javascript
 module.exports = [
   {
-    it: 'so test, many unit'
+    it: 'is so test, many unit'
   },
   {
     it: 'buys milk'
@@ -114,7 +114,7 @@ import washingtonFormatterBrowser from 'washington.formatter.browser'
 const suiteTask = washington(
   [
     {
-      it: '1 + 2 is 3',
+      it: 'returns 3 when adding 1 and 2',
       when: check => check(1 + 2),
       shouldEqual: 3
     }
@@ -134,12 +134,12 @@ const washington = require('washington')
 
 washington([
   {
-    it: 'gives back 2 when adding 1 and 1',
+    it: 'returns 2 when adding 1 and 1',
     when: check => check(1 + 1),
     shouldEqual: 2
   },
   {
-    it: 'gives back 4 when adding 2 and 2',
+    it: 'returns 4 when adding 2 and 2',
     when: check => check(2 + 2),
     shouldEqual: 4
   }
@@ -155,12 +155,12 @@ const washingtonFormatterTAP = require('washington.formatter.tap')
 const suiteTask = washington(
   [
     {
-      it: 'gives back 2 when adding 1 and 1',
+      it: 'returns 2 when adding 1 and 1',
       when: check => check(1 + 1),
       shouldEqual: 2
     },
     {
-      it: 'gives back 4 when adding 2 and 2',
+      it: 'returns 4 when adding 2 and 2',
       when: check => check(2 + 2),
       shouldEqual: 4
     }    
@@ -180,17 +180,17 @@ const washingtonFormatterJSON = require('washington.formatter.json')
 const suiteTask = washington(
   [
     {
-      it: 'gives back 2 when adding 1 and 1',
+      it: 'returns 2 when adding 1 and 1',
       when: check => check(1 + 1),
       shouldEqual: 2
     },
     {
-      it: 'gives back 4 when adding 2 and 2',
+      it: 'returns 4 when adding 2 and 2',
       when: check => check(2 + 2),
       shouldEqual: 4
     },
     {
-      it: 'get chocolate as well'
+      it: 'gets chocolate as well'
     }
   ],
   {safe: true}
@@ -247,12 +247,12 @@ const addition = require('./addition')
 
 module.exports = [
   {
-    it: 'adding 1 and 1 gives 2',
+    it: 'returns 2 when adding 1 and 1',
     when: check => check(addition(1, 1)),
     expectedValue: 2
   },
   {
-    it: 'adding 1 and 3 gives 4',
+    it: 'returns 4 when adding 1 and 3',
     when: check => check(addition(1, 3)),
     expectedValue: 4
   }
@@ -298,12 +298,12 @@ const multiplication = require('./multiplication')
 
 module.exports = [
   {
-    it: 'multiplying 1 by 1 gives 1',
+    it: 'returns 1 when multiplying 1 by 1',
     when: check => check(multiplication(1, 1)),
     shouldEqual: 1
   },
   {
-    it: 'multiplying 2 by 3 gives 6',
+    it: 'returns 6 when multiplying 2 by 3',
     when: check => check(multiplication(2, 3)),
     shouldEqual: 6
   }
