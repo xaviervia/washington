@@ -22,15 +22,17 @@ npm install -g washington
 
 ```javascript
 // tests.js
+const add = (x, y) => x + y
+
 module.exports = [
   {
     it: 'returns 2 when adding 1 and 1',
-    when: check => check(1 + 1),
+    when: check => check(add(1, 1)),
     shouldEqual: 2
   },
   {
     it: 'returns 4 when adding 2 and 2',
-    when: check => check(2 + 2),
+    when: check => check(add(2, 2)),
     shouldEqual: 4
   }
 ]
@@ -45,10 +47,12 @@ module.exports = [
 ```javascript
 const washington = require('washington')
 
+const add = (x, y) => x + y
+
 washington([
   {
     it: 'returns 2 when adding 1 and 1',
-    when: check => check(1 + 1),
+    when: check => check(add(1, 1)),
     shouldEqual: 2
   }
 ])
@@ -57,18 +61,22 @@ washington([
 #### Asynchronous examples work out of the box:
 
 ```javascript
+const addLater = (x, y, callback) => {
+  setTimeout(() => callback(x + y))
+}
+
 module.exports = [
   {
-    it: 'will eventually be 1',
-    when: check => setTimeout(() => check(1)),
-    shouldEqual: 1
+    it: 'will eventually add 1 and 1 and pass 2 to the callback',
+    when: check => addLater(1, 1, result => check(result)),
+    shouldEqual: 2
   }
 ]
 ```
 
 #### You can compare complex object/array structures, no problem:
 
-Assertions are done with `assert.deepEqual`, so this works out of the box as well.
+Assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message), so you Washington can compare between object structures:
 
 ```javascript
 module.exports = [
@@ -83,10 +91,11 @@ module.exports = [
 #### There is a shorthand for synchronous examples: just return the value
 
 ```javascript
+const add = (x, y) => x + y
 module.exports = [
   {
     it: 'returns 2 synchronously when adding 1 and 1',
-    when: () => 1 + 1,
+    when: () => add(1, 1),
     shouldEqual: 2
   }
 ]
@@ -111,11 +120,13 @@ module.exports = [
 import washington from 'washington'
 import washingtonFormatterBrowser from 'washington.formatter.browser'
 
+const add = (x, y) => x + y
+
 const suiteTask = washington(
   [
     {
       it: 'returns 3 when adding 1 and 2',
-      when: check => check(1 + 2),
+      when: check => check(add(1, 2)),
       shouldEqual: 3
     }
   ],
@@ -132,15 +143,17 @@ There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue 
 ```javascript
 const washington = require('washington')
 
+const add = (x, y) => x + y
+
 washington([
   {
     it: 'returns 2 when adding 1 and 1',
-    when: check => check(1 + 1),
+    when: check => check(add(1, 1)),
     shouldEqual: 2
   },
   {
     it: 'returns 4 when adding 2 and 2',
-    when: check => check(2 + 2),
+    when: check => check(add(2, 2)),
     shouldEqual: 4
   }
 ])
@@ -152,16 +165,18 @@ washington([
 const washington = require('washington')
 const washingtonFormatterTAP = require('washington.formatter.tap')
 
+const add = (x, y) => x + y
+
 const suiteTask = washington(
   [
     {
       it: 'returns 2 when adding 1 and 1',
-      when: check => check(1 + 1),
+      when: check => check(add(1, 1)),
       shouldEqual: 2
     },
     {
       it: 'returns 4 when adding 2 and 2',
-      when: check => check(2 + 2),
+      when: check => check(add(2, 2)),
       shouldEqual: 4
     }    
   ],
@@ -177,16 +192,18 @@ washingtonFormatterTAP(suiteTask).run()
 const washington = require('washington')
 const washingtonFormatterJSON = require('washington.formatter.json')
 
+const add = (x, y) => x + y
+
 const suiteTask = washington(
   [
     {
       it: 'returns 2 when adding 1 and 1',
-      when: check => check(1 + 1),
+      when: check => check(add(1, 1)),
       shouldEqual: 2
     },
     {
       it: 'returns 4 when adding 2 and 2',
-      when: check => check(2 + 2),
+      when: check => check(add(2, 2)),
       shouldEqual: 4
     },
     {
@@ -268,6 +285,8 @@ module.exports = [
   }
   …
 ```
+
+The output of this will be: // TODO image
 
 ### Working with multiple test files
 
