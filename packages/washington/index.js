@@ -12,14 +12,15 @@ const washington = (testSuite, options = {}) => {
     return suiteTask
   } else {
     return suiteTask
-      .chain(formatterTerminal)
+      .chain(formatterTerminal(console.log))
       .map(suiteResult => {
         // this could be a Task, but it's pointless, because it will quit anyway
-        const failingExamples = resultArray
+        const failingExamples = suiteResult
           .filter(example => example.result.type === 'failure')
 
         process.exit(failingExamples.length)
       })
+      .run()
   }
 }
 

@@ -57,7 +57,7 @@ washington([
     when: check => check(add(1, 1)),
     shouldEqual: 2
   }
-]).run()
+])
 ```
 
 #### Asynchronous examples work out of the box:

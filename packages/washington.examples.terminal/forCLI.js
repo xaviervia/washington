@@ -4,30 +4,30 @@ const multiplication = x => y => x * y
 
 module.exports = [
   {
-    description: '1 + 1 will be 2',
-    test: () => add(1)(1),
-    expectedValue: 2
+    it: 'returns 2 when adding 1 and 1',
+    when: () => add(1)(1),
+    shouldEqual: 2
   },
 
   {
-    description: '3 + 2 will be 5',
-    test: () => add(3)(2),
-    expectedValue: 5
+    it: 'returns 3 + 2 will be 5',
+    when: () => add(3)(2),
+    shouldEqual: 5
   },
 
   {
-    description: '4 * 5 will be 20',
-    test: () => multiply(4)(5),
-    expectedValue: 20
+    it: 'returns 20 when multiplying 4 by 5',
+    when: () => multiply(4)(5),
+    shouldEqual: 20
   },
 
   {
-    description: '4 * 5 will fail to be 25',
-    test: () => multiplication(4)(5),
-    expectedValue: 25
+    it: 'does not return 25 when multiplying 4 by 5',
+    when: () => multiplication(4)(5),
+    shouldEqual: 25
   },
 
   {
-    description: 'the test is not defined yet'
+    it: 'is not defined yet'
   }
 ]
