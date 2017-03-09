@@ -42,7 +42,7 @@ module.exports = [
 > washington test.js
 ```
 
-The Washington command exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
+The `washington` command exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
 
 #### Programmatically:
 
@@ -60,7 +60,7 @@ washington([
 ])
 ```
 
-By default the Washington function also exits the process with an exit code equal to the number of failing examples.
+By default the `washington` function also exits the process with an exit code equal to the number of failing examples.
 
 #### Asynchronous examples work out of the box:
 
