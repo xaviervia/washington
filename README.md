@@ -139,7 +139,7 @@ const suiteTask = washington(
 )
 
 suiteTask
-  .chain(washingtonFormatterBrowser)
+  .chain(washingtonFormatterBrowser(console.log))
   .run()
 ```
 
@@ -172,17 +172,17 @@ const suiteTask = washington(
 )
 
 suiteTask
-  .chain(washingtonFormatterTAP)
+  .chain(washingtonFormatterTAP(console.log))
   .run()
 ```
 
-#### Access the result of running the suite programmatically
+#### Access the test results programmatically
 
-Maybe you want to use the results of the suite for something else other than unit testing? Displaying results of the test suite interactively in a REPL, or in the browser, sending them over a network…
+Maybe you want to use this tool for something else other than simple unit testing? Displaying results interactively in a REPL, in the browser, or sending them over a network…
 
-I always thought that a library like this might be useful for exercises such as [code koans](https://github.com/edgecase/ruby_koans).
+I always thought that a library like this might be useful for exercises such as [Ruby Koans](https://github.com/edgecase/ruby_koans).
 
-If you are interested in using it you can [check the suite result object structure](#suite-result)
+Check the [suite result object structure](#suite-result) for details on the object structure that Washington puts inside the Task.
 
 ```javascript
 const washington = require('washington')
@@ -205,7 +205,7 @@ const suiteTask = washington(
       description: 'gets chocolate as well'
     }
   ],
-  {safe: true}
+  {safe: true} // This prevents the default output formatter from running
 )
 
 suiteTask
@@ -219,7 +219,7 @@ suiteTask
 
 ## API
 
-The `washington` function takes two arguments and can return a `Task` when running `safe`:
+The `washington` function takes two arguments. It returns a `Task` when running `safe`. When the `safe` option `false` or not set, it will quit the process before returning.
 
 ```javascript
 const suiteTask = washington(
@@ -232,13 +232,25 @@ const suiteTask = washington(
     safe: true
   }
 )
+
+suiteTask
+  .map(suiteResult => {
+    console.log(suiteResult)
+
+    return suiteResult
+  })
+
+suiteTask
+  .chain(suiteResult => Task.of(suiteResult))
 ```
 
-The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. This operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
+The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. These operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
+
+If you are not familiar with a fantasy land monad, think of `map` and `chain` as the `then` of a Promise.
 
 ### Suite Result
 
-The `suiteTask` contains a `suiteResult` that can be accessed via `map` or `chain`. That result structure looks like this:
+The `suiteResult` structure looks like this:
 
 ```javascript
 [
@@ -258,6 +270,8 @@ The `suiteTask` contains a `suiteResult` that can be accessed via `map` or `chai
   },
   {
     description: 'an error',
+    test: check => check(1 + 1),
+    shouldEqual: 3,
     result: {
       type: 'failure',
       message: 'the error message',
