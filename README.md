@@ -456,7 +456,7 @@ The project is a [multi-package repo managed with Lerna](https://lernajs.io/). T
 > npm run bootstrap
 ```
 
-This install lerna locally and then run `lerna bootstrap` that will set up all necessary symlinks between the packages.
+This installs lerna locally and then run `lerna bootstrap` that will set up all necessary symlinks between the packages.
 
 ## License
 
