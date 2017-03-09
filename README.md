@@ -28,13 +28,13 @@ const add = (x, y) => x + y
 
 module.exports = [
   {
-    it: 'returns 2 when adding 1 and 1',
-    when: check => check(add(1, 1)),
+    description: 'returns 2 when adding 1 and 1',
+    test: check => check(add(1, 1)),
     shouldEqual: 2
   },
   {
-    it: 'returns 4 when adding 2 and 2',
-    when: check => check(add(2, 2)),
+    description: 'returns 4 when adding 2 and 2',
+    test: check => check(add(2, 2)),
     shouldEqual: 4
   }
 ]
@@ -53,8 +53,8 @@ const add = (x, y) => x + y
 
 washington([
   {
-    it: 'returns 2 when adding 1 and 1',
-    when: check => check(add(1, 1)),
+    description: 'returns 2 when adding 1 and 1',
+    test: check => check(add(1, 1)),
     shouldEqual: 2
   }
 ])
@@ -69,8 +69,8 @@ const addLater = (x, y, callback) => {
 
 module.exports = [
   {
-    it: 'will eventually add 1 and 1 and pass 2 to the callback',
-    when: check => addLater(1, 1, result => check(result)),
+    description: 'will eventually add 1 and 1 and pass 2 to the callback',
+    test: check => addLater(1, 1, result => check(result)),
     shouldEqual: 2
   }
 ]
@@ -81,8 +81,8 @@ module.exports = [
 ```javascript
 module.exports = [
   {
-    it: 'has the expected data structure',
-    when: check => check({ a: [1, '2', false] }),
+    description: 'has the expected data structure',
+    test: check => check({ a: [1, '2', false] }),
     shouldEqual: { a: [1, '2', false] }
   }
 ]
@@ -97,8 +97,8 @@ const add = (x, y) => x + y
 
 module.exports = [
   {
-    it: 'returns 2 synchronously when adding 1 and 1',
-    when: () => add(1, 1),
+    description: 'returns 2 synchronously when adding 1 and 1',
+    test: () => add(1, 1),
     shouldEqual: 2
   }
 ]
@@ -109,10 +109,10 @@ module.exports = [
 ```javascript
 module.exports = [
   {
-    it: 'is so test, many unit'
+    description: 'is so test, many unit'
   },
   {
-    it: 'buys milk'
+    description: 'buys milk'
   }
 ]
 ```
@@ -128,8 +128,8 @@ const add = (x, y) => x + y
 const suiteTask = washington(
   [
     {
-      it: 'returns 3 when adding 1 and 2',
-      when: check => check(add(1, 2)),
+      description: 'returns 3 when adding 1 and 2',
+      test: check => check(add(1, 2)),
       shouldEqual: 3
     }
   ],
@@ -156,13 +156,13 @@ const add = (x, y) => x + y
 const suiteTask = washington(
   [
     {
-      it: 'returns 2 when adding 1 and 1',
-      when: check => check(add(1, 1)),
+      description: 'returns 2 when adding 1 and 1',
+      test: check => check(add(1, 1)),
       shouldEqual: 2
     },
     {
-      it: 'returns 4 when adding 2 and 2',
-      when: check => check(add(2, 2)),
+      description: 'returns 4 when adding 2 and 2',
+      test: check => check(add(2, 2)),
       shouldEqual: 4
     }    
   ],
@@ -191,17 +191,17 @@ const add = (x, y) => x + y
 const suiteTask = washington(
   [
     {
-      it: 'returns 2 when adding 1 and 1',
-      when: check => check(add(1, 1)),
+      description: 'returns 2 when adding 1 and 1',
+      test: check => check(add(1, 1)),
       shouldEqual: 2
     },
     {
-      it: 'returns 4 when adding 2 and 2',
-      when: check => check(add(2, 2)),
+      description: 'returns 4 when adding 2 and 2',
+      test: check => check(add(2, 2)),
       shouldEqual: 4
     },
     {
-      it: 'gets chocolate as well'
+      description: 'gets chocolate as well'
     }
   ],
   {safe: true}
@@ -283,13 +283,13 @@ const addition = require('./addition')
 
 module.exports = [
   {
-    it: 'returns 2 when adding 1 and 1',
-    when: check => check(addition(1, 1)),
+    description: 'returns 2 when adding 1 and 1',
+    test: check => check(addition(1, 1)),
     expectedValue: 2
   },
   {
-    it: 'returns 4 when adding 1 and 3',
-    when: check => check(addition(1, 3)),
+    description: 'returns 4 when adding 1 and 3',
+    test: check => check(addition(1, 3)),
     expectedValue: 4
   }
 ]
@@ -336,13 +336,13 @@ const multiplication = require('./multiplication')
 
 module.exports = [
   {
-    it: 'returns 1 when multiplying 1 by 1',
-    when: check => check(multiplication(1, 1)),
+    description: 'returns 1 when multiplying 1 by 1',
+    test: check => check(multiplication(1, 1)),
     shouldEqual: 1
   },
   {
-    it: 'returns 6 when multiplying 2 by 3',
-    when: check => check(multiplication(2, 3)),
+    description: 'returns 6 when multiplying 2 by 3',
+    test: check => check(multiplication(2, 3)),
     shouldEqual: 6
   }
 ]
