@@ -449,6 +449,15 @@ Tests for Washington are written in Washington. I really believe in [dogfooding]
 
 This library is transpiler free. I ❤️ Babel but it’s not necessary for this.
 
+The project is a [multi-package repo managed with Lerna](https://lernajs.io/). To get started, clone and then run:
+
+```
+> npm install
+> npm run bootstrap
+```
+
+This install lerna locally and then run `lerna bootstrap` that will set up all necessary symlinks between the packages.
+
 ## License
 
 Copyright 2014 Fernando Vía Canel
