@@ -440,7 +440,7 @@ Washington is also friendly to a functional programming approach by providing a 
 
 ## Why "Washington"?
 
-- George Washington gave us all a good example
+- George Washington gave us a good example
 - We all know that he can’t lie
 
 ## Collaborating
