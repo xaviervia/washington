@@ -2,7 +2,7 @@
 
 [![https://travis-ci.org/xaviervia/washington.svg?branch=master](https://travis-ci.org/xaviervia/washington.svg?branch=master)](https://travis-ci.org/xaviervia/washington/builds) [![npm version](https://img.shields.io/npm/v/washington.svg?maxAge=1000)](https://www.npmjs.com/package/washington)
 
-A pure, functional—as much as it can be in JavaScript—unit testing tool with a straightforward API.
+A [pure, functional](#why-do-you-say-this-is-functional)—as much as it can be in JavaScript—unit testing tool with a dependency-free test suite API.
 
 ## Installation
 
@@ -246,7 +246,7 @@ suiteTask
 
 The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. These operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
 
-If you are not familiar with a fantasy land monad, think of `map` and `chain` as the `then` of a Promise.
+If you are not familiar with this, think of `map` and `chain` as the `then` of a Promise. In the ["Why do you say this is functional"](#why-do-you-say-this-is-functional) section there are links to great tutorials if you want to learn more.
 
 ### Suite Result
 
@@ -430,7 +430,9 @@ But sure some of you disagree! Well, if you for some reason you really like Wash
 
 ## Why do you say this is functional?
 
-Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. In this sense Washington aims to be also future proof.
+Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. I believe this makes Washington fairly future proof—time will tell.
+
+Washington is also friendly to a functional programming approach by providing a nice out-of-the-box experience for testing pure functions. Because the test cases are just plain objects, it’s easy to imagine automating test scenario generation. Washington could be easily combined with [jsverify](https://github.com/jsverify/jsverify) for this purpose.
 
 > Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
 
