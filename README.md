@@ -2,7 +2,7 @@
 
 [![https://travis-ci.org/xaviervia/washington.svg?branch=master](https://travis-ci.org/xaviervia/washington.svg?branch=master)](https://travis-ci.org/xaviervia/washington/builds) [![npm version](https://img.shields.io/npm/v/washington.svg?maxAge=1000)](https://www.npmjs.com/package/washington)
 
-A pure, functional—as much as it can be in JavaScript—unit testing tool with a straightforward API.
+A [pure, functional†](#why-do-you-say-this-is-functional) unit testing tool with a dependency-free test suite API.
 
 ## Installation
 
@@ -10,186 +10,280 @@ A pure, functional—as much as it can be in JavaScript—unit testing tool with
 npm install washington --dev
 ```
 
-## Cheat sheet
+Washington provides a CLI, so you can install it globally to get the `washington` command:
 
-#### Programmatically:
-
-```javascript
-import washington, {example} from 'washington'
-
-washington(
-  example('1 + 1 is 2', check => check(1 + 1), 2)
-)
 ```
+npm install -g washington
+```
+
+## Cheat sheet
 
 #### From the command line:
 
 ```javascript
-// test.js
-import {example} from 'washington'
+// tests.js
+const add = (x, y) => x + y
 
-export default example('1 + 1 is 2', check => check(1 + 1), 2)
+module.exports = [
+  {
+    description: 'returns 2 when adding 1 and 1',
+    test: check => check(add(1, 1)),
+    shouldEqual: 2
+  },
+  {
+    description: 'returns 4 when adding 2 and 2',
+    test: check => check(add(2, 2)),
+    shouldEqual: 4
+  }
+]
 ```
 
 ```
 > washington test.js
 ```
 
+The `washington` command exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
+
+#### Programmatically:
+
+```javascript
+const washington = require('washington')
+
+const add = (x, y) => x + y
+
+washington([
+  {
+    description: 'returns 2 when adding 1 and 1',
+    test: check => check(add(1, 1)),
+    shouldEqual: 2
+  }
+])
+```
+
+By default the `washington` function also exits the process with an exit code equal to the number of failing examples.
+
 #### Asynchronous examples work out of the box:
 
 ```javascript
-example('value will be 1', check => setTimeout(() => check(1)), 1)
+const addLater = (x, y, callback) => {
+  setTimeout(() => callback(x + y))
+}
+
+module.exports = [
+  {
+    description: 'will eventually add 1 and 1 and pass 2 to the callback',
+    test: check => addLater(1, 1, result => check(result)),
+    shouldEqual: 2
+  }
+]
 ```
 
 #### You can compare complex object/array structures, no problem:
 
-Assertions are done with `assert.deepEqual`, so this works out of the box as well.
-
 ```javascript
-example(
-  'the object should have the expected structure',
-  check => check({ a: [1, '2', false] }),
-  { a: [1, '2', false] }
-)
+module.exports = [
+  {
+    description: 'has the expected data structure',
+    test: check => check({ a: [1, '2', false] }),
+    shouldEqual: { a: [1, '2', false] }
+  }
+]
 ```
 
-#### There is a shorthand for synchronous examples: just return the value:
+This is because assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message).
+
+#### There is a shorthand for synchronous examples; just return the value that you want to compare:
 
 ```javascript
-example('1 + 1 is 2 and synchronously so', () => 1 + 1, 2)
+const add = (x, y) => x + y
+
+module.exports = [
+  {
+    description: 'returns 2 synchronously when adding 1 and 1',
+    test: () => add(1, 1),
+    shouldEqual: 2
+  }
+]
 ```
 
 #### Examples without a test scenario are considered pending. Washington is your unit test to-do list:
 
 ```javascript
-example('so test, many unit')
+module.exports = [
+  {
+    description: 'is so test, many unit'
+  },
+  {
+    description: 'buys milk'
+  }
+]
 ```
 
 #### To make it work in the browser, just replace the output formatter:
 
 ```javascript
-import washington, {example, suite} from 'washington'
+import washington from 'washington'
 import washingtonFormatterBrowser from 'washington.formatter.browser'
 
+const add = (x, y) => x + y
+
 const suiteTask = washington(
-  example('1 + 2 is 3', check => check(1 + 2), 3),
+  [
+    {
+      description: 'returns 3 when adding 1 and 2',
+      test: check => check(add(1, 2)),
+      shouldEqual: 3
+    }
+  ],
   { safe: true }
 )
 
-washingtonFormatterBrowser(suiteTask).run()
+suiteTask
+  .chain(washingtonFormatterBrowser(console.log))
+  .run()
 ```
 
 There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
 
-#### The `example` helper function is completely optional.
-
-Its just a shorthand to create the example object. You can do this as well:
-
-```javascript
-import washington from 'washington'
-
-washington({
-  description: '1 + 1 is 2',
-  test: check => check(1 + 1),
-  expectedValue: 2
-})
-```
-
-Choose the style that suits you better.
-
-#### A test suite is just an array of tests:
-
-```javascript
-import washington from 'washington'
-
-washington([
-  {
-    description: '1 + 1 is 2',
-    test: check => check(1 + 1),
-    expectedValue: 2
-  },
-  {
-    description: '2 + 2 is 4',
-    test: check => check(2 + 2),
-    expectedValue: 4
-  }
-])
-```
-
-…or
-
-```javascript
-import washington, {example} from 'washington'
-
-washington([
-  example('1 + 1 is 2', check => check(1 + 1), 2),
-  example('2 + 2 is 4', check => check(2 + 2), 4)
-])
-```
-
-…or with the fancy `suite` (that just creates an Array with the arguments, but damn it looks sweet):
-
-```javascript
-import washington, {example, suite} from 'washington'
-
-washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is 4', check => check(2 + 2), 4)
-  )
-)
-```
+### Other formatters
 
 #### Output [TAP](https://testanything.org/) instead of the default colors:
 
 ```javascript
 const washington = require('washington')
 const washingtonFormatterTAP = require('washington.formatter.tap')
-const {example, suite} = washington
+
+const add = (x, y) => x + y
 
 const suiteTask = washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is 4', check => check(2 + 2), 4)
-  ),
+  [
+    {
+      description: 'returns 2 when adding 1 and 1',
+      test: check => check(add(1, 1)),
+      shouldEqual: 2
+    },
+    {
+      description: 'returns 4 when adding 2 and 2',
+      test: check => check(add(2, 2)),
+      shouldEqual: 4
+    }    
+  ],
   {safe: true}
 )
 
-washingtonFormatterTAP(suiteTask).run()
+suiteTask
+  .chain(washingtonFormatterTAP(console.log))
+  .run()
 ```
 
-#### Get JSON output instead of the default colors:
+#### Access the test results programmatically
+
+Maybe you want to use this tool for something else other than simple unit testing? Displaying results interactively in a REPL, in the browser, or sending them over a network…
+
+I always thought that a library like this might be useful for exercises such as [Ruby Koans](https://github.com/edgecase/ruby_koans).
+
+Check the [suite result object structure](#suite-result) for details on the object structure that Washington puts inside the Task.
 
 ```javascript
 const washington = require('washington')
-const washingtonFormatterJSON = require('washington.formatter.json')
-const {example, suite} = washington
+
+const add = (x, y) => x + y
 
 const suiteTask = washington(
-  suite(
-    example('1 + 1 is 2', check => check(1 + 1), 2),
-    example('2 + 2 is not 5', check => check(2 + 2), 5),
-    example('get chocolate as well')
-  ),
-  {safe: true}
+  [
+    {
+      description: 'returns 2 when adding 1 and 1',
+      test: check => check(add(1, 1)),
+      shouldEqual: 2
+    },
+    {
+      description: 'returns 4 when adding 2 and 2',
+      test: check => check(add(2, 2)),
+      shouldEqual: 4
+    },
+    {
+      description: 'gets chocolate as well'
+    }
+  ],
+  {safe: true} // This prevents the default output formatter from running
 )
 
-washingtonFormatterJSON(suiteTask)
+suiteTask
   .map(result => {
     console.log('object structure result', result)
-     // => [ { status: 'success',
-     //    description: '1 + 1 is 2',
-     //    expectedValue: 2 },
-     //  { status: 'failure',
-     //    description: '2 + 2 is not 5',
-     //    expectedValue: 5,
-     //    message: '4 deepEqual 5',
-     //    stack:
-     //     [ 'AssertionError: 4 deepEqual 5',
-     //       'at matchesExpectation …' ] },
-     //  { status: 'pending', description: 'get chocolate as well' } ]  
   })
   .run()
+```
+
+> `map` is used in this example because most users need not be familiar with `chain` and Folktale Tasks. If you are, I suggest that you use that instead.
+
+## API
+
+The `washington` function takes two arguments. It returns a `Task` when running `safe`. When the `safe` option `false` or not set, it will quit the process before returning.
+
+```javascript
+const suiteTask = washington(
+  testSuite, // explained in the previous examples
+  {
+    // When set to be `safe`, washington will not actually run anything.
+    // Instead, it will return a Folktale Task that you can consume
+    // to add your own output formatter or manipulate the result in any
+    // other way
+    safe: true
+  }
+)
+
+suiteTask
+  .map(suiteResult => {
+    console.log(suiteResult)
+
+    return suiteResult
+  })
+
+suiteTask
+  .chain(suiteResult => Task.of(suiteResult))
+```
+
+The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. These operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
+
+If you are not familiar with this, think of `map` and `chain` as the `then` of a Promise. In the ["Why do you say this is functional"](#why-do-you-say-this-is-functional) section there are links to great tutorials if you want to learn more.
+
+### Suite Result
+
+The `suiteResult` structure looks like this:
+
+```javascript
+[
+  {
+    description: 'some examples that is successful',
+    test: () => 1 + 1,
+    shouldEqual: 2,
+    result: {
+      type: 'success'
+    }
+  },
+  {
+    description: 'something pending',
+    result: {
+      type: 'pending'
+    }
+  },
+  {
+    description: 'an error',
+    test: check => check(1 + 1),
+    shouldEqual: 3,
+    result: {
+      type: 'failure',
+      message: 'the error message',
+      stack: [
+        'a list of',
+        'lines',
+        'from the stack trace'
+      ],
+      original: new Error // Original error object
+    }
+  }
+]
 ```
 
 ## A simple setup for a project using Washington as a test tool
@@ -225,12 +319,12 @@ const addition = require('./addition')
 
 module.exports = [
   {
-    description: 'adding 1 and 1 gives 2',
+    description: 'returns 2 when adding 1 and 1',
     test: check => check(addition(1, 1)),
     expectedValue: 2
   },
   {
-    description: 'adding 1 and 3 gives 4',
+    description: 'returns 4 when adding 1 and 3',
     test: check => check(addition(1, 3)),
     expectedValue: 4
   }
@@ -247,7 +341,7 @@ module.exports = [
   …
 ```
 
-> Note that the above code is not using the Washington helpers for constructing the examples. The intention is to make it transparent to you right now that the example scenarios that Washington works with are plain JavaScript objects. This opens up a plethora of opportunities to organize your tests as it better pleases you.
+The output of this will be: // TODO image
 
 ### Working with multiple test files
 
@@ -278,14 +372,14 @@ const multiplication = require('./multiplication')
 
 module.exports = [
   {
-    description: 'multiplying 1 by 1 gives 1',
+    description: 'returns 1 when multiplying 1 by 1',
     test: check => check(multiplication(1, 1)),
-    expectedValue: 1
+    shouldEqual: 1
   },
   {
-    description: 'multiplying 2 by 3 gives 6',
+    description: 'returns 6 when multiplying 2 by 3',
     test: check => check(multiplication(2, 3)),
-    expectedValue: 6
+    shouldEqual: 6
   }
 ]
 ```
@@ -336,13 +430,17 @@ But sure some of you disagree! Well, if you for some reason you really like Wash
 
 ## Why do you say this is functional?
 
-Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. In this sense Washington aims to be also future proof.
+> † As much as it can be in JavaScript
+
+Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. I believe this makes Washington fairly future proof—time will tell.
+
+Washington is also friendly to a functional programming approach by providing a nice out-of-the-box experience for testing pure functions. Because the test cases are just plain objects, it’s easy to imagine automating test scenario generation. Washington could be easily combined with [jsverify](https://github.com/jsverify/jsverify) for this purpose.
 
 > Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
 
 ## Why "Washington"?
 
-- George Washington gave us all a good example
+- George Washington gave us a good example
 - We all know that he can’t lie
 
 ## Collaborating
@@ -350,6 +448,15 @@ Washington is built on principles inspired or directly taken from the Fantasy La
 Tests for Washington are written in Washington. I really believe in [dogfooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) and [ain’t afraid of self reference](https://xkcd.com/917/).
 
 This library is transpiler free. I ❤️ Babel but it’s not necessary for this.
+
+The project is a [multi-package repo managed with Lerna](https://lernajs.io/). To get started, clone and then run:
+
+```
+> npm install
+> npm run bootstrap
+```
+
+This installs lerna locally and then run `lerna bootstrap` that will set up all necessary symlinks between the packages.
 
 ## License
 

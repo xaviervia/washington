@@ -1,78 +1,50 @@
-const {List} = require('immutable-ext')
-const Task = require('folktale/data/task')
 const {green, red, yellow} = require('./colors')
-const {Success, Pending, Failure} = require('washington.core/data/status')
 const formatterBrowser = require('./')
+
+const collectFourCalls = callback => {
+  let calls = []
+  return (...xs) => {
+    calls.push(xs)
+    if (calls.length === 4) {
+      callback(calls)
+    }
+  }
+}
 
 module.exports = [
   {
-    description: 'success is green',
+    description: 'prints a colorful output',
     test: check => {
-      const resultList = List([
+      const suiteResult = [
         {
           description: 'testing',
-          result: Success()
+          result: {
+            type: 'success'
+          }
         },
         {
           description: 'to be ignored',
-          result: Pending()
-        }
-      ])
-
-      formatterBrowser(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
-    },
-    expectedValue: ['%c testing', `color: ${green}`]
-  },
-  {
-    description: 'pending is yellow',
-    test: check => {
-      const resultList = List([
+          result: {
+            type: 'pending'
+          }
+        },
         {
-          description: 'testing',
-          result: Pending()
-        }
-      ])
-
-      formatterBrowser(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
-    },
-    expectedValue: ['%c testing', `color: ${yellow}`]
-  },
-  {
-    description: 'failure is red',
-    test: check => {
-      const resultList = List([
-        {
-          description: 'testing',
-          result: Failure({
+          description: 'fails',
+          result: {
+            type: 'failure',
             message: 'assertion error',
             stack: ['something', 'multiline']
-          })
+          }
         }
-      ])
+      ]
 
-      formatterBrowser(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
+      formatterBrowser(collectFourCalls(check))(suiteResult).run()
     },
-    expectedValue: [`%c testing
-assertion error
-  something
-  multiline`, `color: ${red}`]
+    shouldEqual: [
+      ['%c testing', `color: ${green}`],
+      ['%c to be ignored', `color: ${yellow}`],
+      ['%c fails\nassertion error\n  something\n  multiline', `color: ${red}`],
+      ['1 success • 1 pending • 1 failure']
+    ]
   }
 ]

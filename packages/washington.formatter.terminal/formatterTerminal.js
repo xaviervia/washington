@@ -2,63 +2,65 @@ const {set, prop} = require('partial.lenses')
 const {green, red, yellow, grey} = require('chalk')
 const {task} = require('folktale/data/task')
 
-const id = x => x
-
-const formatFailure = (description, {message, stack}) =>
-  red(`${description}
-${message}
-${stack.map(line => `  ${line}`).join('\n')}`)
-
-const formatPending = description =>
-  yellow(`${description}`)
-
-const formatSuccess = description =>
-  green(`${description}`)
-
 const setMessage = example => set(
   prop('message'),
-  example.result
-    .match({
-      Failure: () => formatFailure(example.description, example.result.fold(id)),
-      Pending: () => formatPending(example.description),
-      Success: () => formatSuccess(example.description)
-    })
-    .fold(id),
+  (() => {
+    switch (example.result.type) {
+      case 'failure':
+        return red(`${example.description}
+${example.result.message}
+${example.result.stack.map(line => `  ${line}`).join('\n')}`)
+
+      case 'pending':
+        return yellow(`${example.description}`)
+
+      case 'success':
+        return green(`${example.description}`)
+    }
+  })(),
   example
 )
 
-module.exports = suiteTask =>
-  suiteTask
-    .map(resultList => resultList.map(setMessage))
-    .chain(resultList => task(({resolve}) => {
-      resultList.map(({message}) => { console.log(message) })
+module.exports = logger => suiteResult =>
+  task(({resolve}) => {
+    const exampleMessages = suiteResult
+      .map(setMessage)
+      .map(({message}) => message)
 
-      const totals = resultList
-        .toJSON()
-        .reduce(({success, failure, pending}, {result}) =>
-          result.match({
-            Failure: () => ({success, failure: failure + 1, pending}),
-            Pending: () => ({success, failure, pending: pending + 1}),
-            Success: () => ({success: success + 1, failure, pending})
-          }).fold(x => x),
-          {success: 0, failure: 0, pending: 0}
-        )
+    const totals = suiteResult
+      .reduce(
+        ({success, failure, pending}, {result: {type}}) => {
+          switch (type) {
+            case 'failure':
+              return {success, failure: failure + 1, pending}
 
-      const totalsToPrint = [
-        {
-          total: totals.success,
-          message: green(`${totals.success} successful`)
+            case 'pending':
+              return {success, failure, pending: pending + 1}
+
+            case 'success':
+              return {success: success + 1, failure, pending}
+          }
         },
-        {
-          total: totals.pending,
-          message: yellow(`${totals.pending} pending`)
-        },
-        {
-          total: totals.failure,
-          message: red(`${totals.failure} failing`)
-        }
-      ].filter(({total}) => total > 0).map(({message}) => message).join(grey(' • '))
-      console.log('\n' + totalsToPrint)
+        {success: 0, failure: 0, pending: 0}
+      )
 
-      resolve(resultList)
-    }))
+    const totalsToPrint = [
+      [totals.success, green(`${totals.success} successful`)],
+      [totals.pending, yellow(`${totals.pending} pending`)],
+      [totals.failure, red(`${totals.failure} failing`)]
+    ]
+
+    logger(
+      exampleMessages
+        .concat([
+          '',
+          totalsToPrint
+            .filter(([total]) => total > 0)
+            .map(([_, message]) => message)
+            .join(grey(' • '))
+        ])
+        .join('\n')
+    )
+
+    resolve(suiteResult)
+  })

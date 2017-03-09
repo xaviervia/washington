@@ -7,9 +7,9 @@ const {Failure, Pending, Success} = require('./data/status')
 
 const id = x => x
 
-const matchesExpectation = ({expectedValue}, result) => {
+const matchesExpectation = ({shouldEqual}, result) => {
   try {
-    deepEqual(result, expectedValue)
+    deepEqual(result, shouldEqual)
     return Success()
   } catch (e) {
     return Failure(e)
@@ -21,7 +21,7 @@ const hackToEnsureUniqueNameDespiteUglification = {
     if (example.test == null) return callback(Pending())
 
     try {
-      // Arity of 1 in the test indicates callback
+      // Arity of 1 in the `test` function indicates a callback
       if (example.test.length === 1) {
         const thatHackAgain = {
           ensureUniqueWashingtonNameDespiteUglification: result =>
@@ -92,6 +92,34 @@ const setStatus = example => set(
   example
 )
 
+const exampleToJSON = example => ({
+  description: example.description,
+  result: example.result
+    .match({
+      Failure: result => ({
+        type: 'failure',
+        message: result.message,
+        stack: result.stack,
+        original: result.original
+      }),
+      Success: () => ({
+        type: 'success'
+      }),
+      Pending: () => ({
+        type: 'pending'
+      })
+    })
+    .fold(id),
+  test: example.test,
+  shouldEqual: example.shouldEqual
+})
+
+const resultListToJSON = resultList =>
+  resultList
+    .map(exampleToJSON)
+    .toJSON()
+
 module.exports = suite =>
   List(suite)
     .traverse(Task.of, getTestResult)
+    .map(resultListToJSON)

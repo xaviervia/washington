@@ -1,71 +1,38 @@
-const {List} = require('immutable-ext')
-const Task = require('folktale/data/task')
-const {green, red, yellow} = require('chalk')
-const {Success, Pending, Failure} = require('washington.core/data/status')
-const formatterTerminal = require('./')
+const formatterTAP = require('./')
 
 module.exports = [
   {
-    description: 'success is ok',
+    description: 'prints a valid TAP output',
     test: check => {
-      const resultList = List([
+      const suiteResult = [
         {
           description: 'testing',
-          result: Success()
-        }
-      ])
-
-      formatterTerminal(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
-    },
-    expectedValue: 'ok - testing'
-  },
-  {
-    description: 'pending is ok and has pending comment',
-    test: check => {
-      const resultList = List([
+          result: {
+            type: 'success'
+          }
+        },
         {
-          description: 'testing',
-          result: Pending()
-        }
-      ])
-
-      formatterTerminal(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
-    },
-    expectedValue: 'ok - testing # pending'
-  },
-  {
-    description: 'failure is not ok',
-    test: check => {
-      const resultList = List([
+          description: 'to be ignored',
+          result: {
+            type: 'pending'
+          }
+        },
         {
-          description: 'testing',
-          result: Failure({
+          description: 'fails',
+          result: {
+            type: 'failure',
             message: 'assertion error',
             stack: ['something', 'multiline']
-          })
+          }
         }
-      ])
+      ]
 
-      formatterTerminal(Task.of(resultList))
-        .map(resultList => {
-          const resultArray = resultList.toJSON()
-
-          check(resultArray[0].message)
-        })
-        .run()
+      formatterTAP(check)(suiteResult).run()
     },
-    expectedValue: 'not ok - testing'
+    shouldEqual: `TAP version 13
+1..3
+ok - testing
+ok - to be ignored # pending
+not ok - fails`
   }
 ]

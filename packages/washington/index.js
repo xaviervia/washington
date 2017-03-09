@@ -1,8 +1,5 @@
 const formatterTerminal = require('washington.formatter.terminal')
-// const formatterBrowser = require('washington.formatter.browser')
 const runSuite = require('washington.core')
-const example = require('./example')
-const suite = require('./suite')
 
 const washington = (testSuite, options = {}) => {
   const suiteTask = runSuite(
@@ -14,19 +11,17 @@ const washington = (testSuite, options = {}) => {
   if (options.safe) {
     return suiteTask
   } else {
-    formatterTerminal(suiteTask)
-      .map(resultList => {
-        const resultArray = resultList.toJSON()
-
-        const failingExamples = resultArray.filter(example => example.result['@@type'] === 'Failure')
+    return suiteTask
+      .chain(formatterTerminal(console.log))
+      .map(suiteResult => {
+        // this could be a Task, but it's pointless, because it will quit anyway
+        const failingExamples = suiteResult
+          .filter(example => example.result.type === 'failure')
 
         process.exit(failingExamples.length)
       })
       .run()
   }
 }
-
-washington.example = example
-washington.suite = suite
 
 module.exports = washington

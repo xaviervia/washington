@@ -1,10 +1,10 @@
 const statusTest = require('./data/status.test')
-const runSuiteTest = require('./runSuite.test')
+const runSuiteTaskTest = require('./runSuiteTask.test')
 const checkSuiteResults = require('./checkSuiteResults')
-const runSuite = require('./runSuite')
+const runSuiteTask = require('./runSuiteTask')
 
-const tests = statusTest.concat(runSuiteTest)
+const tests = statusTest.concat(runSuiteTaskTest)
 
-runSuite(tests)
+runSuiteTask(tests)
   .map(checkSuiteResults)
   .run()

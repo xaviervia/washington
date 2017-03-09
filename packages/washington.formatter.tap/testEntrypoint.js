@@ -1,7 +1,7 @@
 const checkSuiteResults = require('washington.core/checkSuiteResults')
-const runSuite = require('washington.core/runSuite')
+const runSuiteTask = require('washington.core/runSuiteTask')
 const formatterTAPTest = require('./formatterTAP.test')
 
-runSuite(formatterTAPTest)
+runSuiteTask(formatterTAPTest)
   .map(checkSuiteResults)
   .run()

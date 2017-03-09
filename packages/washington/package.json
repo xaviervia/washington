@@ -1,7 +1,7 @@
 {
   "name": "washington",
   "version": "2.0.0-rc.1",
-  "description": "A pure, functional—as much as JavaScript allows—unit testing tool with a straightforward API",
+  "description": "A pure, functional unit testing tool with a dependency-free test suite API.",
   "main": "index.js",
   "bin": {
     "washington": "./bin/washington.js"

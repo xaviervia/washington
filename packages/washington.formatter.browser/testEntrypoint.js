@@ -1,7 +1,7 @@
 const checkSuiteResults = require('washington.core/checkSuiteResults')
-const runSuite = require('washington.core/runSuite')
+const runSuiteTask = require('washington.core/runSuiteTask')
 const formatterBrowserTest = require('./formatterBrowser.test')
 
-runSuite(formatterBrowserTest)
+runSuiteTask(formatterBrowserTest)
   .map(checkSuiteResults)
   .run()
