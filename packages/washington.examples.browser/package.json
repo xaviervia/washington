@@ -1,6 +1,6 @@
 {
   "name": "washington.examples.browser",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "sagui": "^8.0.2",
-    "washington": "^2.0.0-rc.1",
-    "washington.formatter.browser": "^2.0.0-rc.1"
+    "washington": "^2.0.0-rc.2",
+    "washington.formatter.browser": "^2.0.0-rc.2"
   }
 }
