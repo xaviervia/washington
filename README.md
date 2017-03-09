@@ -18,8 +18,6 @@ npm install -g washington
 
 ## Cheat sheet
 
-Washington exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
-
 #### From the command line:
 
 ```javascript
@@ -44,6 +42,8 @@ module.exports = [
 > washington test.js
 ```
 
+The Washington command exits the process with an exit code equal to the number of failing examples. This takes advantage of the fact that any non-zero exit code means that the command failed.
+
 #### Programmatically:
 
 ```javascript
@@ -59,6 +59,8 @@ washington([
   }
 ])
 ```
+
+By default the Washington function also exits the process with an exit code equal to the number of failing examples.
 
 #### Asynchronous examples work out of the box:
 
@@ -88,9 +90,9 @@ module.exports = [
 ]
 ```
 
-Assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message).
+This is because assertions are done with [`assert.deepEqual`](https://nodejs.org/api/assert.html#assert_assert_deepequal_actual_expected_message).
 
-#### There is a shorthand for synchronous examples: just return the value
+#### There is a shorthand for synchronous examples; just return the value that you want to compare:
 
 ```javascript
 const add = (x, y) => x + y
@@ -174,17 +176,16 @@ suiteTask
   .run()
 ```
 
-#### Get JSON output instead of the default colors:
+#### Access the result of running the suite programmatically
 
-Unlike the TAP and default output formatters, `washington.formatter.json` does not set any exit code for the process, so unless you do that yourself the command will not be interpreted as failing by other commands (such as `npm`, `yarn`, `make`, …). The JSON output formatter is meant for programmatic usage. Maybe you want to use the results of the suite for something else other than unit testing? Displaying results of the test suite interactively in a REPL, or in the browser, sending them over a network…
+Maybe you want to use the results of the suite for something else other than unit testing? Displaying results of the test suite interactively in a REPL, or in the browser, sending them over a network…
 
 I always thought that a library like this might be useful for exercises such as [code koans](https://github.com/edgecase/ruby_koans).
 
-If you are interested in using it you can [check the JSON example object structure](packages/washington.formatter.json) // TODO
+If you are interested in using it you can [check the suite result object structure](#suite-result)
 
 ```javascript
 const washington = require('washington')
-const washingtonFormatterJSON = require('washington.formatter.json')
 
 const add = (x, y) => x + y
 
@@ -208,28 +209,13 @@ const suiteTask = washington(
 )
 
 suiteTask
-  .map(washingtonFormatterJSON)
   .map(result => {
     console.log('object structure result', result)
-     // => [
-     //  { status: 'success',
-     //    description: '1 + 1 is 2',
-     //    expectedValue: 2 },
-     //  { status: 'failure',
-     //    description: '2 + 2 is not 5',
-     //    expectedValue: 5,
-     //    message: '4 deepEqual 5',
-     //    stack:
-     //     [ 'AssertionError: 4 deepEqual 5',
-     //       'at matchesExpectation …' ] },
-     //  { status: 'pending', description: 'get chocolate as well' } ]  
   })
   .run()
 ```
 
-## Writing your own formatter:
-
-// TODO
+> `map` is used in this example because most users need not be familiar with `chain` and Folktale Tasks. If you are, I suggest that you use that instead.
 
 ## API
 
@@ -249,6 +235,42 @@ const suiteTask = washington(
 ```
 
 The `suiteTask` is a [Folktale Task](https://github.com/origamitower/folktale/tree/master/src/data/task). In a nutshell, that means that you can `map` or `chain` over it to get access to the results. This operations are defined in the [Fantasy Land specification](https://github.com/fantasyland/fantasy-land).
+
+### Suite Result
+
+The `suiteTask` contains a `suiteResult` that can be accessed via `map` or `chain`. That result structure looks like this:
+
+```javascript
+[
+  {
+    description: 'some examples that is successful',
+    test: () => 1 + 1,
+    shouldEqual: 2,
+    result: {
+      type: 'success'
+    }
+  },
+  {
+    description: 'something pending',
+    result: {
+      type: 'pending'
+    }
+  },
+  {
+    description: 'an error',
+    result: {
+      type: 'failure',
+      message: 'the error message',
+      stack: [
+        'a list of',
+        'lines',
+        'from the stack trace'
+      ],
+      original: new Error // Original error object
+    }
+  }
+]
+```
 
 ## A simple setup for a project using Washington as a test tool
 
