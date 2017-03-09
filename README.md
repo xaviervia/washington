@@ -2,7 +2,7 @@
 
 [![https://travis-ci.org/xaviervia/washington.svg?branch=master](https://travis-ci.org/xaviervia/washington.svg?branch=master)](https://travis-ci.org/xaviervia/washington/builds) [![npm version](https://img.shields.io/npm/v/washington.svg?maxAge=1000)](https://www.npmjs.com/package/washington)
 
-A [pure, functional](#why-do-you-say-this-is-functional)—as much as it can be in JavaScript—unit testing tool with a dependency-free test suite API.
+A [pure, functional†](#why-do-you-say-this-is-functional) unit testing tool with a dependency-free test suite API.
 
 ## Installation
 
@@ -429,6 +429,8 @@ There are two reasons:
 But sure some of you disagree! Well, if you for some reason you really like Washington’s approach and would like to use it, but you also really want to get a nested structure of tests, remember: examples are just plain JavaScript objects. You are more than welcome to add a `namespace` or `breadcrumbs` property to them and use it in a custom formatter to organize the output of the test suite.
 
 ## Why do you say this is functional?
+
+> † As much as it can be in JavaScript
 
 Washington is built on principles inspired or directly taken from the Fantasy Land community. Furthermore, the test suite is just a regular array of simple objects, there is no hidden magic or state anywhere. You can easily write your own lib that consumes the Washington example format. I believe this makes Washington fairly future proof—time will tell.
 
