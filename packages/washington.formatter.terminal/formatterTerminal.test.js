@@ -1,4 +1,3 @@
-const Task = require('folktale/data/task')
 const {green, grey, red, yellow} = require('chalk')
 const formatterTerminal = require('./')
 
@@ -29,9 +28,7 @@ module.exports = [
         }
       ]
 
-      Task.of(suiteResult)
-        .chain(formatterTerminal(check))
-        .run()
+      formatterTerminal(check)(suiteResult).run()
     },
     shouldEqual:
       green('testing') + '\n' +

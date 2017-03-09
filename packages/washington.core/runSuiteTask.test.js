@@ -15,7 +15,7 @@ module.exports = [
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            description: suiteResult[0].it,
+            description: suiteResult[0].description,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -44,7 +44,7 @@ module.exports = [
           check({
             type: suiteResult[0].result.type,
             message: suiteResult[0].result.message,
-            description: suiteResult[0].it,
+            description: suiteResult[0].description,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -74,7 +74,7 @@ module.exports = [
           check({
             type: suiteResult[0].result.type,
             message: suiteResult[0].result.message,
-            description: suiteResult[0].it,
+            description: suiteResult[0].description,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -101,7 +101,7 @@ module.exports = [
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            description: suiteResult[0].it
+            description: suiteResult[0].description
           })
 
           resolve()
@@ -127,7 +127,7 @@ module.exports = [
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            description: suiteResult[0].it,
+            description: suiteResult[0].description,
             shouldEqual: suiteResult[0].shouldEqual
           })
 

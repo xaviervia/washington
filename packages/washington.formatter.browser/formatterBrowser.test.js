@@ -1,4 +1,3 @@
-const Task = require('folktale/data/task')
 const {green, red, yellow} = require('./colors')
 const formatterBrowser = require('./')
 

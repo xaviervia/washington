@@ -1,4 +1,3 @@
-const Task = require('folktale/data/task')
 const formatterTAP = require('./')
 
 module.exports = [
@@ -28,9 +27,7 @@ module.exports = [
         }
       ]
 
-      Task.of(suiteResult)
-        .chain(formatterTAP(check))
-        .run()
+      formatterTAP(check)(suiteResult).run()
     },
     shouldEqual: `TAP version 13
 1..3
