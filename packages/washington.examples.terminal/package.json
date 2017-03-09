@@ -5,7 +5,7 @@
   "scripts": {
     "manualTestSuite": "node manualTestSuite",
     "forCLI": "washington forCLI",
-    "withTAPFormatter": "node withTAPFormatter",
+    "withTAPFormatter": "node withTAPFormatter"
   },
   "keywords": [
     "washington",

@@ -18,22 +18,22 @@ const matchesExpectation = ({shouldEqual}, result) => {
 
 const hackToEnsureUniqueNameDespiteUglification = {
   ensureUniqueWashingtonNameDespiteUglification: (example, callback) => {
-    if (example.when == null) return callback(Pending())
+    if (example.test == null) return callback(Pending())
 
     try {
-      // Arity of 1 in the `when` function indicates a callback
-      if (example.when.length === 1) {
+      // Arity of 1 in the `test` function indicates a callback
+      if (example.test.length === 1) {
         const thatHackAgain = {
           ensureUniqueWashingtonNameDespiteUglification: result =>
             callback(matchesExpectation(example, result))
         }
 
-        example.when(
+        example.test(
           thatHackAgain.ensureUniqueWashingtonNameDespiteUglification
         )
       } else {
         callback(
-          matchesExpectation(example, example.when())
+          matchesExpectation(example, example.test())
         )
       }
     } catch (e) {
@@ -93,7 +93,7 @@ const setStatus = example => set(
 )
 
 const exampleToJSON = example => ({
-  it: example.it,
+  description: example.description,
   result: example.result
     .match({
       Failure: result => ({
@@ -110,7 +110,7 @@ const exampleToJSON = example => ({
       })
     })
     .fold(id),
-  when: example.when,
+  test: example.test,
   shouldEqual: example.shouldEqual
 })
 

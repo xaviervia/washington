@@ -23,7 +23,7 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: 'ok - testing'
+    shouldEqual: 'ok - testing'
   },
   {
     description: 'pending is ok and has pending comment',
@@ -43,7 +43,7 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: 'ok - testing # pending'
+    shouldEqual: 'ok - testing # pending'
   },
   {
     description: 'failure is not ok',
@@ -66,6 +66,6 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: 'not ok - testing'
+    shouldEqual: 'not ok - testing'
   }
 ]

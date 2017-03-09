@@ -27,7 +27,7 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: ['%c testing', `color: ${green}`]
+    shouldEqual: ['%c testing', `color: ${green}`]
   },
   {
     description: 'pending is yellow',
@@ -47,7 +47,7 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: ['%c testing', `color: ${yellow}`]
+    shouldEqual: ['%c testing', `color: ${yellow}`]
   },
   {
     description: 'failure is red',
@@ -70,7 +70,7 @@ module.exports = [
         })
         .run()
     },
-    expectedValue: [`%c testing
+    shouldEqual: [`%c testing
 assertion error
   something
   multiline`, `color: ${red}`]

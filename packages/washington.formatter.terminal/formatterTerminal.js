@@ -7,15 +7,15 @@ const setMessage = example => set(
   (() => {
     switch (example.result.type) {
       case 'failure':
-        return red(`${example.it}
+        return red(`${example.description}
 ${example.result.message}
 ${example.result.stack.map(line => `  ${line}`).join('\n')}`)
 
       case 'pending':
-        return yellow(`${example.it}`)
+        return yellow(`${example.description}`)
 
       case 'success':
-        return green(`${example.it}`)
+        return green(`${example.description}`)
     }
   })(),
   example

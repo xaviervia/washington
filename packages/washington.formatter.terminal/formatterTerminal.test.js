@@ -4,23 +4,23 @@ const formatterTerminal = require('./')
 
 module.exports = [
   {
-    it: 'prints a colorful output',
-    when: check => {
+    description: 'prints a colorful output',
+    test: check => {
       const suiteResult = [
         {
-          it: 'testing',
+          description: 'testing',
           result: {
             type: 'success'
           }
         },
         {
-          it: 'to be ignored',
+          description: 'to be ignored',
           result: {
             type: 'pending'
           }
         },
         {
-          it: 'fails',
+          description: 'fails',
           result: {
             type: 'failure',
             message: 'assertion error',

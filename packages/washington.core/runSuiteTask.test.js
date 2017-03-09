@@ -3,19 +3,19 @@ const runSuiteTask = require('./runSuiteTask')
 
 module.exports = [
   {
-    it: 'runSuiteTask: a successful test',
-    when: check => {
+    description: 'runSuiteTask: a successful test',
+    test: check => {
       runSuiteTask([
         {
-          it: '1 is 1',
-          when: () => 1,
+          description: '1 is 1',
+          test: () => 1,
           shouldEqual: 1
         }
       ])
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            it: suiteResult[0].it,
+            description: suiteResult[0].it,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -25,18 +25,18 @@ module.exports = [
     },
     shouldEqual: {
       type: 'success',
-      it: '1 is 1',
+      description: '1 is 1',
       shouldEqual: 1
     }
   },
 
   {
-    it: 'runSuiteTask: a failing test (assertion error)',
-    when: check => {
+    description: 'runSuiteTask: a failing test (assertion error)',
+    test: check => {
       runSuiteTask([
         {
-          it: '1 will fail to be 2',
-          when: () => 1,
+          description: '1 will fail to be 2',
+          test: () => 1,
           shouldEqual: 2
         }
       ])
@@ -44,7 +44,7 @@ module.exports = [
           check({
             type: suiteResult[0].result.type,
             message: suiteResult[0].result.message,
-            it: suiteResult[0].it,
+            description: suiteResult[0].it,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -55,18 +55,18 @@ module.exports = [
     shouldEqual: {
       type: 'failure',
       message: '1 deepEqual 2',
-      it: '1 will fail to be 2',
+      description: '1 will fail to be 2',
       shouldEqual: 2
     }
   },
 
   {
-    it: 'runSuiteTask: a failing test (crashing)',
-    when: check => {
+    description: 'runSuiteTask: a failing test (crashing)',
+    test: check => {
       runSuiteTask([
         {
-          it: 'there is no Narnia',
-          when: () => { throw new Error('no Narnia') },
+          description: 'there is no Narnia',
+          test: () => { throw new Error('no Narnia') },
           shouldEqual: 'Narnia?'
         }
       ])
@@ -74,7 +74,7 @@ module.exports = [
           check({
             type: suiteResult[0].result.type,
             message: suiteResult[0].result.message,
-            it: suiteResult[0].it,
+            description: suiteResult[0].it,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -85,23 +85,23 @@ module.exports = [
     shouldEqual: {
       type: 'failure',
       message: 'no Narnia',
-      it: 'there is no Narnia',
+      description: 'there is no Narnia',
       shouldEqual: 'Narnia?'
     }
   },
 
   {
-    it: 'runSuiteTask: a pending test',
-    when: check => {
+    description: 'runSuiteTask: a pending test',
+    test: check => {
       runSuiteTask([
         {
-          it: 'buy milk'
+          description: 'buy milk'
         }
       ])
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            it: suiteResult[0].it
+            description: suiteResult[0].it
           })
 
           resolve()
@@ -110,24 +110,24 @@ module.exports = [
     },
     shouldEqual: {
       type: 'pending',
-      it: 'buy milk'
+      description: 'buy milk'
     }
   },
 
   {
-    it: 'runSuiteTask: an async test',
-    when: check => {
+    description: 'runSuiteTask: an async test',
+    test: check => {
       runSuiteTask([
         {
-          it: 'buy milk in a while',
-          when: check => setTimeout(() => check('milk')),
+          description: 'buy milk in a while',
+          test: check => setTimeout(() => check('milk')),
           shouldEqual: 'milk'
         }
       ])
         .chain(suiteResult => task(({resolve}) => {
           check({
             type: suiteResult[0].result.type,
-            it: suiteResult[0].it,
+            description: suiteResult[0].it,
             shouldEqual: suiteResult[0].shouldEqual
           })
 
@@ -137,7 +137,7 @@ module.exports = [
     },
     shouldEqual: {
       type: 'success',
-      it: 'buy milk in a while',
+      description: 'buy milk in a while',
       shouldEqual: 'milk'
     }
   }
