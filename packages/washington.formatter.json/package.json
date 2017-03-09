@@ -1,5 +1,6 @@
 {
   "name": "washington.formatter.json",
+  "description": "[Deprecated]",
   "version": "2.0.0-rc.1",
   "keywords": [],
   "author": "Fernando Via Canel <fernando.via@gmail.com>",
