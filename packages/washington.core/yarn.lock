@@ -46,6 +46,10 @@ infestines@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/infestines/-/infestines-0.4.2.tgz#05aef1b8b48a349914be6a6f7522199dff8b93b8"
 
+jiff@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/jiff/-/jiff-0.7.3.tgz#42db5d9140f1804399bb501747055a9434f40f46"
+
 partial.lenses@^9.4.1:
   version "9.4.1"
   resolved "https://registry.yarnpkg.com/partial.lenses/-/partial.lenses-9.4.1.tgz#2355dea0cf8fac44d6ed3e6e4b6fdb45ada90ecf"
@@ -61,7 +65,3 @@ strip-ansi@^3.0.0:
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
-
-zazen@^0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/zazen/-/zazen-0.8.2.tgz#886a0602adf024b928da3a4bcc3166e8d8dd1d8d"
