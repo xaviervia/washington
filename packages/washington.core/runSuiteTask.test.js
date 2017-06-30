@@ -1,4 +1,4 @@
-const {task} = require('folktale/data/task')
+const {task} = require('folktale/concurrency/task')
 const runSuiteTask = require('./runSuiteTask')
 
 module.exports = [

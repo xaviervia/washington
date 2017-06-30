@@ -1,6 +1,6 @@
 const {set, prop} = require('partial.lenses')
 const {List} = require('immutable-ext')
-const Task = require('folktale/data/task')
+const Task = require('folktale/concurrency/task')
 const {deepEqual} = require('assert')
 
 const {Failure, Pending, Success} = require('./data/status')
