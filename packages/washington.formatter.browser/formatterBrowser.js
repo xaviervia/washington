@@ -1,5 +1,5 @@
 const {set, prop} = require('partial.lenses')
-const {task} = require('folktale/data/task')
+const {task} = require('folktale/concurrency/task')
 const {red, yellow, green} = require('./colors')
 
 const formatFailure = (description, {message, stack}) => [

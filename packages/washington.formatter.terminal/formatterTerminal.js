@@ -1,6 +1,6 @@
 const {set, prop} = require('partial.lenses')
 const {green, red, yellow, grey} = require('chalk')
-const {task} = require('folktale/data/task')
+const {task} = require('folktale/concurrency/task')
 
 const setMessage = example => set(
   prop('message'),
