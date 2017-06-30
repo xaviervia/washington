@@ -1,6 +1,6 @@
 {
   "name": "washington",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.3",
   "description": "A pure, functional unit testing tool with a dependency-free test suite API.",
   "main": "index.js",
   "bin": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/xaviervia/washington#readme",
   "dependencies": {
-    "washington.formatter.terminal": "^2.0.0-rc.2",
-    "washington.core": "^2.0.0-rc.2"
+    "washington.formatter.terminal": "^2.0.0-rc.3",
+    "washington.core": "^2.0.0-rc.3"
   }
 }

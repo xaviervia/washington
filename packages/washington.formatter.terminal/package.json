@@ -1,6 +1,6 @@
 {
   "name": "washington.formatter.terminal",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.3",
   "description": "Colorful terminal output formatter for the Washington unit test library",
   "main": "formatterTerminal.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
-    "washington.core": "^2.0.0-rc.2",
+    "washington.core": "^2.0.0-rc.3",
     "immutable": "^3.8.1",
     "immutable-ext": "^1.0.8"
   }
