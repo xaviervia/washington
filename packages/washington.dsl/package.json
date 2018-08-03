@@ -1,0 +1,18 @@
+{
+  "name": "washington.dsl",
+  "version": "2.0.0-rc.3",
+  "description": "Small DSL to make building Washington test even easier",
+  "scripts": {
+    "test": "node testEntrypoint"
+  },
+  "keywords": [
+    "washington",
+    "unit testing",
+    "test"
+  ],
+  "author": "Fernando Via Canel <fernando.via@gmail.com>",
+  "devDependencies": {
+    "washington.core": "^2.0.0-rc.3"
+  },
+  "license": "BSD-2-Clause"
+}

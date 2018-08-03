@@ -3,6 +3,7 @@
   "packages": [
     "packages/washington",
     "packages/washington.core",
+    "packages/washington.dsl",
     "packages/washington.examples.browser",
     "packages/washington.examples.terminal",
     "packages/washington.formatter.browser",
