@@ -2,6 +2,7 @@
   "name": "washington.dsl",
   "version": "2.0.0-rc.4",
   "description": "Small DSL to make building Washington test even easier",
+  "main": "index.js",
   "scripts": {
     "test": "node testEntrypoint"
   },

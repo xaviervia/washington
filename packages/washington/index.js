@@ -25,6 +25,6 @@ const washington = (testSuite, options = {}) => {
   }
 }
 
+module.exports = washington
 module.exports.example = dsl.example
 module.exports.suite = dsl.suite
-module.exports = washington
