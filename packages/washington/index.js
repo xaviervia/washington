@@ -1,5 +1,6 @@
 const formatterTerminal = require('washington.formatter.terminal')
 const runSuite = require('washington.core')
+const dsl = require('washington.dsl')
 
 const washington = (testSuite, options = {}) => {
   const suiteTask = runSuite(
@@ -24,4 +25,6 @@ const washington = (testSuite, options = {}) => {
   }
 }
 
+module.exports.example = dsl.example
+module.exports.suite = dsl.suite
 module.exports = washington

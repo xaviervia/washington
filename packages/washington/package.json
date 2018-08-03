@@ -29,6 +29,7 @@
   "homepage": "https://github.com/xaviervia/washington#readme",
   "dependencies": {
     "washington.formatter.terminal": "^2.0.0-rc.3",
-    "washington.core": "^2.0.0-rc.3"
+    "washington.core": "^2.0.0-rc.3",
+    "washington.dsl": "^2.0.0-rc.3"
   }
 }
