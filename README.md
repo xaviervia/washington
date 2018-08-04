@@ -145,6 +145,50 @@ suiteTask
 
 There is no [Karma](https://karma-runner.github.io/) adapter yet. Make an issue or pull request if you want one.
 
+#### DSL
+
+If you get bored of writing the arrays of examples by hand, Washington comes bundled with a neat DSL to write them in a more compact way.
+
+* `example(description, test, shouldEqual)`: builds and returns the example object.
+* `suite(prefix, ...examples)`: prepends the prefix to the description of every example that you pass it to it, and returns the array with the modified examples.
+
+```js
+import { example, suite } from 'washington'
+
+export default suite(
+  'addition',
+
+  example(
+    '1 and 2 make 3',
+    () => 1 + 2,
+    3
+  ),
+
+  example(
+    '2 and 4 make 6',
+    () => 2 + 4,
+    6
+  ),
+
+  example('pending example')
+)
+```
+
+You might wonder, "Why don’t you open the README with this example? It looks like a cleaner API than writing the objects manually, and more similar to other tools".
+
+Well, the thing is that the DSL functions of most JS testing libraries behave in a very different way than Washington, doing things behind the scenes, and by showing examples that looked like those of other libraries, it might seem that Washington works the same way. But half of the point of Washington is that the test suite is a simple array of plain objects, so that you can manipulate it in any way you want. Showing that instead helps hammer the point home.
+
+The DSL functions are extremely lean. There is no magic at all in them. Take a look:
+
+```js
+// packages/washington.dsl/index.js
+const suite = (name, ...suite) =>
+  suite.map(x => ({...x, description: `${name}: ${x.description}`}))
+
+const example = (description, test, shouldEqual) =>
+  ({ description, test, shouldEqual })
+```
+
 ### Other formatters
 
 #### Output [TAP](https://testanything.org/) instead of the default colors:
