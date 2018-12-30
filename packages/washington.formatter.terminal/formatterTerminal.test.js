@@ -1,4 +1,4 @@
-const {green, grey, red, yellow} = require('chalk')
+const {bold, green, grey, red, yellow} = require('chalk')
 const formatterTerminal = require('./')
 
 module.exports = [
@@ -33,7 +33,8 @@ module.exports = [
     shouldEqual:
       green('testing') + '\n' +
       yellow('to be ignored') + '\n' +
-      red('fails\nassertion error\n  something\n  multiline') + '\n' +
+      red('fails') + '\n' + bold(red('assertion error')) + '\n' + grey('  something\n  multiline') + '\n' +
+      '\n' +
       '\n' +
       green('1 successful') +
       grey(' • ') +

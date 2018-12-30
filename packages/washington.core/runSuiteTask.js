@@ -12,7 +12,10 @@ const matchesExpectation = ({shouldEqual}, result) => {
     deepEqual(result, shouldEqual)
     return Success()
   } catch (e) {
-    return Failure(e)
+    return Failure(Object.assign(e, {
+      shouldEqual: shouldEqual,
+      result: result
+    }))
   }
 }
 
