@@ -1,6 +1,6 @@
 {
   "name": "washington.core",
-  "version": "2.0.0-rc.4",
+  "version": "2.0.0",
   "description": "Core functionality of the Washington unit test library",
   "main": "runSuiteTask.js",
   "scripts": {

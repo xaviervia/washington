@@ -1,6 +1,6 @@
 {
   "name": "washington.formatter.browser",
-  "version": "2.0.0-rc.4",
+  "version": "2.0.0",
   "description": "Colorful browser console formatter for the Washington unit test library",
   "main": "formatterBrowser.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "partial.lenses": "^9.4.1"
   },
   "devDependencies": {
-    "washington.core": "^2.0.0-rc.4",
+    "washington.core": "^2.0.0",
     "immutable": "^3.8.1",
     "immutable-ext": "^1.0.8"
   }
