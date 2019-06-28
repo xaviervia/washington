@@ -480,7 +480,7 @@ Washington is built on principles inspired or directly taken from the Fantasy La
 
 Washington is also friendly to a functional programming approach by providing a nice out-of-the-box experience for testing pure functions. Because the test cases are just plain objects, it’s easy to imagine automating test scenario generation. Washington could be easily combined with [jsverify](https://github.com/jsverify/jsverify) for this purpose.
 
-> Shoutout to [DrBoolean](egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
+> Shoutout to [DrBoolean](https://  egghead.io/instructors/brian-lonsdorf) who should take credit of most of my [education in functional JavaScript](https://www.youtube.com/watch?v=h_tkIpwbsxY)
 
 ## Why "Washington"?
 
